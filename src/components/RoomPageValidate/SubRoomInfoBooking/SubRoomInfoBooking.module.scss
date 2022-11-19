@@ -1,0 +1,46 @@
+@import "src/styles/abstracts/variables";
+@import "src/styles/abstracts/_mixins";
+
+.subRoomInfoContainer {
+  border-top: 1px solid white;
+  width: 80%;
+  padding: $hs-spacing-2;
+}
+
+.roomTitle {
+  width: fit-content;
+}
+
+.roomDropdown {
+  border: 1px solid #ad854b;
+  height: fit-content;
+  cursor: pointer;
+
+  .dropdownContainer {
+    width: 23%;
+    border: 1px solid white;
+    position: absolute;
+    background-color: $hs-color-dark-9;
+
+    .subDropdown {
+      &:hover {
+        background-color: $hs-color-black-grey;
+      }
+    }
+  }
+}
+
+.button {
+  cursor: pointer;
+}
+
+.infoRoom {
+  font-size: 1rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.roomButtonAdd {
+  width: fit-content;
+  border: 1px solid #ad854b;
+}

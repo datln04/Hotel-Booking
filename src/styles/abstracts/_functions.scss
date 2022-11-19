@@ -1,0 +1,24 @@
+@use 'sass:math';
+
+@function pxToRem($px) {
+    @return ($px * 0.0625) * 1rem;
+}
+
+@function remToPx($rem) {
+    @return ($rem * 16) * 1px;
+}
+
+@function hexToRGB($hex) {
+    @return red($hex), green($hex), blue($hex);
+}
+
+// ------ CALCULATIONS ------
+/*usage:
+divide(10px, 2);
+
+output:
+5px
+*/
+@function divide($value1, $value2) {
+    @return math.div($value1, $value2);
+}

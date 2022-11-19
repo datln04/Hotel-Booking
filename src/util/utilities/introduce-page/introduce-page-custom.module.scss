@@ -1,0 +1,14 @@
+@import "src/styles/abstracts/mixins";
+@import "src/styles/abstracts/variables";
+.hr1,
+.hr2 {
+    border: 2px solid #ad854b;
+    background-color: #ad854b;
+    width: 15%;
+}
+
+.hr2 {
+    width: 10%;
+    border: 1px solid #ad854b;
+    background-color: #ad854b;
+}

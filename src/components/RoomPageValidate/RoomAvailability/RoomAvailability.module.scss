@@ -1,0 +1,24 @@
+@import "src/styles/abstracts/variables";
+@import "src/styles/abstracts/_mixins";
+
+.RoomAvailability {
+  .ImageOfRoomAvailability img {
+    width: 100%;
+    height: 440px;
+  }
+
+  .hr {
+    border: 1px solid $hs-color-dark-brown;
+  }
+  a {
+    font-weight: 300 !important;
+  }
+
+  svg {
+    width: 30px;
+    height: 30px;
+    path {
+      fill: $hs-color-white-6;
+    }
+  }
+}

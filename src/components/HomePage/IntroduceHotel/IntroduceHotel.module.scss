@@ -1,0 +1,27 @@
+@import 'src/styles/abstracts/variables';
+@import 'src/styles/abstracts/_mixins';
+.introduceContainer {
+    text-align: center;
+    .title {
+        @include breakpoint(md, down) {
+            font-size: $hs-font-size-8;
+        }
+    }
+    .hr1,
+    .hr2 {
+        border: 3px solid #AD854B;
+        background-color: #AD854B;
+        width: 15%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .hr2 {
+        width: 5%;
+        border: 1px solid #AD854B;
+        background-color: #AD854B;
+    }
+    .description {
+        width: 70%;
+        margin: 0 auto
+    }
+}

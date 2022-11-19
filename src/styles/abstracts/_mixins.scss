@@ -1,0 +1,104 @@
+// mixin file, which can reuse scss file
+
+// ------ BREAKPOINTS ------
+@mixin breakpoint($breakpoint, $direction) {
+    @if map-has-key($grid-breakpoints, $breakpoint) {
+        // Get breakpoint value.
+        $breakpoint-value: map-get($grid-breakpoints, $breakpoint);
+
+        @if $direction ==down {
+            @media (max-width: ($breakpoint-value - 1)) {
+                @content;
+            }
+        }
+
+        @else if $direction ==up {
+            @media (min-width: $breakpoint-value) {
+                @content;
+            }
+        }
+
+        @else {
+            @media ($direction: $breakpoint-value) {
+                @content;
+            }
+        }
+
+        // If the breakpoint doesn't exist.
+    }
+
+    @else {
+        @if $direction ==down {
+            @media (max-width: $breakpoint) {
+                @content;
+            }
+        }
+
+        @else if $direction ==up {
+            @media (min-width: $breakpoint) {
+                @content;
+            }
+        }
+
+        @else {
+            @media ($direction: $breakpoint) {
+                @content;
+            }
+        }
+    }
+}
+
+//Combines set-font-size and set-line-height
+@mixin font( // default set to body paragraph
+
+    $sizeValueArray,
+    $heightValue,
+    $font-family,
+    $margin-bottom: null) {
+
+    // set default size array
+    @if ($sizeValueArray ==null) {
+        $sizeValueArray: $hs-font-p-array  !important;
+    }
+
+    // set default height value
+    @if ($heightValue ==null) {
+        $heightValue: $hs-line-height-100;
+    }
+
+    // set default font-family
+    @if ($font-family ==null) {
+        $font-family: null;
+    }
+
+    //set default margin-bottom
+    @if ($margin-bottom ==null) {
+        $margin-bottom: map-get($map: $hs-spacing-sizes,
+            $key: '0',
+        );
+    }
+
+    @each $sizeName,
+    $sizeValue in $sizeValueArray {
+
+        @each $breakName,
+        $breakValue in $grid-breakpoints {
+            @if $sizeName ==$breakName {
+                @if $breakName  !='xs' {
+                    @include breakpoint($breakValue, up) {
+                        font-size: $sizeValue;
+                    }
+                }
+
+                @else {
+                    font-size: $sizeValue;
+                }
+            }
+        }
+    }
+
+    line-height: $heightValue; //fallback for old browsers
+    line-height: ($heightValue * 100)+unquote('%');
+    font-family: $font-family;
+    margin-bottom: $margin-bottom;
+}

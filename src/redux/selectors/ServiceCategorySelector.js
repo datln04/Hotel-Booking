@@ -1,0 +1,2 @@
+export const serviceCategoryTypeState$ = (state)=> state.ServiceCategoryReducer.arrServiceCategory
+export const serviceCategoryDetailTypeState$ = (state) => state.ServiceCategoryDetailReducer.serviceCategoryDetail

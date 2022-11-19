@@ -1,0 +1,93 @@
+@import 'src/styles/abstracts/variables';
+@import 'src/styles/abstracts/_mixins';
+.navContainer {
+    white-space: nowrap;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    .navContent {
+        justify-content: center;
+        align-items: center;
+        padding: $hs-spacing-3;
+        .rightNav {
+            justify-content: center;
+            align-items: center;
+        }
+        .logo {
+            display: contents;
+        }
+        .navLink {
+            margin-right: 5rem;
+            text-align: center;
+            @include breakpoint(lg, down) {
+                margin-right: 1rem;
+            }
+        }
+        .leftNav {
+            justify-content: end;
+        }
+        .btnNav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: transparent;
+            width: remToPx(2.5);
+            height: remToPx(2.625);
+            box-sizing: content-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}
+
+.navContainerActive {
+    display: none !important;
+    border-bottom: 1px solid #c4c4c4;
+    white-space: nowrap;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    .navContent {
+        justify-content: center;
+        align-items: center;
+        padding: $hs-spacing-3;
+        .rightNav {
+            justify-content: center;
+            align-items: center;
+        }
+        .logo {
+            display: contents;
+        }
+        .navLink {
+            margin-right: 5rem;
+            text-align: center;
+            @include breakpoint(lg, down) {
+                margin-right: 1rem;
+            }
+        }
+        .leftNav {
+            justify-content: end;
+        }
+        .btnNav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: transparent;
+            width: remToPx(2.5);
+            height: remToPx(2.625);
+            box-sizing: content-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}

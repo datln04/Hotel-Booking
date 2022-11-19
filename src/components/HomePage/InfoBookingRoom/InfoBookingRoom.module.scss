@@ -1,0 +1,60 @@
+@import 'src/styles/abstracts/variables';
+@import 'src/styles/abstracts/_mixins';
+
+$hs-font-size-array: (
+    xs: $hs-font-size-10,
+    md: $hs-font-size-11,
+    lg: $hs-font-size-6
+);
+
+.infoContainer {
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+
+    @include breakpoint(lg, up) {
+        justify-content: center;
+    }
+
+    .infoBooking {
+        padding: $hs-spacing-1;
+
+        .infoBookingDate,
+        .btnInfoBooking {
+            width: 100%;
+            height: 55px;
+            padding: 0 $hs-spacing-2;
+            border: 1px solid white;
+            outline: none !important;
+            box-shadow: none !important;
+
+            @each $breakpointValue,
+            $fontSize in $hs-font-size-array {
+                @include breakpoint($breakpointValue, up) {
+                    font-size: $fontSize;
+                }
+            }
+
+            @include breakpoint(lg, down) {
+                height: 40px;
+            }
+
+            @include breakpoint(md, down) {
+                width: 60%;
+                height: 45px;
+
+                display: block;
+                margin: 0 auto
+            }
+
+        }
+
+        p {
+            @include breakpoint(md, down) {
+                width: 60%;
+                display: block;
+                margin: 0 auto
+            }
+        }
+    }
+}

@@ -1,0 +1,40 @@
+@import 'src/styles/abstracts/variables';
+@import 'src/styles/abstracts/_mixins';
+// .ServiceBookingContainerActive {
+//     display: none !important;
+// }
+.ServiceBookingContainer {
+    justify-content: center;
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    .ServiceBookingItems {
+        @include breakpoint(md, down) {
+            justify-content: center;
+        }
+    }
+    .ServiceBookingItem {
+        padding: $hs-spacing-2 0;
+        text-align: center;
+    }
+    .icon {
+        font-size: $hs-font-size-5;
+        @include breakpoint(lg, down) {
+            font-size: $hs-font-size-7;
+        }
+    }
+}
+
+.ServiceBookingTag {
+    background-color: #E12D2D;
+    margin: 5px auto;
+    /* padding-bottom: 10px; */
+    width: 35px;
+    color: #ffff;
+    height: 25px;
+    align-items: center;
+    font-size: $hs-font-size-5;
+    border-radius: 10%;
+}

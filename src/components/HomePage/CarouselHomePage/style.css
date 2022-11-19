@@ -1,0 +1,92 @@
+.introduce-carousel {
+    /* background-image: url("../../../../public/assets/img/trangchu.jpg"); */
+    /* min-height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; */
+    /* background-attachment: fixed; */
+    /* height: 700px !important; */
+    /* display: block;
+    width: 100%; */
+}
+
+.introduce-carousel {
+    position: relative;
+    /* height: 800px; */
+    min-height: 10%;
+    /* font-weight: 400; */
+}
+
+.introduce-carousel .carousel-indicators {
+    bottom: 10%;
+}
+
+@media screen and (max-width: 960px) {
+    .introduce-carousel .carousel-indicators {
+        bottom: 0;
+    }
+}
+
+.introduce-carousel .carousel-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+}
+
+.introduce-carousel .carousel-content h1 {
+    font-weight: 300;
+}
+
+.introduce-carousel .carousel-content span {
+    font-weight: 500;
+}
+
+.introduce-carousel p {
+    font-weight: 300;
+}
+
+.introduce-carousel .carousel-indicators li {
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 50%;
+    background-color: transparent;
+    border: #fff solid 2px;
+}
+
+.introduce-carousel .carousel-indicators li.active {
+    background-color: #fff;
+}
+
+.carousel-item p {
+    letter-spacing: 4px;
+    font-size: 1em;
+    line-height: 1.8em;
+    font-weight: 300;
+    color: #fff;
+    margin: 1rem auto 2rem;
+}
+
+.carousel-item .button__rm {
+    border: 1px solid #fff;
+    width: 8rem;
+    margin: 0 auto;
+    bottom: 10%;
+    transition: all 0.5s;
+}
+
+.carousel-item img {
+    height: 800px !important;
+    object-fit: cover;
+}
+
+.carousel-item .button__rm:hover {
+    background-color: #ff4f81;
+    border-color: #ff4f81;
+}
+
+.carousel-item .button__rm a {
+    color: #fff;
+    font-size: 14.4px;
+}

@@ -1,0 +1,38 @@
+@import 'src/styles/abstracts/variables';
+@import 'src/styles/abstracts/_mixins';
+
+.recommendContainer {
+    justify-content: center;
+
+    @include breakpoint(lg, down) {
+        font-size: 0.6rem;
+    }
+
+    .btnNav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: transparent;
+        width: remToPx(2.5);
+        height: remToPx(2.625);
+        box-sizing: content-box;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .recommendBtn {
+        cursor: pointer;
+        background-color: white;
+
+        @include breakpoint(lg, down) {
+            font-size: 0.6rem;
+        }
+
+        &:hover {
+            color: white;
+            background-color: blue;
+        }
+    }
+}

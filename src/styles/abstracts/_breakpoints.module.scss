@@ -1,0 +1,17 @@
+@import './variables';
+
+$breakpointXS: map-get($grid-breakpoints, 'xs');
+$breakpointSM: map-get($grid-breakpoints, 'sm');
+$breakpointMD: map-get($grid-breakpoints, 'md');
+$breakpointMD1024: map-get($grid-breakpoints, 'md-1024');
+$breakpointLG: map-get($grid-breakpoints, 'lg');
+$breakpointXL: map-get($grid-breakpoints, 'xl');
+
+:export {
+    breakpointXS: $breakpointXS;
+    breakpointSM: $breakpointSM;
+    breakpointMD: $breakpointMD;
+    breakpointMD1024: $breakpointMD1024;
+    breakpointLG: $breakpointLG;
+    breakpointXL: $breakpointXL;
+}

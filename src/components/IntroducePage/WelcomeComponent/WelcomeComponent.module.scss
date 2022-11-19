@@ -1,0 +1,15 @@
+@import "src/styles/abstracts/mixins";
+@import "src/styles/abstracts/variables";
+
+.welcomeContainer {
+  .customIntroduce {
+    width: 83.3333%;
+  }
+
+  .imageContainer {
+    background-image: var(--backgroundImage);
+    background-size: cover;
+    width: 30%;
+    height: 360px;
+  }
+}

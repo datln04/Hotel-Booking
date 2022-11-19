@@ -1,0 +1,16 @@
+.evaluateContainer {
+  background-image: linear-gradient(
+      rgba(20, 20, 20, 0.9),
+      rgba(20, 20, 20, 0.9)
+    ),
+    var(--backgroundImage);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  height: 220px;
+
+  .number {
+    font-weight: 700;
+  }
+}

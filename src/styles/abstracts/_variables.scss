@@ -1,0 +1,164 @@
+// define a variable to reuse in another scss file
+@import "./functions";
+// Overwriting default bootstrap breakpoints for bootstrap styling used
+$grid-breakpoints: (
+  xs: 0,
+  sm: 375px,
+  md: 768px,
+  md-1024: 1024px,
+  lg: 1440px,
+  xl: 1920px,
+);
+// ------ FONT SIZES ------
+$hs-font-size-1: pxToRem(60);
+$hs-font-size-2: pxToRem(48);
+$hs-font-size-3: pxToRem(42);
+$hs-font-size-4: pxToRem(36);
+$hs-font-size-5: pxToRem(30);
+$hs-font-size-6: pxToRem(24);
+$hs-font-size-7: pxToRem(20);
+$hs-font-size-8: pxToRem(18);
+$hs-font-size-9: pxToRem(16);
+$hs-font-size-10: pxToRem(14);
+$hs-font-size-11: pxToRem(12);
+$hs-font-size-12: pxToRem(10);
+$hs-font-sizes-array: (
+  "10": $hs-font-size-12,
+  "12": $hs-font-size-11,
+  "14": $hs-font-size-10,
+  "16": $hs-font-size-9,
+  "18": $hs-font-size-8,
+  "20": $hs-font-size-7,
+  "24": $hs-font-size-6,
+  "30": $hs-font-size-5,
+  "36": $hs-font-size-4,
+  "42": $hs-font-size-3,
+  "48": $hs-font-size-2,
+  "60": $hs-font-size-1,
+);
+// ------ MARGINS & PADDINGS ------
+$hs-spacing-0: pxToRem(4);
+$hs-spacing-1: pxToRem(8);
+$hs-spacing-2: pxToRem(16);
+$hs-spacing-3: pxToRem(24);
+$hs-spacing-4: pxToRem(32);
+$hs-spacing-5: pxToRem(40);
+$hs-spacing-6: pxToRem(48);
+$hs-spacing-7: pxToRem(56);
+$hs-spacing-8: pxToRem(64);
+$hs-spacing-9: pxToRem(72);
+$hs-spacing-10: pxToRem(80);
+$hs-spacing-11: pxToRem(88);
+$hs-spacing-12: pxToRem(96);
+$hs-spacing-13: pxToRem(104);
+$hs-spacing-14: pxToRem(112);
+$hs-spacing-15: pxToRem(120);
+$hs-spacing-new-20: pxToRem(20);
+$hs-spacing-new-44: pxToRem(44);
+// ------ BORDER RADIUSES ------
+$hs-border-radius-xs: pxToRem(2);
+$hs-border-radius-sm: pxToRem(5);
+$hs-border-radius-md: pxToRem(8);
+$hs-border-radius-lg: pxToRem(10);
+$hs-border-radius: $hs-border-radius-md;
+$hs-spacing-sizes: (
+  "0": 0,
+  "4": $hs-spacing-0,
+  "8": $hs-spacing-1,
+  "16": $hs-spacing-2,
+  "20": $hs-spacing-new-20,
+  "24": $hs-spacing-3,
+  "32": $hs-spacing-4,
+  "40": $hs-spacing-5,
+  "44": $hs-spacing-new-44,
+  "48": $hs-spacing-6,
+  "56": $hs-spacing-7,
+  "64": $hs-spacing-8,
+  "72": $hs-spacing-9,
+  "80": $hs-spacing-10,
+  "88": $hs-spacing-11,
+  "96": $hs-spacing-12,
+  "104": $hs-spacing-13,
+  "112": $hs-spacing-14,
+  "120": $hs-spacing-15,
+);
+$hs-font-text-xxl-array: (
+  xs: $hs-font-size-3,
+  lg: $hs-font-size-2,
+  xl: $hs-font-size-1,
+);
+$hs-font-text-xl-array: (
+  xs: $hs-font-size-6,
+  lg: $hs-font-size-5,
+  xl: $hs-font-size-4,
+);
+$hs-font-text-lg-array: (
+  xs: $hs-font-size-10,
+  lg: $hs-font-size-7,
+  xl: $hs-font-size-6,
+);
+$hs-font-text-md-array: (
+  xs: $hs-font-size-10,
+  lg: $hs-font-size-9,
+  xl: $hs-font-size-8,
+);
+$hs-font-text-sm-array: (
+  xs: $hs-font-size-11,
+  lg: $hs-font-size-10,
+  xl: $hs-font-size-9,
+);
+$hs-font-text-xs-array: (
+  xs: $hs-font-size-12,
+  lg: $hs-font-size-11,
+  xl: $hs-font-size-10,
+);
+$hs-font-text-xxs-array: (
+  xs: $hs-font-size-12,
+);
+$hs-font-display-array: (
+  xs: $hs-font-size-5,
+  md: $hs-font-size-4,
+  lg: $hs-font-size-2,
+  xl: $hs-font-size-1,
+);
+// ------ LINE HEIGHTS ------
+$hs-line-height-100: 1;
+$hs-line-height-120: 1.2;
+$hs-line-height-130: 1.3;
+$hs-line-height-140: 1.4;
+$hs-line-height-150: 1.5;
+$hs-line-height-160: 1.6;
+// define color
+$hs-color-light-yellow: #ffc42a !default;
+$hs-color-maggie: rgba(173, 133, 75, 1) !default;
+$hs-color-dark-brown: #ad854b !default;
+$hs-color-dark-9: #141414 !default;
+$hs-color-dark-low: #1e1e1e !default;
+$hs-color-dark-8: rgba(30, 30, 30, 0.8);
+$hs-color-dark: #1d1d1d !default;
+$hs-color-dark-grey: #c4c4c4 !default;
+$hs-color-white-6: rgba(255, 255, 255, 0.6);
+$hs-color-white: #fff !default;
+$hs-color-grey: #bcbcb1 !default;
+$hs-color-black-grey: #888177 !default;
+$hs-color-grey-6: rgba(30, 30, 30, 0.6) !default;
+$hs-color-solid-dark: #000000 !default;
+$hs-color-solid-red: #ff0000 !default;
+//  array of color
+$hs-colors: (
+  "light-yellow": $hs-color-light-yellow,
+  "dark-brown": $hs-color-dark-brown,
+  "dark-9": $hs-color-dark-9,
+  "dark-8": $hs-color-dark-8,
+  "dark": $hs-color-dark,
+  "dark-grey": $hs-color-dark-grey,
+  "white-6": $hs-color-white-6,
+  "white": $hs-color-white,
+  "maggie": $hs-color-maggie,
+  "grey": $hs-color-grey,
+  "black-grey": $hs-color-black-grey,
+  "solid-dark": $hs-color-solid-dark,
+  "dark-low": $hs-color-dark-low,
+  "grey-6": $hs-color-grey-6,
+  "solid-red": $hs-color-solid-red,
+);

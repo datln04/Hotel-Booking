@@ -1,0 +1,1 @@
+export const roomTypeState$ = (state)=> state.RoomTypeReducer.arrRoomType

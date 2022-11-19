@@ -1,0 +1,34 @@
+/**Arrow button**/
+
+@import 'src/styles/abstracts/variables';
+@import 'src/styles/abstracts/_mixins';
+.arrowBtn {
+    position: fixed;
+    bottom: 30px;
+    left: 95%;
+    z-index: 10;
+    @include breakpoint(lg, down) {
+        position: fixed;
+        bottom: 30px;
+        left: 85%;
+        z-index: 10;
+    }
+}
+
+.arrowBtn a {
+    position: fixed;
+    bottom: 20px;
+    width: 37px;
+    text-align: center;
+    background: #1b1b1b;
+    display: block;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid #888177;
+}
+
+.arrowBtn a span {
+    color: #f2f2f2;
+    line-height: 39px;
+    font-size: 25px;
+}

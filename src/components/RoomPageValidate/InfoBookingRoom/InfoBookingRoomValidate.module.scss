@@ -1,0 +1,37 @@
+.InfoBookingRoom {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .InfoBookingRoomItem {
+    text-align: center;
+
+    .infoRoom {
+      height: 48px;
+    }
+
+    .overlayContainer {
+      border-top: 1px solid white;
+      position: absolute;
+
+      p {
+        font-weight: 300 !important;
+      }
+
+      .roomTitle {
+        width: fit-content;
+      }
+
+      .roomDropdown {
+        border: 1px solid #ad854b;
+        height: fit-content;
+      }
+    }
+
+    .roomButtonAdd {
+      width: fit-content;
+      border: 1px solid #ad854b;
+    }
+  }
+}

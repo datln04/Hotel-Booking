@@ -1,0 +1,1 @@
+export const RoomAvailabilityState$ = (state) => state.RoomAvailabilityReducer.arrRoomAvailability

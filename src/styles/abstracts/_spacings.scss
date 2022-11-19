@@ -1,0 +1,98 @@
+@import './variables';
+@import './mixins';
+
+@mixin margin-padding-classes {
+    $sides: (
+        '': '',
+        't': 'top',
+        'b': 'bottom',
+        'l': 'inline-start',
+        'r': 'inline-end',
+        'x': (
+            'inline-start',
+            'inline-end',
+        ),
+        'y': (
+            'top',
+            'bottom',
+        ),
+    );
+
+    @each $breakName, $breakValue in $grid-breakpoints {
+        @if $breakName != 'xs' {
+            @include breakpoint($breakValue, up) {
+                @each $sideName, $sideValue in $sides {
+                    @each $spacingName, $spacingSize in $hs-spacing-sizes {
+                        $property: if($sideName == '', '', -#{$sideValue});
+                        $selector: '';
+
+                        @if $breakName != '' {
+                            $selector: #{$sideName}-#{$breakName}-#{$spacingName};
+                        } @else {
+                            $selector: #{$sideName}-#{$spacingName};
+                        }
+
+                        @if $sideName == 'x' or $sideName == 'y' {
+                            .hs-m#{$selector} {
+                                @each $sideValueInner in $sideValue {
+                                    margin#{-#{$sideValueInner}}: #{$spacingSize} !important;
+                                }
+                            }
+
+                            .hs-p#{$selector} {
+                                @each $sideValueInner in $sideValue {
+                                    padding#{-#{$sideValueInner}}: #{$spacingSize} !important;
+                                }
+                            }
+                        } @else {
+                            .hs-m#{$selector} {
+                                margin#{$property}: #{$spacingSize} !important;
+                            }
+
+                            .hs-p#{$selector} {
+                                padding#{$property}: #{$spacingSize} !important;
+                            }
+                        }
+                    }
+                }
+            }
+        } @else {
+            @each $sideName, $sideValue in $sides {
+                @each $spacingName, $spacingSize in $hs-spacing-sizes {
+                    $property: if($sideName == '', '', -#{$sideValue});
+                    $selector: '';
+
+                    @if $breakName != '' {
+                        $selector: #{$sideName}-#{$spacingName};
+                    } @else {
+                        $selector: #{$sideName}-#{$spacingName};
+                    }
+
+                    @if $sideName == 'x' or $sideName == 'y' {
+                        .hs-m#{$selector} {
+                            @each $sideValueInner in $sideValue {
+                                margin#{-#{$sideValueInner}}: #{$spacingSize} !important;
+                            }
+                        }
+
+                        .hs-p#{$selector} {
+                            @each $sideValueInner in $sideValue {
+                                padding#{-#{$sideValueInner}}: #{$spacingSize} !important;
+                            }
+                        }
+                    } @else {
+                        .hs-m#{$selector} {
+                            margin#{$property}: #{$spacingSize} !important;
+                        }
+
+                        .hs-p#{$selector} {
+                            padding#{$property}: #{$spacingSize} !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include margin-padding-classes;

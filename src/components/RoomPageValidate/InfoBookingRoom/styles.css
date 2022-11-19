@@ -1,0 +1,29 @@
+.DateRangePickerInput {
+    background-color: #141414;
+    color: white
+}
+
+.DateRangePickerInput_arrow {
+    width: 30px;
+
+}
+
+.DateRangePickerInput_arrow svg path {
+    fill: white;
+}
+
+.DateInput {
+    background-color: #141414;
+}
+
+.DateInput_input {
+    cursor: pointer;
+    background-color: #141414;
+    color: white;
+    padding: 11px 0;
+    width: 100px;
+}
+
+.DateRangePickerInput__withBorder {
+    border: none;
+}

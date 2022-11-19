@@ -1,0 +1,68 @@
+.text-xs {
+  @include font($hs-font-text-xs-array, $hs-line-height-160, null);
+}
+
+.text-sm {
+  @include font($hs-font-text-sm-array, $hs-line-height-160, null);
+}
+
+p,
+.p,
+.text-md {
+  @include font($hs-font-text-md-array, $hs-line-height-160, null);
+}
+
+.text-lg {
+  @include font($hs-font-text-lg-array, $hs-line-height-160, null);
+}
+
+.text-xl {
+  @include font($hs-font-text-xl-array, $hs-line-height-130, null);
+}
+
+.text-xxl {
+  @include font($hs-font-text-xxl-array, $hs-line-height-100, null);
+}
+
+a,
+.a {
+  text-decoration: none;
+  color: $hs-color-white;
+
+  &:hover {
+    color: $hs-color-dark-brown;
+  }
+}
+
+hr,
+.hr {
+  border: 3px solid #ad854b;
+  width: 15%;
+}
+
+.introduce {
+  text-align: center;
+
+  .hotel-name {
+    color: $hs-color-grey;
+  }
+
+  .title {
+    color: $hs-color-white;
+    padding: 1rem 0 !important;
+  }
+}
+
+.button {
+  cursor: pointer;
+  border-radius: 5px;
+  width: fit-content;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+.weight-300 {
+  font-weight: 300 !important;
+}

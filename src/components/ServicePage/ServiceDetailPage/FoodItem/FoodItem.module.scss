@@ -1,0 +1,30 @@
+    @import 'src/styles/abstracts/variables';
+    @import 'src/styles/abstracts/_mixins';
+    .FoodItemdDetail {
+        height: 300px;
+        @include breakpoint(md, down) {
+            width: 100%;
+            height: 500px;
+        }
+    }
+    
+    .ImageItem img {
+        width: 100%;
+        height: 250px;
+        @include breakpoint(md, down) {
+            width: 100%;
+            height: 200px;
+        }
+    }
+    
+    .ImageFood {
+        width: 75%;
+    }
+    
+    .hr1 {
+        border: 1px solid #c4c4c4;
+        background-color: #c4c4c4;
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }

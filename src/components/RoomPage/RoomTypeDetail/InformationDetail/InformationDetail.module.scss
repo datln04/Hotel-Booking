@@ -1,0 +1,24 @@
+@import "src/styles/abstracts/mixins";
+@import "src/styles/abstracts/variables";
+.hr1 {
+    background-color: #fff;
+    border: 0.5px solid #fff;
+    width: 60% !important;
+    @include breakpoint(lg, down) {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.InformationDetail {
+    @include breakpoint(md, down) {
+        text-align: center;
+        width: 100%;
+    }
+}
+
+.InformationDetailItem {
+    @include breakpoint(md, down) {
+     
+    }
+}

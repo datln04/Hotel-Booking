@@ -1,0 +1,23 @@
+@import 'src/styles/abstracts/variables';
+@import 'src/styles/abstracts/_mixins';
+.ServiceDescription {
+    width: 100%;
+    // height: 1000px;
+}
+
+.hr1 {
+    background-color: #ad854b;
+    border: 2px solid #ad854b
+}
+
+.DescriptionText {
+    width: 90%;
+}
+
+.ImageDescription img {
+    width: 100%;
+    height: 310px;
+    @include breakpoint(md, down) {
+        display: none;
+    }
+}

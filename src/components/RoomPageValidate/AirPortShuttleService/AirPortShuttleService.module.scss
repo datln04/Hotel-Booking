@@ -1,0 +1,16 @@
+@import "src/styles/abstracts/variables";
+@import "src/styles/abstracts/_mixins";
+
+.container {
+    border-top: 1px solid white;
+
+    img {
+        width: 100%;
+    }
+}
+
+input[type=checkbox] {
+    width: 40px;
+    height: 25px;
+    accent-color: $hs-color-light-yellow;
+}

@@ -1,0 +1,70 @@
+@import "src/styles/abstracts/variables";
+@import "src/styles/abstracts/_mixins";
+
+.RoomAvailability {
+  height: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .Title2 {
+    width: 90%;
+  }
+
+  .payment {
+    img {
+      width: 30%;
+    }
+  }
+
+}
+
+.OrderOfRoom {
+
+  .RoomIsChoose,
+  .TotalPrice {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ContinueButton {
+    border: none;
+    width: 100%;
+    height: 50px;
+  }
+}
+
+.border {
+  border-bottom: 1px solid #c4c4c4;
+}
+
+.textarea {
+  height: 230px;
+}
+
+.TextContainer {
+  border: 2px solid $hs-color-dark-grey;
+  border-radius: 5px;
+  width: 70%;
+}
+
+
+.overlay {
+  position: relative;
+}
+
+.overlay:after {
+  content: " ";
+  z-index: 10;
+  display: block;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #141414;
+  opacity: 0.5
+}
