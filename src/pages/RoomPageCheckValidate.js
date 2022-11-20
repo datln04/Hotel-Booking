@@ -72,6 +72,7 @@ export default function RoomPageCheckValidate() {
         )
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomSelect, count]);
 
   useEffect(() => {

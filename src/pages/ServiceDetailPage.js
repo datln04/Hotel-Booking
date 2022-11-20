@@ -1,20 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
+import image2 from "../assets/images/servicePage/serviceDetail/cangcuabachhoa.jpg";
+import image3 from "../assets/images/servicePage/serviceDetail/coffee.jpg";
+import image1 from "../assets/images/servicePage/serviceDetail/suphaisan.jpg";
 import Breadcrumb from "../components/IntroducePage/Breadcrumb/Breadcrumb";
 import ServiceDescription from "../components/ServicePage/ServiceDetailPage/ServiceDescription/ServiceDescription";
 import ServiceDetail from "../components/ServicePage/ServiceDetailPage/ServiceDetail/ServiceDetail";
-import * as actions from "../redux/actions/ServiceCategoryAction"
-import image from "./../assets/images/servicePage/dichVu.jpg";
-import image1 from "../assets/images/servicePage/serviceDetail/suphaisan.jpg";
-import image2 from "../assets/images/servicePage/serviceDetail/cangcuabachhoa.jpg";
-import image3 from "../assets/images/servicePage/serviceDetail/coffee.jpg";
-import { useDispatch, useSelector } from "react-redux";
 import { serviceCategoryDetailTypeState$ } from "../redux/selectors/ServiceCategorySelector";
+import image from "./../assets/images/servicePage/dichVu.jpg";
 export default function ServiceDetailPage() {
-  // const dispatch = useDispatch();
-  // useEffect(()=>{
-  //   dispatch(actions.getServiceCategory.getServiceCategoryRequest())
-  // },[dispatch])
-  const serviceDetail = useSelector(serviceCategoryDetailTypeState$)
+  const serviceDetail = useSelector(serviceCategoryDetailTypeState$);
   const dataFood = [
     {
       title: "Các món khai vị",
@@ -99,8 +94,8 @@ export default function ServiceDetailPage() {
   ];
   return (
     <div className="main-screen">
-      <Breadcrumb image={image} serviceDetail={serviceDetail}/>
-      <ServiceDescription serviceDetail={serviceDetail}/>
+      <Breadcrumb image={image} serviceDetail={serviceDetail} />
+      <ServiceDescription serviceDetail={serviceDetail} />
       <ServiceDetail data={dataFood} dataDrink={dataDrink} />
       {/* <FoodCategory data={data}/> */}
       {/* <MenuOverview data={data}/> */}

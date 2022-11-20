@@ -1,17 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import classNames from "classnames";
 import React from "react";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import Styles from "../ServiceItem/ServiceItem.module.scss";
-import * as actions from "../../../redux/actions/ServiceCategoryAction"
+import * as actions from "../../../redux/actions/ServiceCategoryAction";
 import { useNavigate } from "react-router-dom";
 export default function ServiceItem({ item }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
-  const loadServiceDetail = useCallback(()=>{
-      dispatch(actions.getServiceCategoryById.getServiceCategoryByIdRequest(item.id))
-      navigate({})
-  },[item.id,dispatch])
+  const navigate = useNavigate();
+  const loadServiceDetail = useCallback(() => {
+    dispatch(
+      actions.getServiceCategoryById.getServiceCategoryByIdRequest(item.id)
+    );
+    navigate({});
+  }, [item.id, dispatch]);
   return (
     <div
       className={classNames(
@@ -19,7 +22,7 @@ export default function ServiceItem({ item }) {
         Styles.ServiceItem
       )}
     >
-      <div onClick={()=>loadServiceDetail()}>
+      <div onClick={() => loadServiceDetail()}>
         <div className={classNames(Styles.ImageService)}>
           <img src={item.pictureUrl} alt="#" />
         </div>

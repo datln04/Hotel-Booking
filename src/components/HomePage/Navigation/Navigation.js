@@ -53,7 +53,9 @@ const Navigation = () => {
               style={{ width: "50px", height: "50px" }}
             ></img>
           </div>
-          <div className="col-md-8 hs-pl-12 text-lg">{CONSTANT.HOTEL_NAME}</div>
+          <div className="col-md-8 hs-pl-12 text-lg hs-px-16">
+            {CONSTANT.HOTEL_NAME}
+          </div>
         </div>
         <div className="col-10 col-md-8">
           <div

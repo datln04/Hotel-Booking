@@ -1,5 +1,5 @@
 import React from "react";
-import Styles from "../Loading/Loading.module.scss"
+import Styles from "../Loading/Loading.module.scss";
 import { useSelector } from "react-redux";
 import { loadingState$ } from "../../redux/selectors/LoadingSelector";
 import classNames from "classnames";
@@ -8,7 +8,7 @@ export default function Loading() {
   if (isLoading) {
     return (
       <div className={classNames(Styles.bgLoading)}>
-        <img src="../../assets/img/loading11.gif" />
+        <img src="../../assets/img/loading11.gif" alt="loading" />
       </div>
     );
   } else {

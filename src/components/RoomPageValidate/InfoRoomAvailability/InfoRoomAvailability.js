@@ -1,20 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import classNames from "classnames";
-import React from "react";
-import { useRef } from "react";
-import { useCallback } from "react";
-import { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
-import { formatPrice, generateId } from "../../../util/utilities/utils";
+import MomoImage from "../../../assets/images/momo.png";
+import VNPayImage from "../../../assets/images/VNPay.png";
+import * as paymentAction from "../../../redux/actions/PaymentAction";
+import { PaymentWithVNPayState$ } from "../../../redux/selectors/PaymentSelector";
+import { formatPrice } from "../../../util/utilities/utils";
 import AirPortShuttleService from "../AirPortShuttleService/AirPortShuttleService";
 import CustomerInfo from "../CustomerInfo/CustomerInfo";
 import ListRoomAvailability from "../ListRoomAvailability/ListRoomAvailability";
 import Styles from "./InfoRoomAvailability.module.scss";
-import MomoImage from "../../../assets/images/momo.png";
-import VNPayImage from "../../../assets/images/VNPay.png";
-import { useDispatch, useSelector } from "react-redux";
-import { PaymentWithVNPayState$ } from "../../../redux/selectors/PaymentSelector";
-import * as paymentAction from "../../../redux/actions/PaymentAction";
-import { Navigate, useNavigate } from "react-router-dom";
 
 export default function RoomAvailability({
   count,
@@ -120,7 +118,7 @@ export default function RoomAvailability({
     if (tab === 2) {
       swal({
         title: "Are you sure?",
-        text: "Are you sure to change date?",
+        text: "Your Booking will be canceled!!!",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -139,6 +137,10 @@ export default function RoomAvailability({
   const handleRemoveRoom = () => {
     if (roomSelect.length === 1) {
       setTab(1);
+      setArrayCheckedAirport({
+        id: 0,
+        checked: "",
+      });
     }
 
     setRoomSelect(roomSelect.slice(0, -1));
@@ -571,8 +573,8 @@ export default function RoomAvailability({
                             {currentRoomInfo.name}
                           </div>
                           <div className="col-12 hs-text-dark-grey hs-py-16">
-                            {"Adult: " + person.adult}
-                            {person.child > 0 ? ", child: " + person.child : ""}
+                            {person.adult + " người lớn, "}
+                            {person.child > 0 ? person.child + " trẻ em" : ""}
                           </div>
 
                           {index < count.length - 1 && tab < 2 && (
@@ -620,7 +622,7 @@ export default function RoomAvailability({
                     )}
                   >
                     <div className="col-12 d-flex justify-content-between">
-                      <div className="hs-py-16 text-lg">Extras</div>
+                      <div className="hs-py-16 text-lg">Bổ Sung</div>
                       <div className={classNames("text-lg hs-py-16")}>
                         {formatPrice(airSport.price, "vi-VN", "VND")}
                       </div>
@@ -636,7 +638,7 @@ export default function RoomAvailability({
               Styles.TotalPrice
             )}
           >
-            <div className="col-3 hs-px-16 text-lg">Tổng</div>
+            <div className="col-3 hs-px-24 text-lg">Tổng</div>
             <div className="col-9 text-end hs-pr-16 text-lg">
               {totalPrice ? formatPrice(totalPrice, "vi-VN", "VND") : "0 đ"}
             </div>

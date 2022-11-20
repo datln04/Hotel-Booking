@@ -1,17 +1,7 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { roomTypeState$ } from "../../../redux/selectors/RoomTypeSelector";
-import Styles from "./RoomType.module.scss";
-import * as actions from "../../../redux/actions/RoomTypeAction";
 import classNames from "classnames";
-import { NavLink } from "react-router-dom";
-// import '../../../../public/assets/img/standardRoom.jpg'
+import React from "react";
+import Styles from "./RoomType.module.scss";
 export default function RoomType() {
-  const dispatch = useDispatch;
-  // React.useEffect(() => {
-  //   dispatch(actions.getRoomType.getRoomTypeRequest());
-  // }, [dispatch]);
-  // let arrRoomType = useSelector(roomTypeState$);
   const data = [
     {
       title: "Standard Room",
@@ -59,7 +49,12 @@ export default function RoomType() {
                 <div className="hs-text-white text-center">
                   <p>{item.title}</p>
                 </div>
-                <hr className={classNames('hs-text-dark-brown hs-mt-8', Styles.hr2)} />
+                <hr
+                  className={classNames(
+                    "hs-text-dark-brown hs-mt-8",
+                    Styles.hr2
+                  )}
+                />
                 <div className={classNames(Styles.imageRoomType)}>
                   <img src={item.image} alt="" />
                 </div>
@@ -78,8 +73,13 @@ export default function RoomType() {
                       );
                     })}
                 </div>
-                <div className={classNames("text-lg d-flex justify-content-start hs-pt-8", Styles.buttonDetail)}>
-                  <a href="#">Đặt Phòng +</a>
+                <div
+                  className={classNames(
+                    "text-lg d-flex justify-content-start hs-pt-8",
+                    Styles.buttonDetail
+                  )}
+                >
+                  <a href="/home">Đặt Phòng +</a>
                 </div>
               </div>
             );

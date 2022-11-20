@@ -4,14 +4,13 @@ import Styles from "../ServiceDetail/ServiceDetail.module.scss";
 import FoodCategory from "../FoodCategory/FoodCategory";
 import MenuOverview from "../MenuOverview/MenuOverview";
 import DrinkCategory from "../DrinkCategory/DrinkCategory";
-export default function ServiceDetail({ data,dataDrink }) {
+export default function ServiceDetail({ data, dataDrink }) {
   const data1 = {
     descriptionFood:
       "Để chuyến du lịch trọn vẹn về mọi mặt thì thức ăn cũng góp một phần cực kỳ to lớn trong cả chuyến đi vì thế khách sạn chúng tôi vô cùng quan tâm cũng như đầu tư bài bản về chất lượng cũng như hình thức nhằm đem lại trãi nghiệm trọn vẹn đến với quý du khách. Dưới đây là những món ăn và các thực đơn tiêu biểu của khách sạn. ",
     descriptionDrink:
       "Đồ uống ngon cùng với những món ăn tuyệt vời là tiêu chí hàng đầu mà chúng tôi quan tâm. Đồ uống được đội ngũ nhân viên chúng tôi pha chế và trình bày đẹp mắt nhằm đem lại thêm nhiều màu sắc nâng tầm trãi nghiệm khi thưởng thức.",
   };
-  const menuFood = [];
   const [foodDetail, setFoodDetail] = useState(false);
   const updateFoodDetail = (state) => {
     if (!state) {
@@ -41,7 +40,9 @@ export default function ServiceDetail({ data,dataDrink }) {
       );
     } else {
       return (
-        <div className={classNames("col-12 hs-bg-dark", Styles.ServiceDetailDrink)}>
+        <div
+          className={classNames("col-12 hs-bg-dark", Styles.ServiceDetailDrink)}
+        >
           <div
             className={classNames(
               "hs-text-grey d-flex justify-content-center align-items-center hs-pt-16 text-center",

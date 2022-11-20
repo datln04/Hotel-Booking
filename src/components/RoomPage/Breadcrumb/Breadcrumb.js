@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable array-callback-return */
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";

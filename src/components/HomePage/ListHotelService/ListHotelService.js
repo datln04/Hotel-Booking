@@ -10,14 +10,14 @@ import { serviceCategoryTypeState$ } from "../../../redux/selectors/ServiceCateg
 
 const ListHotelService = () => {
   const dispatch = useDispatch();
-  const listServiceCategory = useSelector(serviceCategoryTypeState$);
-  useEffect(() => {
-    dispatch(
-      actions.getServiceCategory.getServiceCategoryRequest(
-        "img_serviceCategory"
-      )
-    );
-  }, [dispatch]);
+  // const listServiceCategory = useSelector(serviceCategoryTypeState$);
+  // useEffect(() => {
+  //   dispatch(
+  //     actions.getServiceCategory.getServiceCategoryRequest(
+  //       "img_serviceCategory"
+  //     )
+  //   );
+  // }, [dispatch]);
 
   const GalleryPrevArrow = ({ currentSlide, slideCount, ...props }) => {
     const { onClick } = props;
@@ -113,11 +113,11 @@ const ListHotelService = () => {
       <hr className={classNames("hs-text-dark-brown hs-mt-8", Styles.hr2)} />
       <div className={classNames("hs-py-32 col-12 d-flex", Styles.Slider)}>
         <div className="col-10">
-          <Slider {...settings}>
+          {/* <Slider {...settings}>
             {listServiceCategory.map((service) => (
               <HotelServiceSlide service={service} key={service.id} />
             ))}
-          </Slider>
+          </Slider> */}
         </div>
       </div>
     </div>

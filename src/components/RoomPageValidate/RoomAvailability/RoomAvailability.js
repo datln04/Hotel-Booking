@@ -95,7 +95,7 @@ export default function RoomAvailability({ data, callBackFunc }) {
               </div>
               <div
                 className={classNames(
-                  "col-5 hs-bg-dark-brown hs-text-white text-lg text-center button"
+                  "col-5 hs-bg-dark-brown hs-text-white text-lg text-center button d-flex align-items-center justify-content-center"
                 )}
                 onClick={() =>
                   callBackFunc(

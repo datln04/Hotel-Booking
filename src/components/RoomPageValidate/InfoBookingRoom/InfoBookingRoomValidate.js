@@ -1,14 +1,14 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
 import classNames from "classnames";
-import React from "react";
-import { useState } from "react";
+import moment from "moment";
+import React, { useCallback, useState } from "react";
+import { DateRangePicker } from "react-dates";
+import "react-dates/initialize";
+import "react-dates/lib/css/_datepicker.css";
 import SubRoomInfoBooking from "../SubRoomInfoBooking/SubRoomInfoBooking";
 import Styles from "./InfoBookingRoomValidate.module.scss";
-import { DateRangePicker } from "react-dates";
-import "react-dates/lib/css/_datepicker.css";
-import "react-dates/initialize";
-import { useCallback } from "react";
 import "./styles.css";
-import swal from "sweetalert";
 
 export default function InfoBookingRoomValidate({
   handleApplyRoomCb,
@@ -90,6 +90,7 @@ export default function InfoBookingRoomValidate({
   };
 
   const totalPerson = countPerson();
+  const minDate = moment(new Date());
 
   return (
     <div className={classNames("hs-bg-dark-9 col-12", Styles.InfoBookingRoom)}>
@@ -102,7 +103,13 @@ export default function InfoBookingRoomValidate({
             endDate={arrayDate.endDate}
             endDateId="endDate"
             focusedInput={focusInput}
-            isOutsideRange={() => null}
+            minDate={minDate}
+            isOutsideRange={(date) => {
+              if (date < minDate) {
+                return true;
+              }
+              return false;
+            }}
             onDatesChange={handleSetDateRange}
             onFocusChange={handleFocusChange}
             startDate={arrayDate.startDate}

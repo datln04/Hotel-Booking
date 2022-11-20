@@ -4,8 +4,8 @@ import { ReactComponent as wardrobeIcon } from "./../../assets/images/wardrobe.s
 import { ReactComponent as fridgeIcon } from "./../../assets/images/fridge.svg";
 import { ReactComponent as wifiIcon } from "./../../assets/images/wifi.svg";
 
-export const DOMAIN = "https://hotelservice-v5.herokuapp.com/api";
-// export const DOMAIN = "http://localhost:8080/api";
+// export const DOMAIN = "https://hotelservice-v5.herokuapp.com/api";
+export const DOMAIN = "http://localhost:8080/api";
 export const TOKEN = "access_token";
 export const USER_LOGIN = "USER_LOGIN";
 export const STATUS_CODE = {
