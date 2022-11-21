@@ -15,3 +15,10 @@ export const getPaymentWithVNPay = createActions({
   getPaymentWithVNPayFailure: (err) => err,
   removePaymentWithVNPay: undefined,
 });
+
+export const getPaymentVnPayConfirm = createActions({
+  getPaymentVnPayConfirmRequest: (payload) => payload,
+  getPaymentVnPayConfirmSuccess: (payload) => payload,
+  getPaymentVnPayConfirmFailure: (err) => err,
+  removePaymentVnPayConfirm: undefined,
+});

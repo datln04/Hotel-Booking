@@ -2,13 +2,15 @@
 import classNames from "classnames";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import MomoImage from "../../../assets/images/momo.png";
 import VNPayImage from "../../../assets/images/VNPay.png";
 import * as paymentAction from "../../../redux/actions/PaymentAction";
 import { PaymentWithVNPayState$ } from "../../../redux/selectors/PaymentSelector";
-import { formatPrice } from "../../../util/utilities/utils";
+import { CONSTANT } from "../../../util/constant/settingSystem";
+import { formatPrice, getFullName } from "../../../util/utilities/utils";
 import AirPortShuttleService from "../AirPortShuttleService/AirPortShuttleService";
 import CustomerInfo from "../CustomerInfo/CustomerInfo";
 import ListRoomAvailability from "../ListRoomAvailability/ListRoomAvailability";
@@ -34,9 +36,9 @@ export default function RoomAvailability({
   const [check, setCheck] = useState("later");
   const [areaRequire, setAreaRequire] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [acceptPolicy, setAcceptPolicy] = useState(false);
-
+  const [laterPayment, setLaterPayment] = useState(false);
   const emailRef = useRef(null);
   const confirmEmailRef = useRef(null);
   const nameRef = useRef(null);
@@ -182,16 +184,102 @@ export default function RoomAvailability({
       // );
     }
   };
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (payment && Object.keys(payment).length !== 0) {
-      window.open(payment.url, "_blank");
+      window.location.href = payment.url;
       dispatch(paymentAction.getPaymentWithVNPay.removePaymentWithVNPay());
-      navigate("/home");
     }
-  }, [payment]);
+    if (
+      (searchParams.has("vnp_ResponseCode") &&
+        searchParams.get("vnp_ResponseCode") === "00") ||
+      laterPayment
+    ) {
+      if (sessionStorage.getItem(CONSTANT.PAYMENT_INFO) !== null) {
+        const data = JSON.parse(sessionStorage.getItem(CONSTANT.PAYMENT_INFO));
+        dispatch(
+          paymentAction.getPaymentVnPayConfirm.getPaymentVnPayConfirmRequest({
+            bookingDates: data.date,
+            customer: data.customerInfo,
+            persons: data.count,
+            requestServiceBooking: data.requestService,
+            roomTypes: data.roomSelect,
+            specialUtilities: data.specialUtility,
+            vnp_Amount: data.vnp_Amount,
+            hotel_id: data.hotel_id,
+            utilities: data.utilities,
+          })
+        );
+        navigate("/");
+      }
+    }
+  }, [payment, laterPayment]);
 
-  const handlePaymentVNPay = () => {
+  // const handlePaymentVNPay = () => {
+  //   if (!acceptPolicy) {
+  //     swal({
+  //       title: "Announcement!",
+  //       text: "You need to accept a policy to execute the payment",
+  //       icon: "error",
+  //       button: "Understand",
+  //     });
+  //   } else if (
+  //     nameRef &&
+  //     emailRef.current.value &&
+  //     confirmEmailRef.current.value
+  //   ) {
+  //     const isEqual =
+  //       emailRef.current.value.trim() === confirmEmailRef.current.value.trim();
+  //     if (isEqual) {
+  //       const fullName = getFullName(nameRef.current.value);
+  //       const data = {
+  //         count: count,
+  //         roomSelect: roomSelect,
+  //         date: {
+  //           startDate: arrayDate.startDate.format("DD/MM/yyyy HH:mm:ss"),
+  //           endDate: arrayDate.endDate.format("DD/MM/yyyy HH:mm:ss"),
+  //         },
+  //         utilities: arrayChecked,
+  //         requestService: arrayCheckedAirport,
+  //         specialUtility: areaRequire,
+  //         customerInfo: {
+  //           email: emailRef.current.value,
+  //           firstName: fullName.firstName,
+  //           middleName: fullName.middleName,
+  //           lastName: fullName.lastName,
+  //           phoneNumber: phoneRef.current.value,
+  //         },
+  //         hotel_id: hotelInfo.id,
+  //       };
+  //       sessionStorage.setItem(CONSTANT.PAYMENT_INFO, JSON.stringify(data));
+  //       dispatch(
+  //         paymentAction.getPaymentWithVNPay.getPaymentWithVNPayRequest({
+  //           vnp_amount: totalPrice,
+  //           vnp_IpAddr: "127.0.0.1",
+  //           vnp_Locale: "vi",
+  //           vnp_OrderInfo: "Payment",
+  //         })
+  //       );
+  //     } else {
+  //       swal({
+  //         title: "Announcement!",
+  //         text: "Email and Email Confirm are not matched",
+  //         icon: "warning",
+  //         button: "Re-Enter",
+  //       });
+  //     }
+  //   } else {
+  //     swal({
+  //       title: "Announcement!",
+  //       text: "Tell us about your information",
+  //       icon: "info",
+  //       button: "Let in",
+  //     });
+  //   }
+  // };
+
+  const handlePayment = (isPayLater) => {
     if (!acceptPolicy) {
       swal({
         title: "Announcement!",
@@ -199,27 +287,64 @@ export default function RoomAvailability({
         icon: "error",
         button: "Understand",
       });
+    } else if (
+      nameRef &&
+      emailRef.current.value &&
+      confirmEmailRef.current.value
+    ) {
+      const isEqual =
+        emailRef.current.value.trim() === confirmEmailRef.current.value.trim();
+      if (isEqual) {
+        const fullName = getFullName(nameRef.current.value);
+        const data = {
+          vnp_Amount: searchParams.get("vnp_Amount") ?? "",
+          count: count,
+          roomSelect: roomSelect,
+          date: {
+            startDate: arrayDate.startDate.format("DD/MM/yyyy HH:mm:ss"),
+            endDate: arrayDate.endDate.format("DD/MM/yyyy HH:mm:ss"),
+          },
+          utilities: arrayChecked,
+          requestService:
+            arrayCheckedAirport.id !== 0 ? arrayCheckedAirport : {},
+          specialUtility: areaRequire,
+          customerInfo: {
+            email: emailRef.current.value,
+            firstName: fullName.firstName,
+            middleName: fullName.middleName,
+            lastName: fullName.lastName,
+            phoneNumber: phoneRef.current.value,
+          },
+          hotel_id: hotelInfo.id,
+        };
+        sessionStorage.setItem(CONSTANT.PAYMENT_INFO, JSON.stringify(data));
+        if (!isPayLater) {
+          dispatch(
+            paymentAction.getPaymentWithVNPay.getPaymentWithVNPayRequest({
+              vnp_amount: totalPrice,
+              vnp_IpAddr: "127.0.0.1",
+              vnp_Locale: "vi",
+              vnp_OrderInfo: "Payment",
+            })
+          );
+        } else {
+          setLaterPayment(true);
+        }
+      } else {
+        swal({
+          title: "Announcement!",
+          text: "Email and Email Confirm are not matched",
+          icon: "warning",
+          button: "Re-Enter",
+        });
+      }
     } else {
-      dispatch(
-        paymentAction.getPaymentWithVNPay.getPaymentWithVNPayRequest({
-          vnp_amount: totalPrice,
-          vnp_IpAddr: "127.0.0.1",
-          vnp_Locale: "vi",
-          vnp_OrderInfo: "Payment",
-        })
-      );
-    }
-  };
-
-  const handlePayment = () => {
-    if (!acceptPolicy) {
       swal({
         title: "Announcement!",
-        text: "You need to accept a policy to execute the payment",
-        icon: "error",
-        button: "Understand",
+        text: "Tell us about your information",
+        icon: "info",
+        button: "Let in",
       });
-    } else {
     }
   };
 
@@ -500,7 +625,7 @@ export default function RoomAvailability({
                       className="hs-mr-32 button"
                       src={VNPayImage}
                       alt="vnPay"
-                      onClick={handlePaymentVNPay}
+                      onClick={() => handlePayment(false)}
                     />
                   </div>
                 </div>
@@ -525,7 +650,7 @@ export default function RoomAvailability({
                   <div className="d-flex justify-content-center hs-pb-32">
                     <p
                       className="button hs-text-white text-center text-lg hs-bg-dark-brown w-25 hs-py-16"
-                      onClick={handlePayment}
+                      onClick={() => handlePayment(true)}
                     >
                       Đặt Phòng
                     </p>

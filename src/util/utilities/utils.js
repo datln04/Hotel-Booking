@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import moment from "moment/moment";
 
 export const checkDate = (date, format) => {
@@ -24,4 +25,25 @@ export const generateId = (length) => {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
+};
+
+export const getFullName = (str) => {
+  const rs = str.trim().split(/\s+/);
+  if (rs.length > 0) {
+    return {
+      firstName: rs[0] && rs[0],
+      middleName: rs[1] && rs[1],
+      lastName: rs[2] ? getLastName(rs) : null,
+    };
+  }
+  return rs;
+};
+
+export const getLastName = (str) => {
+  const lastName = str.map((item, idx) => {
+    if (idx > 1) {
+      return item;
+    }
+  });
+  return lastName.join(" ").trim();
 };

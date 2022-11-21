@@ -52,6 +52,32 @@ function* getPaymentWithVNPay(action) {
   }
 }
 
+function* getPaymentVNPayConfirm(action) {
+  try {
+    yield put({
+      type: DISPLAY_LOADING,
+    });
+    yield delay(1000);
+    let listService = yield call(() => {
+      return PaymentService.getPaymentVnPayConfirm(action.payload);
+    });
+    if (listService.status === STATUS_CODE.SUCCESS) {
+      yield put(
+        actions.getPaymentVnPayConfirm.getPaymentVnPayConfirmSuccess(
+          listService.data
+        )
+      );
+    }
+    yield put({
+      type: HIDE_LOADING,
+    });
+  } catch (error) {
+    yield put(
+      actions.getPaymentVnPayConfirm.getPaymentVnPayConfirmFailure(error)
+    );
+  }
+}
+
 export function* followActionGetPaymentWithMoMo() {
   yield takeLatest(
     actions.getPaymentWithMoMo.getPaymentWithMoMoRequest,
@@ -63,5 +89,12 @@ export function* followActionGetPaymentWithVNPay() {
   yield takeLatest(
     actions.getPaymentWithVNPay.getPaymentWithVNPayRequest,
     getPaymentWithVNPay
+  );
+}
+
+export function* followActionGetPaymentVnPayConfirm() {
+  yield takeLatest(
+    actions.getPaymentVnPayConfirm.getPaymentVnPayConfirmRequest,
+    getPaymentVNPayConfirm
   );
 }

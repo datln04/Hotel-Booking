@@ -3,3 +3,6 @@ export const PaymentWithMoMoState$ = (state) =>
 
 export const PaymentWithVNPayState$ = (state) =>
   state.PaymentVNPayReducer.arrPayment;
+
+export const PaymentVnPayConfirmState$ = (state) =>
+  state.PaymentVnPayConfirmReducer.arrPayment;

@@ -19,5 +19,6 @@ export default function* rootSaga() {
     getAllSpecialUtility.followActionGetAllSpecialUtility(),
     paymentSaga.followActionGetPaymentWithMoMo(),
     paymentSaga.followActionGetPaymentWithVNPay(),
+    paymentSaga.followActionGetPaymentVnPayConfirm(),
   ]);
 }

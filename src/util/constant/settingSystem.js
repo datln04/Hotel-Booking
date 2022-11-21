@@ -13,6 +13,7 @@ export const STATUS_CODE = {
 };
 
 export const CONSTANT = {
+  PAYMENT_INFO: "PaymentInfo",
   NAV_RECOMMEND: "Nhiều Chương Trình Khuyến Mãi Dành Riêng Cho Bạn",
   NAV_BTN: "Khám phá ngay",
 

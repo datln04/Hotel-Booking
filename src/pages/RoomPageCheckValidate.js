@@ -12,20 +12,23 @@ import * as specialUtilityAction from "../redux/actions/SpecialUtilityActions";
 import * as hotelAction from "../redux/actions/HotelServiceAction";
 import { SpecialUtilityState$ } from "../redux/selectors/SpecialUtilitySelector";
 import { HotelByIdState$ } from "../redux/selectors/HotelServiceSelector";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { RoomAvailabilityState$ } from "../redux/selectors/RoomAvailabilitySelector";
 import * as actions from "../redux/actions/RoomAvailability";
 import moment from "moment/moment";
 import { checkDate } from "../util/utilities/utils";
 
 export default function RoomPageCheckValidate() {
+  const [searchParams] = useSearchParams();
   const [count, setCount] = useState([{ adult: 1, child: 0 }]);
   const [roomSelect, setRoomSelect] = useState([]);
   const [tab, setTab] = useState(1);
   const location = useLocation();
   const [arrayDate, setArrayDate] = useState({
-    startDate: moment(location.state.dateCheckIn),
-    endDate: moment(location.state.dateCheckout),
+    startDate: moment(location.state?.dateCheckIn) ?? moment(new Date()),
+    endDate: moment(
+      location.state?.dateCheckout ?? moment(new Date()).add(1, "d")
+    ),
   });
   const dispatch = useDispatch();
   const airportShuttle = useSelector(ServiceByCategoryIdState$);
@@ -81,15 +84,17 @@ export default function RoomPageCheckValidate() {
     );
     dispatch(specialUtilityAction.getSpecialUtility.getSpecialUtilityRequest());
     dispatch(hotelAction.getHotelServiceById.getHotelServiceByIdRequest(1));
-    dispatch(
-      actions.getRoomAvailability.getRoomAvailabilityRequest(
-        `dateCheckIn=${moment(location.state.dateCheckIn).format(
-          "DD/MM/yyyy"
-        )}&dateCheckOut=${moment(location.state.dateCheckout).format(
-          "DD/MM/yyyy"
-        )}&numOfPerson=${location.state.numOfPerson}`
-      )
-    );
+    if (!searchParams.toString()) {
+      dispatch(
+        actions.getRoomAvailability.getRoomAvailabilityRequest(
+          `dateCheckIn=${moment(location.state.dateCheckIn).format(
+            "DD/MM/yyyy"
+          )}&dateCheckOut=${moment(location.state.dateCheckout).format(
+            "DD/MM/yyyy"
+          )}&numOfPerson=${location.state.numOfPerson}`
+        )
+      );
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
@@ -100,7 +105,7 @@ export default function RoomPageCheckValidate() {
       <InfoBookingRoomValidate
         handleApplyRoomCb={handleApplyRoom}
         arrayDate={arrayDate}
-        numOfPerson={location.state.numOfPerson}
+        numOfPerson={location.state?.numOfPerson ?? 1}
         roomSelect={roomSelect}
         setDateArray={setArrayDate}
         handleApplyDate={handleApplyRoom}

@@ -1,6 +1,7 @@
 import {
   getPaymentWithMoMo,
   getPaymentWithVNPay,
+  getPaymentVnPayConfirm,
   getType,
 } from "../actions/PaymentAction";
 
@@ -53,7 +54,36 @@ export function PaymentVNPayReducer(state = initialState, action) {
     case getType(getPaymentWithVNPay.removePaymentWithVNPay):
       return {
         ...state,
-        arrPayment: [],
+        arrPayment: {},
+        isLoading: false,
+      };
+    default:
+      return state;
+  }
+}
+
+export function PaymentVnPayConfirmReducer(state = initialState, action) {
+  switch (action.type) {
+    case getType(getPaymentVnPayConfirm.getPaymentVnPayConfirmRequest):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(getPaymentVnPayConfirm.getPaymentVnPayConfirmSuccess):
+      return {
+        ...state,
+        arrPayment: action.payload,
+        isLoading: false,
+      };
+    case getType(getPaymentVnPayConfirm.getPaymentVnPayConfirmFailure):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(getPaymentVnPayConfirm.removePaymentVnPayConfirm):
+      return {
+        ...state,
+        arrPayment: {},
         isLoading: false,
       };
     default:
