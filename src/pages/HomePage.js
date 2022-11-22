@@ -16,7 +16,6 @@ export default function HomePage() {
   const dispatch = useDispatch();
   const paymentVnPayConfirm = useSelector(PaymentVnPayConfirmState$);
   useEffect(() => {
-    console.log(paymentVnPayConfirm);
     if (paymentVnPayConfirm && Object.keys(paymentVnPayConfirm).length !== 0) {
       swal({
         title: "Payment Successfully",
@@ -28,7 +27,7 @@ export default function HomePage() {
         paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
       );
     }
-  }, []);
+  }, [paymentVnPayConfirm]);
 
   return (
     <div className="main-screen">
