@@ -3,18 +3,21 @@ import classNames from "classnames";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import MomoImage from "../../../assets/images/momo.png";
 import VNPayImage from "../../../assets/images/VNPay.png";
 import * as paymentAction from "../../../redux/actions/PaymentAction";
-import { PaymentWithVNPayState$ } from "../../../redux/selectors/PaymentSelector";
+import {
+  PaymentVnPayConfirmState$,
+  PaymentWithVNPayState$,
+} from "../../../redux/selectors/PaymentSelector";
 import { CONSTANT } from "../../../util/constant/settingSystem";
 import { formatPrice, getFullName } from "../../../util/utilities/utils";
 import AirPortShuttleService from "../AirPortShuttleService/AirPortShuttleService";
 import CustomerInfo from "../CustomerInfo/CustomerInfo";
 import ListRoomAvailability from "../ListRoomAvailability/ListRoomAvailability";
 import Styles from "./InfoRoomAvailability.module.scss";
+import Cookies from "js-cookie";
 
 export default function RoomAvailability({
   count,
@@ -65,7 +68,7 @@ export default function RoomAvailability({
       const airPortPrice = airportShuttleList.find(
         (airPort) => airPort.id === arrayCheckedAirport.id
       );
-      price += airPortPrice.price;
+      price += airPortPrice.price * roomSelect.length;
     }
     setTotalPrice(price);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -164,6 +167,7 @@ export default function RoomAvailability({
 
   const dispatch = useDispatch();
   const payment = useSelector(PaymentWithVNPayState$);
+  const paymentVnPayConfirm = useSelector(PaymentVnPayConfirmState$);
 
   const handlePaymentMomo = () => {
     if (!acceptPolicy) {
@@ -184,100 +188,50 @@ export default function RoomAvailability({
       // );
     }
   };
+
   const navigate = useNavigate();
 
   useEffect(() => {
     if (payment && Object.keys(payment).length !== 0) {
-      window.location.href = payment.url;
       dispatch(paymentAction.getPaymentWithVNPay.removePaymentWithVNPay());
+      window.location.href = payment.url;
+    }
+    if (paymentVnPayConfirm && Object.keys(paymentVnPayConfirm).length !== 0) {
+      Cookies.set(CONSTANT.PAYMENT_INFO, JSON.stringify(paymentVnPayConfirm), {
+        path: "/",
+      });
+      dispatch(
+        paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
+      );
+      setLaterPayment(false);
+      navigate("/bookingConfirm");
     }
     if (
       (searchParams.has("vnp_ResponseCode") &&
         searchParams.get("vnp_ResponseCode") === "00") ||
       laterPayment
     ) {
-      if (sessionStorage.getItem(CONSTANT.PAYMENT_INFO) !== null) {
-        const data = JSON.parse(sessionStorage.getItem(CONSTANT.PAYMENT_INFO));
+      if (Cookies.get(CONSTANT.PAYMENT_INFO) !== null) {
+        const dataMock = Cookies.get(CONSTANT.PAYMENT_INFO);
+        const data = JSON.parse(dataMock);
         dispatch(
           paymentAction.getPaymentVnPayConfirm.getPaymentVnPayConfirmRequest({
             bookingDates: data.date,
             customer: data.customerInfo,
             persons: data.count,
-            requestServiceBooking: data.requestService,
+            serviceBooking: data.requestService,
             roomTypes: data.roomSelect,
-            specialUtilities: data.specialUtility,
+            bookingNotes: data.specialUtility,
             vnp_Amount: data.vnp_Amount,
             hotel_id: data.hotel_id,
-            utilities: data.utilities,
+            specialUtilities: data.utilities,
+            paymentMethod: searchParams.has("vnp_ResponseCode") ? 3 : 0,
           })
         );
-        navigate("/");
+        setLaterPayment(false);
       }
     }
-  }, [payment, laterPayment]);
-
-  // const handlePaymentVNPay = () => {
-  //   if (!acceptPolicy) {
-  //     swal({
-  //       title: "Announcement!",
-  //       text: "You need to accept a policy to execute the payment",
-  //       icon: "error",
-  //       button: "Understand",
-  //     });
-  //   } else if (
-  //     nameRef &&
-  //     emailRef.current.value &&
-  //     confirmEmailRef.current.value
-  //   ) {
-  //     const isEqual =
-  //       emailRef.current.value.trim() === confirmEmailRef.current.value.trim();
-  //     if (isEqual) {
-  //       const fullName = getFullName(nameRef.current.value);
-  //       const data = {
-  //         count: count,
-  //         roomSelect: roomSelect,
-  //         date: {
-  //           startDate: arrayDate.startDate.format("DD/MM/yyyy HH:mm:ss"),
-  //           endDate: arrayDate.endDate.format("DD/MM/yyyy HH:mm:ss"),
-  //         },
-  //         utilities: arrayChecked,
-  //         requestService: arrayCheckedAirport,
-  //         specialUtility: areaRequire,
-  //         customerInfo: {
-  //           email: emailRef.current.value,
-  //           firstName: fullName.firstName,
-  //           middleName: fullName.middleName,
-  //           lastName: fullName.lastName,
-  //           phoneNumber: phoneRef.current.value,
-  //         },
-  //         hotel_id: hotelInfo.id,
-  //       };
-  //       sessionStorage.setItem(CONSTANT.PAYMENT_INFO, JSON.stringify(data));
-  //       dispatch(
-  //         paymentAction.getPaymentWithVNPay.getPaymentWithVNPayRequest({
-  //           vnp_amount: totalPrice,
-  //           vnp_IpAddr: "127.0.0.1",
-  //           vnp_Locale: "vi",
-  //           vnp_OrderInfo: "Payment",
-  //         })
-  //       );
-  //     } else {
-  //       swal({
-  //         title: "Announcement!",
-  //         text: "Email and Email Confirm are not matched",
-  //         icon: "warning",
-  //         button: "Re-Enter",
-  //       });
-  //     }
-  //   } else {
-  //     swal({
-  //       title: "Announcement!",
-  //       text: "Tell us about your information",
-  //       icon: "info",
-  //       button: "Let in",
-  //     });
-  //   }
-  // };
+  }, [payment, laterPayment, paymentVnPayConfirm]);
 
   const handlePayment = (isPayLater) => {
     if (!acceptPolicy) {
@@ -317,7 +271,10 @@ export default function RoomAvailability({
           },
           hotel_id: hotelInfo.id,
         };
-        sessionStorage.setItem(CONSTANT.PAYMENT_INFO, JSON.stringify(data));
+        Cookies.set(CONSTANT.PAYMENT_INFO, JSON.stringify(data), {
+          path: "/",
+        });
+        // sessionStorage.setItem(CONSTANT.PAYMENT_INFO, );
         if (!isPayLater) {
           dispatch(
             paymentAction.getPaymentWithVNPay.getPaymentWithVNPayRequest({
@@ -348,6 +305,294 @@ export default function RoomAvailability({
     }
   };
 
+  const renderFirstTab = () => {
+    return (
+      <>
+        <div className={classNames("hs-text-white text-xl", Styles.Title1)}>
+          Đặt phòng ngay để có mức giá ưu đãi nhất
+        </div>
+        <div className={classNames("hs-text-dark-grey text-md", Styles.Title2)}>
+          Quý khách sẽ được đặt phòng ở mức giá tốt nhất do không phải qua đơn
+          vị trung gian. Quý khách đang ghé thăm trang web của khách sạn.
+        </div>
+        <ListRoomAvailability
+          callBackFunc={handleClickRoom}
+          data={listRoomAvailability}
+        />
+      </>
+    );
+  };
+
+  const renderSecondTab = () => {
+    return (
+      <>
+        <div className={classNames("hs-text-white text-xl", Styles.Title1)}>
+          Chọn thêm dịch vụ bổ sung cho chuyến lưu trú trú của quý khách
+        </div>
+        <div className={classNames("hs-text-dark-grey text-md", Styles.Title2)}>
+          Quý khách sẽ được đặt phòng ở mức giá tốt nhất do không phải qua đơn
+          vị trung gian. Quý khách đang ghé thăm trang web của khách sạn.
+        </div>
+        <div className="hs-mt-64 hs-py-8">
+          <p
+            className=" button hs-px-16 text-md hs-text-white"
+            onClick={handleBackButton}
+          >
+            <i className="fa-solid fa-arrow-left-long hs-pr-16"></i>
+            BACK
+          </p>
+        </div>
+        <div className="hs-bg-dark-9 hs-mt-16">
+          <div className="text-lg hs-text-dark-grey hs-p-8">
+            Lựa chọn bổ sung cho chuyến lưu trú của quý khách
+          </div>
+          {airportShuttleList &&
+            airportShuttleList.map((airport, index) => {
+              return (
+                <AirPortShuttleService
+                  airportShuttle={airport}
+                  key={index}
+                  checked={arrayCheckedAirport}
+                  setCheckCb={handleOnChangeCheckAirport}
+                />
+              );
+            })}
+        </div>
+        <div className="hs-bg-dark-9 hs-my-48">
+          <div
+            className={classNames(
+              "text-lg hs-text-dark-grey hs-px-32 hs-py-8",
+              Styles.border
+            )}
+          >
+            Hãy cho chúng tôi biết quý khách cần gì ?
+          </div>
+          <div className="col-12 container-fluid row hs-py-16">
+            {specialUtilityList &&
+              specialUtilityList.map((specialUtility, index) => {
+                if (specialUtility.status) {
+                  return (
+                    <>
+                      <div key={index} className="d-flex col-6 hs-py-8">
+                        <div className="col-1 hs-py-4">
+                          <input
+                            type="checkbox"
+                            onChange={(e) =>
+                              handleOnChangeCheckbox(e, specialUtility)
+                            }
+                          />
+                        </div>
+                        <div className="hs-px-16 col-11 text-lg hs-text-white">
+                          {specialUtility.description}
+                        </div>
+                      </div>
+                    </>
+                  );
+                }
+                return null;
+              })}
+          </div>
+        </div>
+        <div className="hs-bg-dark-9 hs-my-48">
+          <div
+            className={classNames(
+              "text-lg hs-text-dark-grey hs-px-32 hs-py-8",
+              Styles.border
+            )}
+          >
+            Yêu cầu đặc biệt cho lựa chọn bổ sung của quý khách
+          </div>
+          <div className="col-12 hs-px-32 hs-py-16 text-md hs-text-white">
+            <div className="hs-py-16">
+              Vui lòng cung cấp thêm thông tin: thời gian đến, dị ứng đồ ăn...
+            </div>
+            <div>
+              <textarea
+                className={classNames("col-12", Styles.textarea)}
+                onChange={(e) => handleMessageChange(e)}
+                value={areaRequire}
+              />
+            </div>
+            <div className="weight-300 hs-py-16">
+              Yêu cầu của quý khách sẽ được xem xét cẩn thận, chúng tôi sẽ cố
+              gắng hết sức để đáp ứng những yêu cầu đó.
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const renderThirdTab = () => {
+    return (
+      <>
+        <CustomerInfo
+          hotel={hotelInfo}
+          dateArray={arrayDate}
+          roomSelect={roomSelect}
+          count={count}
+          backCb={handleBackButton}
+          totalPrice={totalPrice}
+          removeRoomCb={handleRemoveRoom}
+          areaRequire={areaRequire}
+          airSportList={airportShuttleList}
+          arrayCheckedAirport={arrayCheckedAirport}
+        />
+        <div className="hs-bg-dark-9 hs-pb-48 hs-px-32 d-flex text-md hs-mb-32">
+          <div className="col-5">
+            <div className="text-lg hs-text-white hs-py-24">
+              Thông Tin Khách
+            </div>
+            <div className="d-flex">
+              <div className="hs-text-dark-grey">Địa chỉ email </div>
+              <div className="hs-px-4 hs-text-solid-red text-sm">*</div>
+            </div>
+            <div className="hs-py-8">
+              <input
+                type="text"
+                className={Styles.TextContainer}
+                required={true}
+                ref={emailRef}
+                onChange={(e) => e.target.value}
+              />
+            </div>
+            <div className="d-flex">
+              <div className="hs-text-dark-grey">Nhập Lại Địa chỉ email </div>
+              <div className="hs-px-4 hs-text-solid-red text-sm">*</div>
+            </div>
+            <div className="hs-py-8">
+              <input
+                type="text"
+                className={Styles.TextContainer}
+                required={true}
+                ref={confirmEmailRef}
+                onChange={(e) => e.target.value}
+              />
+            </div>
+            <div className="d-flex">
+              <div className="hs-text-dark-grey">Họ và Tên</div>
+              <div className="hs-px-4 hs-text-solid-red text-sm">*</div>
+            </div>
+            <div className="hs-py-8">
+              <input
+                type="text"
+                className={Styles.TextContainer}
+                required={true}
+                ref={nameRef}
+                onChange={(e) => e.target.value}
+              />
+            </div>
+            <div className="d-flex">
+              <div className="hs-text-dark-grey">Số điện thoại </div>
+            </div>
+            <div className="hs-py-8">
+              <input
+                type="text"
+                className={Styles.TextContainer}
+                ref={phoneRef}
+                onChange={(e) => e.target.value}
+              />
+            </div>
+          </div>
+          <div className="col-1 hs-my-32 hs-border-right-solid-dark"></div>
+          <div className="col-6">
+            <div className="text-lg hs-text-white hs-py-24">
+              Thông tin thanh toán
+            </div>
+            <div className="d-flex text-md hs-text-white hs-pb-24">
+              <div className="d-flex ">
+                <input
+                  className="hs-pr-16"
+                  type="checkbox"
+                  checked={check === "later" ? true : false}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setCheck("later");
+                    }
+                  }}
+                />
+                Thanh toán sau
+              </div>
+              <div className="d-flex hs-px-24">
+                <input
+                  className="hs-px-16"
+                  type="checkbox"
+                  checked={check === "online" ? true : false}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setCheck("online");
+                    }
+                  }}
+                />
+                Thanh toán trực tuyến
+              </div>
+            </div>
+            {check === "online" && (
+              <div className="d-flex text-md hs-text-white hs-pb-16 col-12">
+                <input
+                  type="checkbox"
+                  className="col-auto"
+                  checked={acceptPolicy}
+                  onChange={(e) => setAcceptPolicy(e.target.checked)}
+                />
+                <span>
+                  Khi lựa chọn đặt phòng, chúng tôi đã đồng ý và chấp nhận khoản
+                  <span className="hs-text-dark-brown hs-px-4">
+                    chính sách bảo mật
+                  </span>
+                </span>
+              </div>
+            )}
+            <div
+              className={classNames(
+                "d-flex",
+                Styles.payment,
+                check === "later" && Styles.overlay
+              )}
+            >
+              <img
+                className="hs-mr-32 button"
+                src={MomoImage}
+                alt="momo"
+                onClick={handlePaymentMomo}
+              />
+              <img
+                className="hs-mr-32 button"
+                src={VNPayImage}
+                alt="vnPay"
+                onClick={() => handlePayment(false)}
+              />
+            </div>
+          </div>
+        </div>
+        {check === "later" && (
+          <>
+            <div className="d-flex text-md hs-text-white hs-py-32 col-12">
+              <input
+                type="checkbox"
+                className="col-auto"
+                checked={acceptPolicy}
+                onChange={(e) => setAcceptPolicy(e.target.checked)}
+              />
+              <p>
+                Khi lựa chọn đặt phòng, chúng tôi đã đồng ý và chấp nhận khoản
+              </p>
+              <p className="hs-text-dark-brown hs-px-4">chính sách bảo mật</p>
+            </div>
+            <div className="d-flex justify-content-center hs-pb-32">
+              <p
+                className="button hs-text-white text-center text-lg hs-bg-dark-brown w-25 hs-py-16"
+                onClick={() => handlePayment(true)}
+              >
+                Đặt Phòng
+              </p>
+            </div>
+          </>
+        )}
+      </>
+    );
+  };
+
   return (
     <div className={classNames("hs-bg-dark col-12", Styles.RoomAvailability)}>
       <div
@@ -356,315 +601,16 @@ export default function RoomAvailability({
           tab !== 3 ? "col-8" : "col-12 d-flex justify-content-center"
         )}
       >
-        <div className="col-12 col-md-9">
-          {tab === 1 && (
-            <>
-              <div
-                className={classNames("hs-text-white text-xl", Styles.Title1)}
-              >
-                Đặt phòng ngay để có mức giá ưu đãi nhất
-              </div>
-              <div
-                className={classNames(
-                  "hs-text-dark-grey text-md",
-                  Styles.Title2
-                )}
-              >
-                Quý khách sẽ được đặt phòng ở mức giá tốt nhất do không phải qua
-                đơn vị trung gian. Quý khách đang ghé thăm trang web của khách
-                sạn.
-              </div>
-              <ListRoomAvailability
-                callBackFunc={handleClickRoom}
-                data={listRoomAvailability}
-              />
-            </>
-          )}
-          {tab === 2 && (
-            <>
-              <div
-                className={classNames("hs-text-white text-xl", Styles.Title1)}
-              >
-                Chọn thêm dịch vụ bổ sung cho chuyến lưu trú trú của quý khách
-              </div>
-              <div
-                className={classNames(
-                  "hs-text-dark-grey text-md",
-                  Styles.Title2
-                )}
-              >
-                Quý khách sẽ được đặt phòng ở mức giá tốt nhất do không phải qua
-                đơn vị trung gian. Quý khách đang ghé thăm trang web của khách
-                sạn.
-              </div>
-              <div className="hs-mt-64 hs-py-8">
-                <p
-                  className=" button hs-px-16 text-md hs-text-white"
-                  onClick={handleBackButton}
-                >
-                  <i className="fa-solid fa-arrow-left-long hs-pr-16"></i>
-                  BACK
-                </p>
-              </div>
-              <div className="hs-bg-dark-9 hs-mt-16">
-                <div className="text-lg hs-text-dark-grey hs-p-8">
-                  Lựa chọn bổ sung cho chuyến lưu trú của quý khách
-                </div>
-                {airportShuttleList &&
-                  airportShuttleList.map((airport, index) => {
-                    return (
-                      <AirPortShuttleService
-                        airportShuttle={airport}
-                        key={index}
-                        checked={arrayCheckedAirport}
-                        setCheckCb={handleOnChangeCheckAirport}
-                      />
-                    );
-                  })}
-              </div>
-              <div className="hs-bg-dark-9 hs-my-48">
-                <div
-                  className={classNames(
-                    "text-lg hs-text-dark-grey hs-px-32 hs-py-8",
-                    Styles.border
-                  )}
-                >
-                  Hãy cho chúng tôi biết quý khách cần gì ?
-                </div>
-                <div className="col-12 container-fluid row hs-py-16">
-                  {specialUtilityList &&
-                    specialUtilityList.map((specialUtility, index) => {
-                      if (specialUtility.status) {
-                        return (
-                          <>
-                            <div key={index} className="d-flex col-6 hs-py-8">
-                              <div className="col-1 hs-py-4">
-                                <input
-                                  type="checkbox"
-                                  onChange={(e) =>
-                                    handleOnChangeCheckbox(e, specialUtility)
-                                  }
-                                />
-                              </div>
-                              <div className="hs-px-16 col-11 text-lg hs-text-white">
-                                {specialUtility.description}
-                              </div>
-                            </div>
-                          </>
-                        );
-                      }
-                      return null;
-                    })}
-                </div>
-              </div>
-              <div className="hs-bg-dark-9 hs-my-48">
-                <div
-                  className={classNames(
-                    "text-lg hs-text-dark-grey hs-px-32 hs-py-8",
-                    Styles.border
-                  )}
-                >
-                  Yêu cầu đặc biệt cho lựa chọn bổ sung của quý khách
-                </div>
-                <div className="col-12 hs-px-32 hs-py-16 text-md hs-text-white">
-                  <div className="hs-py-16">
-                    Vui lòng cung cấp thêm thông tin: thời gian đến, dị ứng đồ
-                    ăn...
-                  </div>
-                  <div>
-                    <textarea
-                      className={classNames("col-12", Styles.textarea)}
-                      onChange={(e) => handleMessageChange(e)}
-                      value={areaRequire}
-                    />
-                  </div>
-                  <div className="weight-300 hs-py-16">
-                    Yêu cầu của quý khách sẽ được xem xét cẩn thận, chúng tôi sẽ
-                    cố gắng hết sức để đáp ứng những yêu cầu đó.
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-          {tab === 3 && (
-            <>
-              <CustomerInfo
-                hotel={hotelInfo}
-                dateArray={arrayDate}
-                roomSelect={roomSelect}
-                count={count}
-                backCb={handleBackButton}
-                totalPrice={totalPrice}
-                removeRoomCb={handleRemoveRoom}
-                areaRequire={areaRequire}
-                airSportList={airportShuttleList}
-                arrayCheckedAirport={arrayCheckedAirport}
-              />
-              <div className="hs-bg-dark-9 hs-pb-48 hs-px-32 d-flex text-md hs-mb-32">
-                <div className="col-5">
-                  <div className="text-lg hs-text-white hs-py-24">
-                    Thông Tin Khách
-                  </div>
-                  <div className="d-flex">
-                    <div className="hs-text-dark-grey">Địa chỉ email </div>
-                    <div className="hs-px-4 hs-text-solid-red text-sm">*</div>
-                  </div>
-                  <div className="hs-py-8">
-                    <input
-                      type="text"
-                      className={Styles.TextContainer}
-                      required={true}
-                      ref={emailRef}
-                      onChange={(e) => e.target.value}
-                    />
-                  </div>
-                  <div className="d-flex">
-                    <div className="hs-text-dark-grey">
-                      Nhập Lại Địa chỉ email{" "}
-                    </div>
-                    <div className="hs-px-4 hs-text-solid-red text-sm">*</div>
-                  </div>
-                  <div className="hs-py-8">
-                    <input
-                      type="text"
-                      className={Styles.TextContainer}
-                      required={true}
-                      ref={confirmEmailRef}
-                      onChange={(e) => e.target.value}
-                    />
-                  </div>
-                  <div className="d-flex">
-                    <div className="hs-text-dark-grey">Họ và Tên</div>
-                    <div className="hs-px-4 hs-text-solid-red text-sm">*</div>
-                  </div>
-                  <div className="hs-py-8">
-                    <input
-                      type="text"
-                      className={Styles.TextContainer}
-                      required={true}
-                      ref={nameRef}
-                      onChange={(e) => e.target.value}
-                    />
-                  </div>
-                  <div className="d-flex">
-                    <div className="hs-text-dark-grey">Số điện thoại </div>
-                  </div>
-                  <div className="hs-py-8">
-                    <input
-                      type="text"
-                      className={Styles.TextContainer}
-                      ref={phoneRef}
-                      onChange={(e) => e.target.value}
-                    />
-                  </div>
-                </div>
-                <div className="col-1 hs-my-32 hs-border-right-solid-dark"></div>
-                <div className="col-6">
-                  <div className="text-lg hs-text-white hs-py-24">
-                    Thông tin thanh toán
-                  </div>
-                  <div className="d-flex text-md hs-text-white hs-pb-24">
-                    <div className="d-flex ">
-                      <input
-                        className="hs-pr-16"
-                        type="checkbox"
-                        checked={check === "later" ? true : false}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setCheck("later");
-                          }
-                        }}
-                      />
-                      Thanh toán sau
-                    </div>
-                    <div className="d-flex hs-px-24">
-                      <input
-                        className="hs-px-16"
-                        type="checkbox"
-                        checked={check === "online" ? true : false}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setCheck("online");
-                          }
-                        }}
-                      />
-                      Thanh toán trực tuyến
-                    </div>
-                  </div>
-                  {check === "online" && (
-                    <div className="d-flex text-md hs-text-white hs-pb-16 col-12">
-                      <input
-                        type="checkbox"
-                        className="col-auto"
-                        checked={acceptPolicy}
-                        onChange={(e) => setAcceptPolicy(e.target.checked)}
-                      />
-                      <span>
-                        Khi lựa chọn đặt phòng, chúng tôi đã đồng ý và chấp nhận
-                        khoản
-                        <span className="hs-text-dark-brown hs-px-4">
-                          chính sách bảo mật
-                        </span>
-                      </span>
-                    </div>
-                  )}
-                  <div
-                    className={classNames(
-                      "d-flex",
-                      Styles.payment,
-                      check === "later" && Styles.overlay
-                    )}
-                  >
-                    <img
-                      className="hs-mr-32 button"
-                      src={MomoImage}
-                      alt="momo"
-                      onClick={handlePaymentMomo}
-                    />
-                    <img
-                      className="hs-mr-32 button"
-                      src={VNPayImage}
-                      alt="vnPay"
-                      onClick={() => handlePayment(false)}
-                    />
-                  </div>
-                </div>
-              </div>
-              {check === "later" && (
-                <>
-                  <div className="d-flex text-md hs-text-white hs-py-32 col-12">
-                    <input
-                      type="checkbox"
-                      className="col-auto"
-                      checked={acceptPolicy}
-                      onChange={(e) => setAcceptPolicy(e.target.checked)}
-                    />
-                    <p>
-                      Khi lựa chọn đặt phòng, chúng tôi đã đồng ý và chấp nhận
-                      khoản
-                    </p>
-                    <p className="hs-text-dark-brown hs-px-4">
-                      chính sách bảo mật
-                    </p>
-                  </div>
-                  <div className="d-flex justify-content-center hs-pb-32">
-                    <p
-                      className="button hs-text-white text-center text-lg hs-bg-dark-brown w-25 hs-py-16"
-                      onClick={() => handlePayment(true)}
-                    >
-                      Đặt Phòng
-                    </p>
-                  </div>
-                </>
-              )}
-            </>
-          )}
+        <div className={classNames("col-12 col-md-9")}>
+          {tab === 1 && renderFirstTab()}
+          {tab === 2 && renderSecondTab()}
+          {tab === 3 && renderThirdTab()}
         </div>
         <div
           className={classNames(
             "col-12 col-md-3 hs-text-white",
             Styles.OrderOfRoom,
-            tab === 3 && "d-none"
+            tab > 2 && "d-none"
           )}
         >
           {count.length > 0 &&
@@ -698,8 +644,8 @@ export default function RoomAvailability({
                             {currentRoomInfo.name}
                           </div>
                           <div className="col-12 hs-text-dark-grey hs-py-16">
-                            {person.adult + " người lớn, "}
-                            {person.child > 0 ? person.child + " trẻ em" : ""}
+                            {person.adult + " người lớn "}
+                            {person.child > 0 ? person.child + ", trẻ em" : ""}
                           </div>
 
                           {index < count.length - 1 && tab < 2 && (
@@ -747,9 +693,16 @@ export default function RoomAvailability({
                     )}
                   >
                     <div className="col-12 d-flex justify-content-between">
-                      <div className="hs-py-16 text-lg">Bổ Sung</div>
+                      <div className="hs-py-16 text-lg">
+                        Bổ Sung{" "}
+                        {roomSelect.length > 1 && `x${roomSelect.length}`}
+                      </div>
                       <div className={classNames("text-lg hs-py-16")}>
-                        {formatPrice(airSport.price, "vi-VN", "VND")}
+                        {formatPrice(
+                          airSport.price * roomSelect.length,
+                          "vi-VN",
+                          "VND"
+                        )}
                       </div>
                     </div>
                   </div>

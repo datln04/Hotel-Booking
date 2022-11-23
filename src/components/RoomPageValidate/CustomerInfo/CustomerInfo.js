@@ -117,9 +117,18 @@ const CustomerInfo = ({
                       <div className="col-12 d-flex justify-content-between">
                         <div className="hs-py-16 text-lg">{airSport.name}</div>
                         <div className={classNames("text-lg hs-py-16")}>
-                          {formatPrice(airSport.price, "vi-VN", "VND")}
+                          {formatPrice(
+                            roomSelect.length > 1
+                              ? airSport.price * roomSelect.length
+                              : airSport.price,
+                            "vi-VN",
+                            "VND"
+                          )}
                         </div>
                       </div>
+                      {roomSelect.length > 1 && (
+                        <div className="col-12 hs-text-dark-grey text-md">{`${roomSelect.length} xe cho ${roomSelect.length} phòng`}</div>
+                      )}
                       <div className="col-12 hs-text-dark-grey text-md">
                         {airSport.description}
                       </div>

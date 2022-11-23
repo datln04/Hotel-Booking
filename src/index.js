@@ -8,7 +8,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import createSagaMiddleware from "redux-saga";
 import rootStore from "./redux/reducers/rootStore";
 import rootSaga from "./redux/sagas/rootSaga";
-import './styles/global.scss';
+import "./styles/global.scss";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(

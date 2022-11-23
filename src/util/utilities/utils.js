@@ -47,3 +47,7 @@ export const getLastName = (str) => {
   });
   return lastName.join(" ").trim();
 };
+
+export const combineName = (firstName, middleName, lastName) => {
+  return firstName + " " + middleName + " " + lastName;
+};

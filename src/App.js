@@ -17,6 +17,7 @@ import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
 import { loadingState$ } from "./redux/selectors/LoadingSelector";
 import { useSelector } from "react-redux";
 import RoomPageCheckValidate from "./pages/RoomPageCheckValidate";
+import BookingConfirm from "./components/RoomPageValidate/BookingConfim/BookingConfirm";
 
 function App() {
   let isLoading = useSelector(loadingState$);
@@ -25,6 +26,7 @@ function App() {
       {isLoading ? <Loading /> : <Navigation />}
       <Routes>
         <Route exact path="/" element={<HomePage />} />
+        <Route exact path="/bookingConfirm" element={<BookingConfirm />} />
         <Route path="/home" element={<HomePage />} />
         <Route exact path="/room" element={<RoomPage />} />
         <Route exact path="/RoomValidate" element={<RoomPageCheckValidate />} />
