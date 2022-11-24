@@ -1,21 +1,21 @@
-import React from "react";
-import Breadcrumb from "../components/IntroducePage/Breadcrumb/Breadcrumb";
+import Cookies from "js-cookie";
+import moment from "moment/moment";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useSearchParams } from "react-router-dom";
 import image from "../assets/images/roomType/phong.jpg";
+import Breadcrumb from "../components/IntroducePage/Breadcrumb/Breadcrumb";
 import InfoBookingRoomValidate from "../components/RoomPageValidate/InfoBookingRoom/InfoBookingRoomValidate";
 import RoomAvailability from "../components/RoomPageValidate/InfoRoomAvailability/InfoRoomAvailability";
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import { useEffect } from "react";
-import { ServiceByCategoryIdState$ } from "../redux/selectors/ServiceSelector";
+import * as hotelAction from "../redux/actions/HotelServiceAction";
+import * as actions from "../redux/actions/RoomAvailability";
 import * as serviceAction from "../redux/actions/ServiceAction";
 import * as specialUtilityAction from "../redux/actions/SpecialUtilityActions";
-import * as hotelAction from "../redux/actions/HotelServiceAction";
-import { SpecialUtilityState$ } from "../redux/selectors/SpecialUtilitySelector";
 import { HotelByIdState$ } from "../redux/selectors/HotelServiceSelector";
-import { useLocation, useSearchParams } from "react-router-dom";
 import { RoomAvailabilityState$ } from "../redux/selectors/RoomAvailabilitySelector";
-import * as actions from "../redux/actions/RoomAvailability";
-import moment from "moment/moment";
+import { ServiceByCategoryIdState$ } from "../redux/selectors/ServiceSelector";
+import { SpecialUtilityState$ } from "../redux/selectors/SpecialUtilitySelector";
+import { CONSTANT } from "../util/constant/settingSystem";
 import { checkDate } from "../util/utilities/utils";
 
 export default function RoomPageCheckValidate() {
@@ -79,21 +79,34 @@ export default function RoomPageCheckValidate() {
   }, [roomSelect, count]);
 
   useEffect(() => {
-    dispatch(
-      serviceAction.getAllServiceByCategoryId.getServiceByCategoryIdRequest(4)
-    );
-    dispatch(specialUtilityAction.getSpecialUtility.getSpecialUtilityRequest());
-    dispatch(hotelAction.getHotelServiceById.getHotelServiceByIdRequest(1));
-    if (!searchParams.toString()) {
+    if (
+      (location.state === undefined ||
+        location.state === null ||
+        location.state === "") &&
+      (Cookies.get(CONSTANT.PAYMENT_INFO) === undefined ||
+        Cookies.get(CONSTANT.PAYMENT_INFO) === null)
+    ) {
+      window.location.href = "/";
+    } else {
+      console.log("error", Cookies.get(CONSTANT.PAYMENT_INFO));
       dispatch(
-        actions.getRoomAvailability.getRoomAvailabilityRequest(
-          `dateCheckIn=${moment(location.state.dateCheckIn).format(
-            "DD/MM/yyyy"
-          )}&dateCheckOut=${moment(location.state.dateCheckout).format(
-            "DD/MM/yyyy"
-          )}&numOfPerson=${location.state.numOfPerson}`
-        )
+        serviceAction.getAllServiceByCategoryId.getServiceByCategoryIdRequest(4)
       );
+      dispatch(
+        specialUtilityAction.getSpecialUtility.getSpecialUtilityRequest()
+      );
+      dispatch(hotelAction.getHotelServiceById.getHotelServiceByIdRequest(1));
+      if (!searchParams.toString()) {
+        dispatch(
+          actions.getRoomAvailability.getRoomAvailabilityRequest(
+            `dateCheckIn=${moment(location.state.dateCheckIn).format(
+              "DD/MM/yyyy"
+            )}&dateCheckOut=${moment(location.state.dateCheckout).format(
+              "DD/MM/yyyy"
+            )}&numOfPerson=${location.state.numOfPerson}`
+          )
+        );
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -53,18 +53,6 @@
 
 
 .overlay {
-  position: relative;
-}
-
-.overlay:after {
-  content: " ";
-  z-index: 10;
-  display: block;
-  position: absolute;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: #141414;
-  opacity: 0.5
+  opacity: 0.5;
+  pointer-events: none;
 }

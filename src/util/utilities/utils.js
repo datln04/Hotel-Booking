@@ -31,9 +31,9 @@ export const getFullName = (str) => {
   const rs = str.trim().split(/\s+/);
   if (rs.length > 0) {
     return {
-      firstName: rs[0] && rs[0],
-      middleName: rs[1] && rs[1],
-      lastName: rs[2] ? getLastName(rs) : null,
+      firstName: rs[0] ? rs[0] : "",
+      middleName: rs[1] ? rs[1] : "",
+      lastName: rs[2] ? getLastName(rs) : "",
     };
   }
   return rs;

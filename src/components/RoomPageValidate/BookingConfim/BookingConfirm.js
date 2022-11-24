@@ -1,32 +1,43 @@
 import Cookies from "js-cookie";
 import moment from "moment/moment";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import { CONSTANT } from "../../../util/constant/settingSystem";
 import { combineName, formatPrice } from "../../../util/utilities/utils";
+import * as paymentAction from "../../../redux/actions/PaymentAction";
 
 const BookingConfirm = () => {
-  // const bookingInfo = JSON.parse(sessionStorage.getItem(CONSTANT.PAYMENT_INFO));
-  const dataMock = Cookies.get(CONSTANT.PAYMENT_INFO);
-  const bookingInfo = JSON.parse(dataMock);
+  const location = useLocation();
+  const bookingInfo = location.state;
   console.log(bookingInfo);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   let totalPrice = 0;
 
   window.onpopstate = () => {
     navigate("/");
   };
+
   useEffect(() => {
+    if (
+      location.state === undefined ||
+      location.state === null ||
+      location.state === ""
+    ) {
+      window.location.href = "/";
+    }
     if (bookingInfo) {
+      dispatch(
+        paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
+      );
       swal({
         title: "Payment Successfully",
         text: "Below is some information regarding your booking, you need to take a look at this if you have any concern please reach out to the receptionist about that",
         icon: "success",
         button: "Congratulation",
       });
-    } else {
-      navigate("/NotFound");
     }
 
     return () => {
@@ -70,6 +81,15 @@ const BookingConfirm = () => {
     return Number(price + servicePrice);
   };
 
+  const handleOpenCancelRoom = () => {
+    swal({
+      title: "Information",
+      text: "You might call for the receptionist to cancel your booking \n PHONE: 0987654321",
+      icon: "info",
+      button: "Got it!",
+    });
+  };
+
   return (
     bookingInfo && (
       <div className="col-12 hs-bg-dark-low d-flex justify-content-center">
@@ -99,7 +119,10 @@ const BookingConfirm = () => {
                 <i className="fa-solid fa-check hs-text-green-light text-md"></i>
                 <div className="hs-px-16 ">
                   Bạn có thể{" "}
-                  <span className="text-decoration">
+                  <span
+                    className="text-decoration-underline hs-text-solid-blue button"
+                    onClick={handleOpenCancelRoom}
+                  >
                     thay đổi hoặc hủy đặt phòng của mình{" "}
                   </span>{" "}
                   bất cứ lúc nào
@@ -206,10 +229,11 @@ const BookingConfirm = () => {
                         <div className="d-flex col-12 hs-py-8">
                           <div className="col-4">Đón sân bay: </div>
                           <div className="col-8">
-                            {data.service &&
-                              data.service.name +
+                            {data.service
+                              ? data.service.name +
                                 " " +
-                                formatPrice(data.service.price, "vi-VN", "VND")}
+                                formatPrice(data.service.price, "vi-VN", "VND")
+                              : "Không"}
                           </div>
                         </div>
                         <div className="d-flex col-12 hs-py-16 hs-text-white text-lg">

@@ -197,21 +197,17 @@ export default function RoomAvailability({
       window.location.href = payment.url;
     }
     if (paymentVnPayConfirm && Object.keys(paymentVnPayConfirm).length !== 0) {
-      Cookies.set(CONSTANT.PAYMENT_INFO, JSON.stringify(paymentVnPayConfirm), {
-        path: "/",
-      });
-      dispatch(
-        paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
-      );
-      setLaterPayment(false);
-      navigate("/bookingConfirm");
+      navigate("/bookingConfirm", { state: paymentVnPayConfirm });
     }
     if (
       (searchParams.has("vnp_ResponseCode") &&
         searchParams.get("vnp_ResponseCode") === "00") ||
       laterPayment
     ) {
-      if (Cookies.get(CONSTANT.PAYMENT_INFO) !== null) {
+      if (
+        Cookies.get(CONSTANT.PAYMENT_INFO) !== null &&
+        Object.keys(paymentVnPayConfirm).length === 0
+      ) {
         const dataMock = Cookies.get(CONSTANT.PAYMENT_INFO);
         const data = JSON.parse(dataMock);
         dispatch(
@@ -228,7 +224,6 @@ export default function RoomAvailability({
             paymentMethod: searchParams.has("vnp_ResponseCode") ? 3 : 0,
           })
         );
-        setLaterPayment(false);
       }
     }
   }, [payment, laterPayment, paymentVnPayConfirm]);
@@ -543,21 +538,21 @@ export default function RoomAvailability({
                 </span>
               </div>
             )}
-            <div
-              className={classNames(
-                "d-flex",
-                Styles.payment,
-                check === "later" && Styles.overlay
-              )}
-            >
+            <div className={classNames("d-flex", Styles.payment)}>
               <img
-                className="hs-mr-32 button"
+                className={classNames(
+                  "hs-mr-32 button",
+                  check === "later" && Styles.overlay
+                )}
                 src={MomoImage}
                 alt="momo"
                 onClick={handlePaymentMomo}
               />
               <img
-                className="hs-mr-32 button"
+                className={classNames(
+                  "hs-mr-32 button",
+                  check === "later" && Styles.overlay
+                )}
                 src={VNPayImage}
                 alt="vnPay"
                 onClick={() => handlePayment(false)}
