@@ -189,7 +189,17 @@ export default function RoomAvailability({
       window.location.href = payment.url;
     }
     if (paymentVnPayConfirm && Object.keys(paymentVnPayConfirm).length !== 0) {
-      navigate("/bookingConfirm", { state: paymentVnPayConfirm });
+      if (paymentVnPayConfirm.length > 0) {
+        navigate("/bookingConfirm", { state: paymentVnPayConfirm });
+      } else {
+        setTab(1);
+        swal({
+          title: "ERROR!",
+          text: "Room is run out of available - Sorry about that",
+          icon: "error",
+          button: "Got it",
+        });
+      }
     }
     if (
       (searchParams.has("vnp_ResponseCode") &&
