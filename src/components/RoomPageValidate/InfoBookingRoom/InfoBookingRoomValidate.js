@@ -15,17 +15,16 @@ export default function InfoBookingRoomValidate({
   arrayDate,
   setDateArray,
   numOfPerson,
-  roomSelect,
-  handleApplyDate,
+  close,
+  setCloseCB,
+  setRoomSelect,
 }) {
   const [count, setCount] = useState([{ adult: numOfPerson, child: 0 }]);
   const [isOpen, setOpen] = useState(false);
   const [focusInput, setFocusInput] = useState(null);
-
   const handleAddMoreRoom = () => {
     setCount([...count, { adult: 1, child: 0 }]);
   };
-
   const handleSetDateRange = ({ startDate, endDate }) => {
     setDateArray({ startDate, endDate });
   };
@@ -90,7 +89,7 @@ export default function InfoBookingRoomValidate({
   };
 
   const totalPerson = countPerson();
-  const minDate = moment(new Date());
+  const minDate = moment(new Date()).subtract("d", 1);
 
   return (
     <div className={classNames("hs-bg-dark-9 col-12", Styles.InfoBookingRoom)}>
@@ -100,10 +99,13 @@ export default function InfoBookingRoomValidate({
         <div className="col-6 d-flex justify-content-end hs-px-32 hs-border-right-dark-grey">
           <i className="fa-solid fa-calendar-days hs-text-dark-brown text-lg"></i>
           <DateRangePicker
+            onClose={() => {
+              setCloseCB(!close);
+              setRoomSelect([]);
+            }}
             endDate={arrayDate.endDate}
             endDateId="endDate"
             focusedInput={focusInput}
-            minDate={minDate}
             isOutsideRange={(date) => {
               if (date < minDate) {
                 return true;
@@ -115,7 +117,7 @@ export default function InfoBookingRoomValidate({
             startDate={arrayDate.startDate}
             startDateId="startDate"
             hideKeyboardShortcutsPanel={true}
-            minimumNights={1}
+            minimumNights={0}
           />
           <i className="fa-solid fa-sort-down hs-text-dark-grey text-lg"></i>
         </div>

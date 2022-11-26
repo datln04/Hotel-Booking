@@ -11,7 +11,6 @@ import * as paymentAction from "../../../redux/actions/PaymentAction";
 const BookingConfirm = () => {
   const location = useLocation();
   const bookingInfo = location.state;
-  console.log(bookingInfo);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let totalPrice = 0;
@@ -217,9 +216,9 @@ const BookingConfirm = () => {
                             <p className="col-6">{data.roomType.bedType}</p>
                           </div>
                         </div>
-                        <div className="d-flex col-12 hs-py-8">
-                          <div className="col-4">Tiền phòng:</div>
-                          <div className="col-8">
+                        <div className="d-flex col-6 hs-py-8">
+                          <div className="col-5">Tiền phòng:</div>
+                          <div className="col-6">
                             {formatPrice(price, "vi-VN", "VND")}
                           </div>
                         </div>
@@ -227,8 +226,8 @@ const BookingConfirm = () => {
                           <div>Yêu cầu khác: {data.booking.specialNote}</div>
                         </div>
                         <div className="d-flex col-12 hs-py-8">
-                          <div className="col-4">Đón sân bay: </div>
-                          <div className="col-8">
+                          <div className="col-3">Đón sân bay: </div>
+                          <div className="col-9">
                             {data.service
                               ? data.service.name +
                                 " " +
@@ -236,7 +235,7 @@ const BookingConfirm = () => {
                               : "Không"}
                           </div>
                         </div>
-                        <div className="d-flex col-12 hs-py-16 hs-text-white text-lg">
+                        <div className="d-flex col-12 hs-py-16 hs-text-white text-lg align-items-center">
                           <div className="col-4 text-md">Giá theo phòng: </div>
                           <div className="col-8">
                             {formatPrice(priceRoom, "vi-VN", "VND")}

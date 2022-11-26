@@ -19,11 +19,13 @@ import { CONSTANT } from "../util/constant/settingSystem";
 import { checkDate } from "../util/utilities/utils";
 
 export default function RoomPageCheckValidate() {
+  const location = useLocation();
   const [searchParams] = useSearchParams();
-  const [count, setCount] = useState([{ adult: 1, child: 0 }]);
+  const [count, setCount] = useState([
+    { adult: location.state?.numOfPerson ?? 1, child: 0 },
+  ]);
   const [roomSelect, setRoomSelect] = useState([]);
   const [tab, setTab] = useState(1);
-  const location = useLocation();
   const [arrayDate, setArrayDate] = useState({
     startDate: moment(location.state?.dateCheckIn) ?? moment(new Date()),
     endDate: moment(
@@ -35,48 +37,74 @@ export default function RoomPageCheckValidate() {
   const specialUtility = useSelector(SpecialUtilityState$);
   const hotelInfo = useSelector(HotelByIdState$);
   const listRoomAvailability = useSelector(RoomAvailabilityState$);
-
   const handleApplyRoom = (count) => {
     setCount(count);
     setTab(1);
+    setRoomSelect([]);
   };
+  const [close, setClose] = useState(false);
 
   useEffect(() => {
-    const currentNumOfPerson = roomSelect.findIndex(
-      (x) => x.isSelected === false
-    );
+    console.log("haha");
+    if (arrayDate.startDate && arrayDate.endDate) {
+      const currentNumOfPerson = roomSelect.findIndex(
+        (x) => x.isSelected === false
+      );
 
-    if (currentNumOfPerson !== -1) {
-      dispatch(
-        actions.getRoomAvailability.getRoomAvailabilityRequest(
-          `dateCheckIn=${arrayDate.startDate.format(
-            "DD/MM/yyyy"
-          )}&dateCheckOut=${arrayDate.endDate.format(
-            "DD/MM/yyyy"
-          )}&numOfPerson=${
-            Number(count[currentNumOfPerson].adult) +
-            Number(count[currentNumOfPerson].child)
-          }`
-        )
-      );
-    } else if (roomSelect.length < count.length && tab < 3) {
-      const roomIndex = roomSelect.length - count.length + count.length;
-      dispatch(
-        actions.getRoomAvailability.getRoomAvailabilityRequest(
-          `dateCheckIn=${checkDate(
-            arrayDate.endDate,
-            "DD/MM/yyyy"
-          )}&dateCheckOut=${checkDate(
-            arrayDate.endDate,
-            "DD/MM/yyyy"
-          )}&numOfPerson=${
-            Number(count[roomIndex].adult) + Number(count[roomIndex].child)
-          }`
-        )
-      );
+      if (currentNumOfPerson !== -1) {
+        dispatch(
+          actions.getRoomAvailability.getRoomAvailabilityRequest(
+            `dateCheckIn=${arrayDate.startDate.format(
+              "DD/MM/yyyy"
+            )}&dateCheckOut=${arrayDate.endDate.format(
+              "DD/MM/yyyy"
+            )}&numOfPerson=${
+              Number(count[currentNumOfPerson].adult) +
+              Number(count[currentNumOfPerson].child)
+            }`
+          )
+        );
+      } else if (roomSelect.length < count.length && tab < 3) {
+        const roomIndex = roomSelect.length - count.length + count.length;
+        if (tab > 1) {
+          setTab(1);
+        }
+        dispatch(
+          actions.getRoomAvailability.getRoomAvailabilityRequest(
+            `dateCheckIn=${checkDate(
+              arrayDate.startDate,
+              "DD/MM/yyyy"
+            )}&dateCheckOut=${checkDate(
+              arrayDate.endDate,
+              "DD/MM/yyyy"
+            )}&numOfPerson=${
+              Number(count[roomIndex].adult) + Number(count[roomIndex].child)
+            }`
+          )
+        );
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomSelect, count]);
+  }, [roomSelect, count, close]);
+
+  // useEffect(() => {
+  //   if(searchParams.has('startDate')){
+  //     const roomIndex = roomSelect.length - count.length + count.length;
+  //     dispatch(
+  //       actions.getRoomAvailability.getRoomAvailabilityRequest(
+  //         `dateCheckIn=${checkDate(
+  //           searchParams.get.endDate,
+  //           "DD/MM/yyyy"
+  //         )}&dateCheckOut=${checkDate(
+  //           arrayDate.endDate,
+  //           "DD/MM/yyyy"
+  //         )}&numOfPerson=${
+  //           Number(count[roomIndex].adult) + Number(count[roomIndex].child)
+  //         }`
+  //       )
+  //     );
+  //   }
+  // }, [searchParams]);
 
   useEffect(() => {
     if (
@@ -88,7 +116,6 @@ export default function RoomPageCheckValidate() {
     ) {
       window.location.href = "/";
     } else {
-      console.log("error", Cookies.get(CONSTANT.PAYMENT_INFO));
       dispatch(
         serviceAction.getAllServiceByCategoryId.getServiceByCategoryIdRequest(4)
       );
@@ -119,9 +146,10 @@ export default function RoomPageCheckValidate() {
         handleApplyRoomCb={handleApplyRoom}
         arrayDate={arrayDate}
         numOfPerson={location.state?.numOfPerson ?? 1}
-        roomSelect={roomSelect}
         setDateArray={setArrayDate}
-        handleApplyDate={handleApplyRoom}
+        setRoomSelect={setRoomSelect}
+        close={close}
+        setCloseCB={setClose}
       />
       <RoomAvailability
         count={count}

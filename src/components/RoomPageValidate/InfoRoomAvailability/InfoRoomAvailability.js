@@ -178,14 +178,6 @@ export default function RoomAvailability({
         button: "Understand",
       });
     } else {
-      // dispatch(
-      //   paymentAction.getPaymentWithVNPay.getPaymentWithVNPayRequest({
-      //     vnp_amount: totalPrice,
-      //     vnp_IpAddr: "127.0.0.1",
-      //     vnp_Locale: "vi",
-      //     vnp_OrderInfo: "Payment",
-      //   })
-      // );
     }
   };
 
@@ -250,8 +242,8 @@ export default function RoomAvailability({
           count: count,
           roomSelect: roomSelect,
           date: {
-            startDate: arrayDate.startDate.format("DD/MM/yyyy HH:mm:ss"),
-            endDate: arrayDate.endDate.format("DD/MM/yyyy HH:mm:ss"),
+            startDate: arrayDate.startDate.format("DD/MM/yyyy"),
+            endDate: arrayDate.endDate.format("DD/MM/yyyy"),
           },
           utilities: arrayChecked,
           requestService:
