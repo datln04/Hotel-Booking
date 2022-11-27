@@ -11,11 +11,12 @@ const InfoBookingRoom = () => {
   const dateCheckInRef = useRef(null);
   const dateCheckOutRef = useRef(null);
   const [person, setPerson] = useState(1);
+  const [children, setChildren] = useState(0);
   const navigate = useNavigate();
   const minDate = checkDate(new Date(), "yyyy-MM-DD");
   const nextDate = moment().add(1, "d").format("yyyy-MM-DD");
 
-  const renderDropdownPerson = () => {
+  const renderAdult = () => {
     return (
       <select
         onChange={(e) => setPerson(e.target.value)}
@@ -25,10 +26,31 @@ const InfoBookingRoom = () => {
           Styles.infoBookingDate
         )}
       >
-        {Array.from(Array(6), (e, i) => {
+        {Array.from(Array(4), (e, i) => {
           return (
             <option value={i + 1} key={i}>
               {i + 1}
+            </option>
+          );
+        })}
+      </select>
+    );
+  };
+
+  const renderChild = () => {
+    return (
+      <select
+        onChange={(e) => setChildren(e.target.value)}
+        defaultValue={children}
+        className={classNames(
+          "hs-bg-dark hs-text-dark-grey",
+          Styles.infoBookingDate
+        )}
+      >
+        {Array.from(Array(3), (e, i) => {
+          return (
+            <option value={i} key={i}>
+              {i}
             </option>
           );
         })}
@@ -47,6 +69,7 @@ const InfoBookingRoom = () => {
           dateCheckIn: dateCheckInRef.current.value,
           dateCheckout: dateCheckOutRef.current.value,
           numOfPerson: person,
+          numOfChild: children,
         },
       });
     } else {
@@ -60,13 +83,13 @@ const InfoBookingRoom = () => {
         <div className={classNames("col-12 row", Styles.infoContainer)}>
           <div
             className={classNames(
-              "col-12 col-lg-8 d-md-flex d-block",
+              "col-10 d-flex justify-content-between",
               Styles.subContainer
             )}
           >
             <div
               className={classNames(
-                "hs-text-white col-md-3 col-12",
+                "hs-text-white col-md-2 col-12",
                 Styles.infoBooking
               )}
             >
@@ -87,7 +110,7 @@ const InfoBookingRoom = () => {
             </div>
             <div
               className={classNames(
-                "hs-text-white col-md-3 col-12",
+                "hs-text-white col-md-2 col-12",
                 Styles.infoBooking
               )}
             >
@@ -108,21 +131,30 @@ const InfoBookingRoom = () => {
             </div>
             <div
               className={classNames(
-                "hs-text-white col-md-3 col-12",
+                "hs-text-white col-md-2 col-12",
                 Styles.infoBooking
               )}
             >
-              <p>Số Người:</p>
-              <div className="col-12 hs-py-8">{renderDropdownPerson()}</div>
+              <p>Số Người Lớn:</p>
+              <div className="col-12 hs-py-8">{renderAdult()}</div>
             </div>
             <div
               className={classNames(
-                "hs-text-white col-lg-4 col-md-3 col-12",
+                "hs-text-white col-md-2 col-12",
+                Styles.infoBooking
+              )}
+            >
+              <p>Số Trẻ Em:</p>
+              <div className="col-12 hs-py-8">{renderChild()}</div>
+            </div>
+            <div
+              className={classNames(
+                "hs-text-white col-lg-4 col-md-2 col-12",
                 Styles.infoBooking
               )}
             >
               <p className="d-md-block invisible d-none">hành động</p>
-              <div className="col-12 hs-py-8">
+              <div className="col-10 hs-py-8">
                 <button
                   className={classNames(
                     "hs-bg-maggie hs-text-white",

@@ -188,17 +188,19 @@ export default function RoomAvailability({
       dispatch(paymentAction.getPaymentWithVNPay.removePaymentWithVNPay());
       window.location.href = payment.url;
     }
-    if (paymentVnPayConfirm && Object.keys(paymentVnPayConfirm).length !== 0) {
+    if (
+      (paymentVnPayConfirm && Object.keys(paymentVnPayConfirm).length !== 0) ||
+      paymentVnPayConfirm.length === 0
+    ) {
       if (paymentVnPayConfirm.length > 0) {
         navigate("/bookingConfirm", { state: paymentVnPayConfirm });
       } else {
-        setTab(1);
         swal({
           title: "ERROR!",
           text: "Room is run out of available - Sorry about that",
           icon: "error",
-          button: "Got it",
-        });
+          button: "Got it!",
+        }).then(() => window.location.reload());
       }
     }
     if (
@@ -208,7 +210,8 @@ export default function RoomAvailability({
     ) {
       if (
         Cookies.get(CONSTANT.PAYMENT_INFO) !== null &&
-        Object.keys(paymentVnPayConfirm).length === 0
+        Object.keys(paymentVnPayConfirm).length === 0 &&
+        paymentVnPayConfirm.length !== 0
       ) {
         const dataMock = Cookies.get(CONSTANT.PAYMENT_INFO);
         const data = JSON.parse(dataMock);
@@ -446,7 +449,7 @@ export default function RoomAvailability({
             </div>
             <div className="hs-py-8">
               <input
-                type="text"
+                type="email"
                 className={Styles.TextContainer}
                 required={true}
                 ref={emailRef}
@@ -459,7 +462,7 @@ export default function RoomAvailability({
             </div>
             <div className="hs-py-8">
               <input
-                type="text"
+                type="email"
                 className={Styles.TextContainer}
                 required={true}
                 ref={confirmEmailRef}

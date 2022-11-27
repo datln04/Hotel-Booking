@@ -21,7 +21,7 @@ export default function RoomAvailability({ data, callBackFunc }) {
     });
 
     return (
-      <div className="hs-bg-dark-9 hs-mb-64">
+      <div className="hs-bg-dark-9 hs-mb-64 col-11">
         <div className="hs-text-white text-lg hs-p-8">{obj.name}</div>
         <div className={Styles.ImageOfRoomAvailability}>
           {obj.images.length > 0 ? (
@@ -39,9 +39,10 @@ export default function RoomAvailability({ data, callBackFunc }) {
           )}
         </div>
         <div className="d-flex col-12 justify-content-center">
-          <div className="col-10 d-flex">
+          <div className="col-11 d-flex">
             <div className="col-6 text-lg hs-text-dark-brown d-flex align-items-center">
-              <i className="fa-solid fa-bed hs-py-16 hs-pr-16"></i> Giường Đôi
+              <i className="fa-solid fa-bed hs-py-16 hs-pr-16"></i>
+              {obj.bedType}
             </div>
             <div className="col-6 d-flex justify-content-end">
               <a
@@ -54,7 +55,7 @@ export default function RoomAvailability({ data, callBackFunc }) {
           </div>
         </div>
         <div className="col-12 d-flex justify-content-center">
-          <div className={classNames("col-10", Styles.hr)}></div>
+          <div className={classNames("col-11", Styles.hr)}></div>
         </div>
         <div className="d-flex col-12 justify-content-center">
           <div className="col-10 d-flex">

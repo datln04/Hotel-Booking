@@ -22,7 +22,10 @@ export default function RoomPageCheckValidate() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const [count, setCount] = useState([
-    { adult: location.state?.numOfPerson ?? 1, child: 0 },
+    {
+      adult: location.state?.numOfPerson ?? 1,
+      child: location.state?.numOfChild ?? 0,
+    },
   ]);
   const [roomSelect, setRoomSelect] = useState([]);
   const [tab, setTab] = useState(1);
@@ -45,7 +48,6 @@ export default function RoomPageCheckValidate() {
   const [close, setClose] = useState(false);
 
   useEffect(() => {
-    console.log("haha");
     if (arrayDate.startDate && arrayDate.endDate) {
       const currentNumOfPerson = roomSelect.findIndex(
         (x) => x.isSelected === false
@@ -87,25 +89,6 @@ export default function RoomPageCheckValidate() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomSelect, count, close]);
 
-  // useEffect(() => {
-  //   if(searchParams.has('startDate')){
-  //     const roomIndex = roomSelect.length - count.length + count.length;
-  //     dispatch(
-  //       actions.getRoomAvailability.getRoomAvailabilityRequest(
-  //         `dateCheckIn=${checkDate(
-  //           searchParams.get.endDate,
-  //           "DD/MM/yyyy"
-  //         )}&dateCheckOut=${checkDate(
-  //           arrayDate.endDate,
-  //           "DD/MM/yyyy"
-  //         )}&numOfPerson=${
-  //           Number(count[roomIndex].adult) + Number(count[roomIndex].child)
-  //         }`
-  //       )
-  //     );
-  //   }
-  // }, [searchParams]);
-
   useEffect(() => {
     if (
       (location.state === undefined ||
@@ -117,7 +100,9 @@ export default function RoomPageCheckValidate() {
       window.location.href = "/";
     } else {
       dispatch(
-        serviceAction.getAllServiceByCategoryId.getServiceByCategoryIdRequest(4)
+        serviceAction.getAllServiceByCategoryId.getServiceByCategoryIdRequest(
+          12
+        )
       );
       dispatch(
         specialUtilityAction.getSpecialUtility.getSpecialUtilityRequest()
@@ -130,7 +115,10 @@ export default function RoomPageCheckValidate() {
               "DD/MM/yyyy"
             )}&dateCheckOut=${moment(location.state.dateCheckout).format(
               "DD/MM/yyyy"
-            )}&numOfPerson=${location.state.numOfPerson}`
+            )}&numOfPerson=${
+              Number(location.state.numOfPerson) +
+              Number(location.state.numOfChild)
+            }`
           )
         );
       }
