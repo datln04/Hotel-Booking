@@ -149,12 +149,12 @@ const InfoBookingRoom = () => {
             </div>
             <div
               className={classNames(
-                "hs-text-white col-lg-4 col-md-2 col-12",
+                "hs-text-white col-lg-3 col-md-2 col-12",
                 Styles.infoBooking
               )}
             >
               <p className="d-md-block invisible d-none">hành động</p>
-              <div className="col-10 hs-py-8">
+              <div className="col-12 hs-py-8">
                 <button
                   className={classNames(
                     "hs-bg-maggie hs-text-white",

@@ -1,19 +1,25 @@
 import Cookies from "js-cookie";
 import moment from "moment/moment";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import swal from "sweetalert";
 import { CONSTANT } from "../../../util/constant/settingSystem";
 import { combineName, formatPrice } from "../../../util/utilities/utils";
 import * as paymentAction from "../../../redux/actions/PaymentAction";
+import { PaymentVnPayConfirmState$ } from "../../../redux/selectors/PaymentSelector";
+import { useState } from "react";
 
 const BookingConfirm = () => {
-  const location = useLocation();
-  const bookingInfo = location.state;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let totalPrice = 0;
+  const [searchParams] = useSearchParams();
+  const paymentVnPayConfirm = useSelector(PaymentVnPayConfirmState$);
+  const location = useLocation();
+  const [bookingInfo, setBooingInfo] = useState(
+    location.state?.payment ?? null
+  );
 
   window.onpopstate = () => {
     navigate("/");
@@ -21,16 +27,17 @@ const BookingConfirm = () => {
 
   useEffect(() => {
     if (
-      location.state === undefined ||
-      location.state === null ||
-      location.state === ""
+      (location.state === undefined ||
+        location.state === null ||
+        location.state === "") &&
+      !(
+        searchParams.has("vnp_ResponseCode") &&
+        searchParams.get("vnp_ResponseCode") === "00"
+      )
     ) {
       window.location.href = "/";
     }
-    if (bookingInfo) {
-      dispatch(
-        paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
-      );
+    if (bookingInfo && bookingInfo.length > 0) {
       swal({
         title: "Payment Successfully",
         text: "Below is some information regarding your booking, you need to take a look at this if you have any concern please reach out to the receptionist about that",
@@ -38,11 +45,50 @@ const BookingConfirm = () => {
         button: "Congratulation",
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bookingInfo]);
 
-    return () => {
-      Cookies.remove(CONSTANT.PAYMENT_INFO, { path: "/" });
-    };
-  });
+  useEffect(() => {
+    if (paymentVnPayConfirm && Object.keys(paymentVnPayConfirm).length !== 0) {
+      if (paymentVnPayConfirm.length >= 0) {
+        dispatch(
+          paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
+        );
+        setBooingInfo(paymentVnPayConfirm);
+      }
+    }
+    if (paymentVnPayConfirm.length === 0) {
+      swal({
+        title: "ERROR!",
+        text: "Room is run out of available - Sorry about that",
+        icon: "error",
+        button: "Got it!",
+      }).then(() => (window.location.href = "/"));
+    }
+    if (
+      Cookies.get(CONSTANT.PAYMENT_INFO) !== undefined &&
+      Object.keys(paymentVnPayConfirm).length === 0
+    ) {
+      const dataMock = Cookies.get(CONSTANT.PAYMENT_INFO);
+      const data = JSON.parse(dataMock);
+      dispatch(
+        paymentAction.getPaymentVnPayConfirm.getPaymentVnPayConfirmRequest({
+          bookingDates: data.date,
+          customer: data.customerInfo,
+          persons: data.count,
+          serviceBooking: data.requestService,
+          roomTypes: data.roomSelect,
+          bookingNotes: data.specialUtility,
+          vnp_Amount: data.vnp_Amount,
+          hotel_id: data.hotel_id,
+          specialUtilities: data.utilities,
+          paymentMethod: searchParams.has("vnp_ResponseCode") ? 3 : 0,
+        })
+      );
+    }
+    return () => Cookies.remove(CONSTANT.PAYMENT_INFO);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paymentVnPayConfirm]);
 
   const getPrice = (roomType) => {
     const currentDate = moment(new Date());
@@ -90,7 +136,8 @@ const BookingConfirm = () => {
   };
 
   return (
-    bookingInfo && (
+    bookingInfo &&
+    bookingInfo.length > 0 && (
       <div className="col-12 hs-bg-dark-low d-flex justify-content-center">
         <div className="col-8">
           <div className="col-12 d-flex justify-content-center hs-mt-96">

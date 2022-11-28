@@ -193,7 +193,12 @@ export default function RoomAvailability({
       paymentVnPayConfirm.length === 0
     ) {
       if (paymentVnPayConfirm.length > 0) {
-        navigate("/bookingConfirm", { state: paymentVnPayConfirm });
+        dispatch(
+          paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
+        );
+        navigate("/bookingConfirm", {
+          state: { payment: paymentVnPayConfirm },
+        });
       } else {
         swal({
           title: "ERROR!",
@@ -203,11 +208,7 @@ export default function RoomAvailability({
         }).then(() => window.location.reload());
       }
     }
-    if (
-      (searchParams.has("vnp_ResponseCode") &&
-        searchParams.get("vnp_ResponseCode") === "00") ||
-      laterPayment
-    ) {
+    if (laterPayment) {
       if (
         Cookies.get(CONSTANT.PAYMENT_INFO) !== null &&
         Object.keys(paymentVnPayConfirm).length === 0 &&
