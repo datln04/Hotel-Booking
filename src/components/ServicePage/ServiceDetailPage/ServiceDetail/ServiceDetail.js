@@ -74,14 +74,17 @@ export default function ServiceDetail({ data, dataDrink }) {
               Styles.SectionTitleItem
             )}
           >
-            <a
-              href="#tongQuan"
+            <div
+              className={classNames(
+                "button",
+                !foodDetail ? "hs-text-dark-brown" : "hs-text-dark-grey"
+              )}
               onClick={() => {
                 updateFoodDetail(false);
               }}
             >
               Thức Ăn
-            </a>
+            </div>
             <hr
               className={classNames("hs-text-dark-brown hs-mt-8 ", Styles.hr1)}
             />
@@ -92,14 +95,17 @@ export default function ServiceDetail({ data, dataDrink }) {
               Styles.SectionTitleItem
             )}
           >
-            <a
-              href="#tienich"
+            <div
+              className={classNames(
+                "button",
+                foodDetail ? "hs-text-dark-brown" : "hs-text-dark-grey"
+              )}
               onClick={() => {
                 updateFoodDetail(true);
               }}
             >
               Đồ Uống
-            </a>
+            </div>
             <hr
               className={classNames("hs-text-dark-brown hs-mt-8", Styles.hr1)}
             />

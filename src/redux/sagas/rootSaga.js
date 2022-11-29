@@ -12,7 +12,6 @@ export default function* rootSaga() {
     hotelServiceSaga.followActionGetHotelById(),
     roomTypeSaga.followActionGetAllRoomType(),
     serviceCategorySaga.followActionGetAllHotelService(),
-    serviceCategorySaga.followActionGetAllHotelService(),
     serviceCategorySaga.followActionGetServiceDetail(),
     roomAvailabilitySaga.followActionGetAllRoomAvailability(),
     serviceSaga.followActionGetAllServiceByCategoryId(),

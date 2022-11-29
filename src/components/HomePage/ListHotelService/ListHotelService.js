@@ -6,18 +6,15 @@ import * as actions from "../../../redux/actions/ServiceCategoryAction";
 import classNames from "classnames";
 import HotelServiceSlide from "../HotelService/HotelServiceSlide";
 import "./CustomSlider.css";
-import { serviceCategoryTypeState$ } from "../../../redux/selectors/ServiceCategorySelector";
+import { serviceCategoryState$ } from "../../../redux/selectors/ServiceCategorySelector";
 
 const ListHotelService = () => {
   const dispatch = useDispatch();
-  // const listServiceCategory = useSelector(serviceCategoryTypeState$);
-  // useEffect(() => {
-  //   dispatch(
-  //     actions.getServiceCategory.getServiceCategoryRequest(
-  //       "img_serviceCategory"
-  //     )
-  //   );
-  // }, [dispatch]);
+  const listServiceCategory = useSelector(serviceCategoryState$);
+
+  useEffect(() => {
+    dispatch(actions.getAllService.getAllServiceRequest());
+  }, [dispatch]);
 
   const GalleryPrevArrow = ({ currentSlide, slideCount, ...props }) => {
     const { onClick } = props;
@@ -58,7 +55,6 @@ const ListHotelService = () => {
   };
 
   const settings = {
-    dots: true,
     infinite: true,
     slidesToShow: 4,
     slidesToScroll: 1,
@@ -68,11 +64,11 @@ const ListHotelService = () => {
     cssEase: "linear",
     nextArrow: <GalleryNextArrow />,
     prevArrow: <GalleryPrevArrow />,
-    appendDots: (dots) => (
-      <div>
-        <ul>{dots}</ul>
-      </div>
-    ),
+    // appendDots: (dots) => (
+    //   <div>
+    //     <ul>{dots}</ul>
+    //   </div>
+    // ),
     customPaging: (i) => <button>{i + 1}</button>,
     responsive: [
       {
@@ -113,11 +109,11 @@ const ListHotelService = () => {
       <hr className={classNames("hs-text-dark-brown hs-mt-8", Styles.hr2)} />
       <div className={classNames("hs-py-32 col-12 d-flex", Styles.Slider)}>
         <div className="col-10">
-          {/* <Slider {...settings}>
+          <Slider {...settings}>
             {listServiceCategory.map((service) => (
               <HotelServiceSlide service={service} key={service.id} />
             ))}
-          </Slider> */}
+          </Slider>
         </div>
       </div>
     </div>

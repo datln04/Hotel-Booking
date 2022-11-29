@@ -1,39 +1,53 @@
 import classNames from "classnames";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { CONSTANT } from "../../../util/constant/settingSystem";
 import Styles from "./RoomType.module.scss";
 export default function RoomType() {
   const data = [
     {
       title: "Standard Room",
-      image: "https://i.ibb.co/c6hcy1D/standard-room.jpg",
+      image: "https://i.ibb.co/tCt8kcB/anhthucte1.png",
       description: [
         { icon: "fa-solid fa-bed", text: "Giường Đôi" },
         { icon: "fa-solid fa-users", text: "2 Người" },
-        { icon: "fa-solid fa-text-width", text: "19m2" },
+        { icon: "fa-solid fa-text-width", text: "20m2" },
         { icon: "fa-regular fa-compass", text: "Hướng Phố" },
       ],
     },
     {
       title: "Superior Room",
-      image: "https://i.ibb.co/c6hcy1D/standard-room.jpg",
+      image: "https://i.ibb.co/8MtncR4/phong.jpg",
       description: [
         { icon: "fa-solid fa-bed", text: "Giường Đôi" },
         { icon: "fa-solid fa-users", text: "2 Người" },
-        { icon: "fa-solid fa-text-width", text: "19m2" },
+        { icon: "fa-solid fa-text-width", text: "40m2" },
         { icon: "fa-regular fa-compass", text: "Hướng Phố" },
       ],
     },
     {
       title: "Deluxe Room",
-      image: "https://i.ibb.co/c6hcy1D/standard-room.jpg",
+      image: "https://i.ibb.co/VT4Q43H/deluxe-room.jpg",
       description: [
         { icon: "fa-solid fa-bed", text: "Giường Đôi" },
         { icon: "fa-solid fa-users", text: "2 Người" },
-        { icon: "fa-solid fa-text-width", text: "19m2" },
+        { icon: "fa-solid fa-text-width", text: "80m2" },
         { icon: "fa-regular fa-compass", text: "Hướng Phố" },
       ],
     },
   ];
+
+  const navigate = useNavigate();
+
+  const handleBookRoom = (index) => {
+    const numOfPerson = index === 0 ? 2 : index === 1 ? 3 : 4;
+    navigate(`${CONSTANT.ROOM_VALIDATE}`, {
+      state: {
+        numOfPerson: numOfPerson,
+      },
+    });
+  };
+
   return (
     <div
       className={classNames(
@@ -56,7 +70,7 @@ export default function RoomType() {
                   )}
                 />
                 <div className={classNames(Styles.imageRoomType)}>
-                  <img src={item.image} alt="" />
+                  <img src={item.image} alt="room" />
                 </div>
                 <div className="d-flex row justify-content-start align-items-center">
                   {item.description &&
@@ -79,7 +93,12 @@ export default function RoomType() {
                     Styles.buttonDetail
                   )}
                 >
-                  <a href="/home">Đặt Phòng +</a>
+                  <div
+                    className="button hs-text-dark-brown"
+                    onClick={() => handleBookRoom(index)}
+                  >
+                    Đặt Phòng +
+                  </div>
                 </div>
               </div>
             );

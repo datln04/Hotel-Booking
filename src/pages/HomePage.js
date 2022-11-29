@@ -6,6 +6,7 @@ import ListHotelService from "../components/HomePage/ListHotelService/ListHotelS
 import OverviewRoom from "../components/HomePage/OverviewRoom/OverviewRoom";
 
 export default function HomePage() {
+  window.scrollTo(0, 0);
   return (
     <div className="main-screen">
       <Header />

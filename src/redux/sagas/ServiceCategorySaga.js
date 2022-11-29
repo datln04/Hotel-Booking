@@ -8,27 +8,26 @@ import {
 } from "../../util/common/LoadingConstant";
 import { serviceCategory } from "../../services/ServiceCategory";
 
-function* getAllServiceCategory(action) {
+function* getAllServiceCategory() {
   try {
     yield put({
       type: DISPLAY_LOADING,
     });
     yield delay(1000);
     let listService = yield call(() => {
-      return serviceCategory.getAllServiceCategory(action.payload);
+      return serviceCategory.getAllServiceCategory();
     });
     if (listService.status === STATUS_CODE.SUCCESS) {
-      yield put(
-        actions.getServiceCategory.getServiceCategorySuccess(listService.data)
-      );
+      yield put(actions.getAllService.getAllServiceSuccess(listService.data));
     }
     yield put({
       type: HIDE_LOADING,
     });
   } catch (error) {
-    yield put(actions.getServiceCategory.getServiceCategoryFailure(error));
+    yield put(actions.getAllService.getAllServiceFailure(error));
   }
 }
+
 function* getServiceCategoryById(action) {
   try {
     yield put({
@@ -40,19 +39,23 @@ function* getServiceCategoryById(action) {
     });
     if (service.status === STATUS_CODE.SUCCESS) {
       yield put(
-        actions.getServiceCategoryById.getServiceCategoryByIdSuccess(service.data)
-      )
+        actions.getServiceCategoryById.getServiceCategoryByIdSuccess(
+          service.data
+        )
+      );
     }
     yield put({
       type: HIDE_LOADING,
     });
   } catch (error) {
-    yield put(actions.getServiceCategoryById.getServiceCategoryByIdFailure(error))
+    yield put(
+      actions.getServiceCategoryById.getServiceCategoryByIdFailure(error)
+    );
   }
 }
 export function* followActionGetAllHotelService() {
   yield takeLatest(
-    actions.getServiceCategory.getServiceCategoryRequest,
+    actions.getAllService.getAllServiceRequest,
     getAllServiceCategory
   );
 }
@@ -61,5 +64,4 @@ export function* followActionGetServiceDetail() {
     actions.getServiceCategoryById.getServiceCategoryByIdRequest,
     getServiceCategoryById
   );
-
 }

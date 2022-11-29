@@ -1,12 +1,12 @@
 import { BaseServices } from "./BaseService";
 
 class ServiceCategory extends BaseServices {
-  getAllServiceCategory = (payload) => {
-    return this.get(`v1/image?type=${payload}`)
+  getServiceCategoryById = (payload) => {
+    return this.get(`v1/serviceCategory/${payload}`);
   };
-  getServiceCategoryById = (payload) =>{
-    return this.get(`v1/serviceCategory/${payload}`)
-  }
+  getAllServiceCategory = () => {
+    return this.get("v1/serviceCategories");
+  };
 }
 
 export const serviceCategory = new ServiceCategory();

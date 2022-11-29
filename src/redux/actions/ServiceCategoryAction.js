@@ -3,10 +3,11 @@ import { createActions } from "redux-actions";
 export const getType = (reduxAction) => {
   return reduxAction().type;
 };
-export const getServiceCategory = createActions({
-  getServiceCategoryRequest: (payload) => payload,
-  getServiceCategorySuccess: (payload) => payload,
-  getServiceCategoryFailure: (err) => err,
+
+export const getAllService = createActions({
+  getAllServiceRequest: undefined,
+  getAllServiceSuccess: (payload) => payload,
+  getAllServiceFailure: (err) => err,
 });
 
 export const getServiceCategoryById = createActions({

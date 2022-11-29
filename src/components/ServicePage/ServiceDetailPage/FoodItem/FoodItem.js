@@ -21,23 +21,25 @@ export default function FoodItem({ information }) {
                 )}
               >
                 <div
-                  className={classNames("col-12 col-md-3 hs-text-white d-block text-lg")}
+                  className={classNames(
+                    "col-12 col-md-3 hs-text-white d-block text-lg"
+                  )}
                   key={index}
                 >
                   {item.listFood &&
                     item.listFood.map((itemFood, index) => {
                       return (
                         <div className={classNames("d-flex hs-py-8")}>
-                          
-                          <p>{(index += 1)}.{itemFood.name}</p>
-                          
+                          <p>
+                            {(index += 1)}.{itemFood.name}
+                          </p>
                         </div>
                       );
                     })}
                 </div>
                 <div
                   className={classNames(
-                    "col-12 col-md-9 d-flex justify-content-center align-items-center",
+                    "col-8 d-flex justify-content-center align-items-center",
                     Styles.ImageFood
                   )}
                 >

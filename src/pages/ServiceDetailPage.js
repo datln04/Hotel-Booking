@@ -1,15 +1,49 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 import image2 from "../assets/images/servicePage/serviceDetail/cangcuabachhoa.jpg";
 import image3 from "../assets/images/servicePage/serviceDetail/coffee.jpg";
 import image1 from "../assets/images/servicePage/serviceDetail/suphaisan.jpg";
+import image_tom from "../assets/images/serviceDetail/tom.png";
+import image_beaf from "../assets/images/serviceDetail/beaf.png";
+import image_tiramisu from "../assets/images/serviceDetail/tiramisu.png";
+import image_salad from "../assets/images/serviceDetail/salad.png";
+import image_tea from "../assets/images/serviceDetail/tea.png";
+import image_sweat_water from "../assets/images/serviceDetail/sweat-water.png";
+import image_beer from "../assets/images/serviceDetail/bear.png";
+import image_fruit_juice from "../assets/images/serviceDetail/fruit-juice.png";
+
 import Breadcrumb from "../components/IntroducePage/Breadcrumb/Breadcrumb";
 import ServiceDescription from "../components/ServicePage/ServiceDetailPage/ServiceDescription/ServiceDescription";
 import ServiceDetail from "../components/ServicePage/ServiceDetailPage/ServiceDetail/ServiceDetail";
-import { serviceCategoryDetailTypeState$ } from "../redux/selectors/ServiceCategorySelector";
 import image from "./../assets/images/servicePage/dichVu.jpg";
+import * as actions from "../redux/actions/ServiceCategoryAction";
+import { useDispatch, useSelector } from "react-redux";
+import { serviceCategoryDetailTypeState$ } from "../redux/selectors/ServiceCategorySelector";
+
 export default function ServiceDetailPage() {
+  const location = useLocation();
+  const dispatch = useDispatch();
   const serviceDetail = useSelector(serviceCategoryDetailTypeState$);
+
+  useEffect(() => {
+    if (
+      location.state === undefined ||
+      location.state === null ||
+      location.state === ""
+    ) {
+      window.location.href = "/service";
+    } else {
+      dispatch(
+        actions.getServiceCategoryById.getServiceCategoryByIdRequest(
+          location?.state
+        )
+      );
+    }
+  }, [dispatch]);
+
   const dataFood = [
     {
       title: "Các món khai vị",
@@ -37,7 +71,7 @@ export default function ServiceDetailPage() {
         { name: "Sườn non chiên kiểu Hoa" },
         { name: "Tôm càng nướng" },
       ],
-      imageFood: [{ imageItem: image1 }, { imageItem: image2 }],
+      imageFood: [{ imageItem: image_tom }, { imageItem: image_beaf }],
     },
     {
       title: "Các món tráng miệng",
@@ -51,7 +85,7 @@ export default function ServiceDetailPage() {
         { name: "Trái vải hạnh nhân lạnh" },
         { name: "Chè long nhân" },
       ],
-      imageFood: [{ imageItem: image1 }, { imageItem: image2 }],
+      imageFood: [{ imageItem: image_tiramisu }, { imageItem: image_salad }],
     },
   ];
   const dataDrink = [
@@ -68,37 +102,63 @@ export default function ServiceDetailPage() {
       imageDrink: image3,
     },
     {
-      title: "Cà Phê",
+      title: "Trà",
       listDrink: [
-        { name: "Cà Phê Đen Nóng/Đá" },
-        { name: "Cà Phê Sữa Nóng/Đá" },
-        { name: "Cappuchino" },
-        { name: "Latte" },
-        { name: "Espresso" },
-        { name: "Double Espresso" },
+        { name: "Trà Hoa Cúc" },
+        { name: "Trà Lipton" },
+        { name: "Trà Bá Tước" },
+        { name: "Trà Xanh" },
+        { name: "Trà Thái Nguyên" },
+        { name: "Trà Đào" },
+        { name: "Trà Dâu" },
       ],
-      imageDrink: image3,
+      imageDrink: image_tea,
     },
     {
-      title: "Cà Phê",
+      title: "NƯỚC SUỐI & NƯỚC NGỌT",
       listDrink: [
-        { name: "Cà Phê Đen Nóng/Đá" },
-        { name: "Cà Phê Sữa Nóng/Đá" },
-        { name: "Cappuchino" },
-        { name: "Latte" },
-        { name: "Espresso" },
-        { name: "Double Espresso" },
+        { name: "Dasani Water" },
+        { name: "Aquafina" },
+        { name: "Red Bull" },
+        { name: "Coke" },
+        { name: "Sprite" },
+        { name: "Soda" },
       ],
-      imageDrink: image3,
+      imageDrink: image_sweat_water,
+    },
+    {
+      title: "Bia",
+      listDrink: [
+        { name: "Heineken" },
+        { name: "Tiger" },
+        { name: "333" },
+        { name: "Corona" },
+        { name: "Budweiser" },
+      ],
+      imageDrink: image_beer,
+    },
+    {
+      title: "NƯỚC SUỐI & NƯỚC NGỌT",
+      listDrink: [
+        { name: "Classic Shirley Temple Water" },
+        { name: "Non-Alcoholic Fizz" },
+        { name: "Virgin Mary Bull" },
+        { name: "Virgin Pinacolada" },
+        { name: "Pomegranate Spritzer" },
+      ],
+      imageDrink: image_fruit_juice,
     },
   ];
+
   return (
-    <div className="main-screen">
-      <Breadcrumb image={image} serviceDetail={serviceDetail} />
-      <ServiceDescription serviceDetail={serviceDetail} />
-      <ServiceDetail data={dataFood} dataDrink={dataDrink} />
-      {/* <FoodCategory data={data}/> */}
-      {/* <MenuOverview data={data}/> */}
-    </div>
+    Object.keys(serviceDetail).length !== 0 && (
+      <div className="main-screen">
+        <Breadcrumb image={image} />
+        <ServiceDescription serviceDetail={serviceDetail} />
+        {serviceDetail?.foodAndBeverage && (
+          <ServiceDetail data={dataFood} dataDrink={dataDrink} />
+        )}
+      </div>
+    )
   );
 }

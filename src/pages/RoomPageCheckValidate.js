@@ -20,20 +20,23 @@ import { checkDate } from "../util/utilities/utils";
 
 export default function RoomPageCheckValidate() {
   const location = useLocation();
+  const dateCheckInDefault = location.state?.dateCheckIn ?? moment(new Date());
+  const dateCheckOutDefault =
+    location.state?.dateCheckout ?? moment(new Date()).add(1, "d");
+  const personDefault = location.state?.numOfPerson ?? 1;
+  const childDefault = location.state?.numOfChild ?? 0;
   const [searchParams] = useSearchParams();
   const [count, setCount] = useState([
     {
-      adult: location.state?.numOfPerson ?? 1,
-      child: location.state?.numOfChild ?? 0,
+      adult: personDefault,
+      child: childDefault,
     },
   ]);
   const [roomSelect, setRoomSelect] = useState([]);
   const [tab, setTab] = useState(1);
   const [arrayDate, setArrayDate] = useState({
-    startDate: moment(location.state?.dateCheckIn) ?? moment(new Date()),
-    endDate: moment(
-      location.state?.dateCheckout ?? moment(new Date()).add(1, "d")
-    ),
+    startDate: moment(dateCheckInDefault),
+    endDate: moment(dateCheckOutDefault),
   });
   const dispatch = useDispatch();
   const airportShuttle = useSelector(ServiceByCategoryIdState$);
@@ -90,6 +93,7 @@ export default function RoomPageCheckValidate() {
   }, [roomSelect, count, close]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (
       (location.state === undefined ||
         location.state === null ||
@@ -111,13 +115,15 @@ export default function RoomPageCheckValidate() {
       if (!searchParams.toString()) {
         dispatch(
           actions.getRoomAvailability.getRoomAvailabilityRequest(
-            `dateCheckIn=${moment(location.state.dateCheckIn).format(
-              "DD/MM/yyyy"
-            )}&dateCheckOut=${moment(location.state.dateCheckout).format(
-              "DD/MM/yyyy"
-            )}&numOfPerson=${
-              Number(location.state.numOfPerson) +
-              Number(location.state.numOfChild)
+            `dateCheckIn=${
+              moment(location.state?.dateCheckIn).format("DD/MM/yyyy") ??
+              moment(new Date()).format("dd/MM/yyyy")
+            }&dateCheckOut=${
+              moment(location.state.dateCheckout).format("DD/MM/yyyy") ??
+              moment(new Date()).add(1, "d").format("dd/mm/yyyy")
+            }&numOfPerson=${
+              Number(location.state?.numOfPerson ?? 1) +
+              Number(location.state?.numOfChild ?? 0)
             }`
           )
         );
@@ -134,6 +140,7 @@ export default function RoomPageCheckValidate() {
         handleApplyRoomCb={handleApplyRoom}
         arrayDate={arrayDate}
         numOfPerson={location.state?.numOfPerson ?? 1}
+        numOfChild={location.state?.numOfChild ?? 0}
         setDateArray={setArrayDate}
         setRoomSelect={setRoomSelect}
         close={close}

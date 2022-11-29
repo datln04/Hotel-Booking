@@ -10,7 +10,7 @@ export default function HotelService({ listServiceCategory }) {
         Styles.HotelService
       )}
     >
-      <div className="col-10 row hs-my-32">
+      <div className="col-8 row hs-my-32">
         {listServiceCategory &&
           listServiceCategory.map((item, index) => {
             return <ServiceItem item={item} key={index} />;

@@ -3,6 +3,7 @@
 import classNames from "classnames";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
+import { useEffect } from "react";
 import { DateRangePicker } from "react-dates";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
@@ -18,8 +19,11 @@ export default function InfoBookingRoomValidate({
   close,
   setCloseCB,
   setRoomSelect,
+  numOfChild,
 }) {
-  const [count, setCount] = useState([{ adult: numOfPerson, child: 0 }]);
+  const [count, setCount] = useState([
+    { adult: numOfPerson, child: numOfChild },
+  ]);
   const [isOpen, setOpen] = useState(false);
   const [focusInput, setFocusInput] = useState(null);
   const handleAddMoreRoom = () => {
@@ -61,6 +65,7 @@ export default function InfoBookingRoomValidate({
 
   const renderDropdown = useCallback(() => {
     const tmp = count.map((person, index) => {
+      console.log("person: ", person);
       return (
         <SubRoomInfoBooking
           key={index}
@@ -77,6 +82,10 @@ export default function InfoBookingRoomValidate({
     });
     return tmp;
   }, [count]);
+
+  useEffect(() => {
+    renderDropdown();
+  });
 
   const countPerson = () => {
     let adult = 0;

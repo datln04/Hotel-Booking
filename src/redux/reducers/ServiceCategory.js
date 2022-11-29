@@ -1,4 +1,4 @@
-import { getServiceCategory, getType } from "../actions/ServiceCategoryAction";
+import { getAllService, getType } from "../actions/ServiceCategoryAction";
 
 const initialState = {
   arrServiceCategory: [],
@@ -6,16 +6,16 @@ const initialState = {
 
 export default function ServiceCategoryReducer(state = initialState, action) {
   switch (action.type) {
-    case getType(getServiceCategory.getServiceCategoryRequest):
+    case getType(getAllService.getAllServiceRequest):
       return {
         ...state,
       };
-    case getType(getServiceCategory.getServiceCategorySuccess):
+    case getType(getAllService.getAllServiceSuccess):
       return {
         ...state,
         arrServiceCategory: action.payload,
       };
-    case getType(getServiceCategory.getServiceCategoryFailure):
+    case getType(getAllService.getAllServiceFailure):
       return {
         ...state,
       };

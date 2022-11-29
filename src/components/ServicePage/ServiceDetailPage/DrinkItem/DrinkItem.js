@@ -3,7 +3,7 @@ import React from "react";
 import Styles from "../DrinkItem/DrinkItem.module.scss";
 export default function DrinkItem({ dataDrink }) {
   return (
-    <div className={classNames(Styles.DrinkItem)}>
+    <div className={classNames(Styles.DrinkItem, "hs-py-32")}>
       {dataDrink &&
         dataDrink.map((item, index) => {
           return (

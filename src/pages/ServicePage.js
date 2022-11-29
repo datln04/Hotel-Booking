@@ -4,17 +4,17 @@ import Breadcrumb from "../components/IntroducePage/Breadcrumb/Breadcrumb";
 import HotelService from "../components/ServicePage/HotelService/HotelService";
 import image from "./../assets/images/servicePage/dichVu.jpg";
 import * as actions from "../redux/actions/ServiceCategoryAction";
-import { serviceCategoryTypeState$ } from "../redux/selectors/ServiceCategorySelector";
+import { serviceCategoryState$ } from "../redux/selectors/ServiceCategorySelector";
 export default function ServicePage() {
   const dispatch = useDispatch();
-  const listServiceCategory = useSelector(serviceCategoryTypeState$);
+  const listServiceCategory = useSelector(serviceCategoryState$);
   useEffect(() => {
-    dispatch(actions.getServiceCategory.getServiceCategoryRequest("img_serviceCategory"));
+    dispatch(actions.getAllService.getAllServiceRequest());
   }, [dispatch]);
   return (
     <div className="main-screen">
       <Breadcrumb image={image} />
-      <HotelService listServiceCategory={listServiceCategory}/>
+      <HotelService listServiceCategory={listServiceCategory} />
     </div>
   );
 }

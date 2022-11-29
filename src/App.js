@@ -29,7 +29,7 @@ function App() {
         <Route exact path="/bookingConfirm" element={<BookingConfirm />} />
         <Route path="/home" element={<HomePage />} />
         <Route exact path="/room" element={<RoomPage />} />
-        <Route exact path="/RoomValidate" element={<RoomPageCheckValidate />} />
+        <Route exact path="/roomValidate" element={<RoomPageCheckValidate />} />
         <Route exact path="/roomTypeDetail" element={<RoomTypeDetail />} />
         <Route exact path="/introduce" element={<IntroducePage />} />
         <Route exact path="/news" element={<NewsComponent />} />

@@ -7,8 +7,6 @@ export default function RoomPage() {
     <div className="main-screen">
       <Breadcrumb image={imageBreadcrumb} />
       <RoomType />
-      {/* <Footer />
-      <FooterCopyRight /> */}
     </div>
   );
 }

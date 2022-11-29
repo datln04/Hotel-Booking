@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import classNames from "classnames";
 import { useState } from "react";
 import Styles from "./ServiceBookingItem.module.scss";
@@ -38,7 +39,7 @@ const ServiceBookingItem = () => {
           >
             <p>Hot</p>
           </div>
-          <a href="/" className="service-booking-icon">
+          <a href="/room" className="service-booking-icon">
             <i
               className={classNames(
                 "fa-solid fa-people-roof hs-text-white-6",
@@ -51,10 +52,10 @@ const ServiceBookingItem = () => {
         <div
           className={classNames("col-2 col-md-3", Styles.ServiceBookingItem)}
         >
-          <div style={{ width: "40px", height: "15px", margin: "8px auto" }}>
-          {/* <p>Hot</p> */}
-        </div>
-          <a href="/">
+          <div
+            style={{ width: "40px", height: "15px", margin: "8px auto" }}
+          ></div>
+          <a href="#">
             <i
               className={classNames(
                 "fa-solid fa-utensils hs-text-white-6",
@@ -67,10 +68,10 @@ const ServiceBookingItem = () => {
         <div
           className={classNames("col-2 col-md-3", Styles.ServiceBookingItem)}
         >
-   <div style={{ width: "40px", height: "15px", margin: "8px auto" }}>
-          {/* <p>Hot</p> */}
-        </div>
-          <a href="/">
+          <div
+            style={{ width: "40px", height: "15px", margin: "8px auto" }}
+          ></div>
+          <a href="/service">
             <i
               className={classNames(
                 "fa-solid fa-bell-concierge hs-text-white-6",
@@ -91,7 +92,7 @@ const ServiceBookingItem = () => {
           >
             <p>Hot</p>
           </div>
-          <a href="/">
+          <a href="#">
             <i
               className={classNames(
                 "fa-solid fa-person-swimming hs-text-white-6",
