@@ -21,4 +21,5 @@ export const getPaymentVnPayConfirm = createActions({
   getPaymentVnPayConfirmSuccess: (payload) => payload,
   getPaymentVnPayConfirmFailure: (err) => err,
   removePaymentVnPayConfirm: undefined,
+  clearPaymentVNPayConfirm: undefined,
 });

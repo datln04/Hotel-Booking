@@ -83,6 +83,12 @@ export function PaymentVnPayConfirmReducer(state = initialState, action) {
     case getType(getPaymentVnPayConfirm.removePaymentVnPayConfirm):
       return {
         ...state,
+        arrPayment: 1,
+        isLoading: false,
+      };
+    case getType(getPaymentVnPayConfirm.clearPaymentVNPayConfirm):
+      return {
+        ...state,
         arrPayment: {},
         isLoading: false,
       };

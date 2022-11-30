@@ -11,6 +11,7 @@ import * as hotelAction from "../redux/actions/HotelServiceAction";
 import * as actions from "../redux/actions/RoomAvailability";
 import * as serviceAction from "../redux/actions/ServiceAction";
 import * as specialUtilityAction from "../redux/actions/SpecialUtilityActions";
+import * as paymentAction from "../redux/actions/PaymentAction";
 import { HotelByIdState$ } from "../redux/selectors/HotelServiceSelector";
 import { RoomAvailabilityState$ } from "../redux/selectors/RoomAvailabilitySelector";
 import { ServiceByCategoryIdState$ } from "../redux/selectors/ServiceSelector";
@@ -103,6 +104,7 @@ export default function RoomPageCheckValidate() {
     ) {
       window.location.href = "/";
     } else {
+      dispatch(paymentAction.getPaymentVnPayConfirm.clearPaymentVNPayConfirm());
       dispatch(
         serviceAction.getAllServiceByCategoryId.getServiceByCategoryIdRequest(
           12

@@ -188,48 +188,51 @@ export default function RoomAvailability({
       dispatch(paymentAction.getPaymentWithVNPay.removePaymentWithVNPay());
       window.location.href = payment.url;
     }
-    if (
-      (paymentVnPayConfirm && Object.keys(paymentVnPayConfirm).length !== 0) ||
-      paymentVnPayConfirm.length === 0
-    ) {
-      if (paymentVnPayConfirm.length > 0) {
-        dispatch(
-          paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
-        );
-        navigate("/bookingConfirm", {
-          state: { payment: paymentVnPayConfirm },
-        });
-      } else {
-        swal({
-          title: "ERROR!",
-          text: "Room is run out of available - Sorry about that",
-          icon: "error",
-          button: "Got it!",
-        }).then(() => window.location.reload());
-      }
-    }
-    if (laterPayment) {
+    if (typeof paymentVnPayConfirm !== "number") {
       if (
-        Cookies.get(CONSTANT.PAYMENT_INFO) !== null &&
-        Object.keys(paymentVnPayConfirm).length === 0 &&
-        paymentVnPayConfirm.length !== 0
+        (paymentVnPayConfirm &&
+          Object.keys(paymentVnPayConfirm).length !== 0) ||
+        paymentVnPayConfirm.length === 0
       ) {
-        const dataMock = Cookies.get(CONSTANT.PAYMENT_INFO);
-        const data = JSON.parse(dataMock);
-        dispatch(
-          paymentAction.getPaymentVnPayConfirm.getPaymentVnPayConfirmRequest({
-            bookingDates: data.date,
-            customer: data.customerInfo,
-            persons: data.count,
-            serviceBooking: data.requestService,
-            roomTypes: data.roomSelect,
-            bookingNotes: data.specialUtility,
-            vnp_Amount: data.vnp_Amount,
-            hotel_id: data.hotel_id,
-            specialUtilities: data.utilities,
-            paymentMethod: searchParams.has("vnp_ResponseCode") ? 3 : 0,
-          })
-        );
+        if (paymentVnPayConfirm.length > 0) {
+          dispatch(
+            paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
+          );
+          navigate("/bookingConfirm", {
+            state: { payment: paymentVnPayConfirm },
+          });
+        } else {
+          swal({
+            title: "ERROR!",
+            text: "Room is run out of available - Sorry about that",
+            icon: "error",
+            button: "Got it!",
+          }).then(() => window.location.reload());
+        }
+      } else if (laterPayment) {
+        if (
+          Cookies.get(CONSTANT.PAYMENT_INFO) !== null &&
+          Object.keys(paymentVnPayConfirm).length === 0 &&
+          paymentVnPayConfirm !== null
+        ) {
+          setLaterPayment(false);
+          const dataMock = Cookies.get(CONSTANT.PAYMENT_INFO);
+          const data = JSON.parse(dataMock);
+          dispatch(
+            paymentAction.getPaymentVnPayConfirm.getPaymentVnPayConfirmRequest({
+              bookingDates: data.date,
+              customer: data.customerInfo,
+              persons: data.count,
+              serviceBooking: data.requestService,
+              roomTypes: data.roomSelect,
+              bookingNotes: data.specialUtility,
+              vnp_Amount: data.vnp_Amount,
+              hotel_id: data.hotel_id,
+              specialUtilities: data.utilities,
+              paymentMethod: searchParams.has("vnp_ResponseCode") ? 3 : 0,
+            })
+          );
+        }
       }
     }
   }, [payment, laterPayment, paymentVnPayConfirm]);
@@ -256,8 +259,8 @@ export default function RoomAvailability({
           count: count,
           roomSelect: roomSelect,
           date: {
-            startDate: arrayDate.startDate.format("DD/MM/yyyy"),
-            endDate: arrayDate.endDate.format("DD/MM/yyyy"),
+            startDate: arrayDate.startDate.format("DD/MM/yyyy HH:mm:ss"),
+            endDate: arrayDate.endDate.format("DD/MM/yyyy HH:mm:ss"),
           },
           utilities: arrayChecked,
           requestService:
@@ -286,6 +289,9 @@ export default function RoomAvailability({
             })
           );
         } else {
+          Cookies.set(CONSTANT.LATER_PAYMENT, JSON.stringify("Later"), {
+            path: "/",
+          });
           setLaterPayment(true);
         }
       } else {
@@ -497,9 +503,7 @@ export default function RoomAvailability({
           </div>
           <div className="col-1 hs-my-32 hs-border-right-solid-dark"></div>
           <div className="col-6">
-            <div className="text-lg hs-text-white hs-py-24">
-              Thông tin thanh toán
-            </div>
+            <div className="text-lg hs-text-white hs-py-24">Thông tin</div>
             <div className="d-flex text-md hs-text-white hs-pb-24">
               <div className="d-flex ">
                 <input

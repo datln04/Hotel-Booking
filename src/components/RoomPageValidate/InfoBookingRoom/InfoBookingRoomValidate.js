@@ -65,7 +65,6 @@ export default function InfoBookingRoomValidate({
 
   const renderDropdown = useCallback(() => {
     const tmp = count.map((person, index) => {
-      console.log("person: ", person);
       return (
         <SubRoomInfoBooking
           key={index}

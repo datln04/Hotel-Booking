@@ -49,42 +49,47 @@ const BookingConfirm = () => {
   }, [bookingInfo]);
 
   useEffect(() => {
-    if (paymentVnPayConfirm && Object.keys(paymentVnPayConfirm).length !== 0) {
-      if (paymentVnPayConfirm.length >= 0) {
-        dispatch(
-          paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
-        );
-        setBooingInfo(paymentVnPayConfirm);
+    if (typeof paymentVnPayConfirm !== "number") {
+      if (
+        paymentVnPayConfirm &&
+        Object.keys(paymentVnPayConfirm).length !== 0
+      ) {
+        if (paymentVnPayConfirm.length >= 0) {
+          dispatch(
+            paymentAction.getPaymentVnPayConfirm.removePaymentVnPayConfirm()
+          );
+          setBooingInfo(paymentVnPayConfirm);
+        }
       }
-    }
-    if (paymentVnPayConfirm.length === 0) {
-      swal({
-        title: "ERROR!",
-        text: "Room is run out of available - Sorry about that",
-        icon: "error",
-        button: "Got it!",
-      }).then(() => (window.location.href = "/"));
-    }
-    if (
-      Cookies.get(CONSTANT.PAYMENT_INFO) !== undefined &&
-      Object.keys(paymentVnPayConfirm).length === 0
-    ) {
-      const dataMock = Cookies.get(CONSTANT.PAYMENT_INFO);
-      const data = JSON.parse(dataMock);
-      dispatch(
-        paymentAction.getPaymentVnPayConfirm.getPaymentVnPayConfirmRequest({
-          bookingDates: data.date,
-          customer: data.customerInfo,
-          persons: data.count,
-          serviceBooking: data.requestService,
-          roomTypes: data.roomSelect,
-          bookingNotes: data.specialUtility,
-          vnp_Amount: data.vnp_Amount,
-          hotel_id: data.hotel_id,
-          specialUtilities: data.utilities,
-          paymentMethod: searchParams.has("vnp_ResponseCode") ? 3 : 0,
-        })
-      );
+      if (paymentVnPayConfirm.length === 0) {
+        swal({
+          title: "ERROR!",
+          text: "Room is run out of available - Sorry about that",
+          icon: "error",
+          button: "Got it!",
+        }).then(() => (window.location.href = "/"));
+      }
+      if (
+        Cookies.get(CONSTANT.PAYMENT_INFO) !== undefined &&
+        Object.keys(paymentVnPayConfirm).length === 0
+      ) {
+        const dataMock = Cookies.get(CONSTANT.PAYMENT_INFO);
+        const data = JSON.parse(dataMock);
+        dispatch(
+          paymentAction.getPaymentVnPayConfirm.getPaymentVnPayConfirmRequest({
+            bookingDates: data.date,
+            customer: data.customerInfo,
+            persons: data.count,
+            serviceBooking: data.requestService,
+            roomTypes: data.roomSelect,
+            bookingNotes: data.specialUtility,
+            vnp_Amount: data.vnp_Amount,
+            hotel_id: data.hotel_id,
+            specialUtilities: data.utilities,
+            paymentMethod: searchParams.has("vnp_ResponseCode") ? 3 : 0,
+          })
+        );
+      }
     }
     return () => Cookies.remove(CONSTANT.PAYMENT_INFO);
     // eslint-disable-next-line react-hooks/exhaustive-deps
