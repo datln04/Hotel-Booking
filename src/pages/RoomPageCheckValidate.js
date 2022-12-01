@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import moment from "moment/moment";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { ReactReduxContext, useDispatch, useSelector } from "react-redux";
 import { useLocation, useSearchParams } from "react-router-dom";
 import image from "../assets/images/roomType/phong.jpg";
 import Breadcrumb from "../components/IntroducePage/Breadcrumb/Breadcrumb";
@@ -18,6 +18,7 @@ import { ServiceByCategoryIdState$ } from "../redux/selectors/ServiceSelector";
 import { SpecialUtilityState$ } from "../redux/selectors/SpecialUtilitySelector";
 import { CONSTANT } from "../util/constant/settingSystem";
 import { checkDate } from "../util/utilities/utils";
+import Loading from "../components/Loading/Loading";
 
 export default function RoomPageCheckValidate() {
   const location = useLocation();
@@ -134,6 +135,10 @@ export default function RoomPageCheckValidate() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  if (listRoomAvailability === null) return <Loading />;
+  if (listRoomAvailability !== null && listRoomAvailability.length === 0)
+    return;
 
   return (
     <div className="main-screen">
