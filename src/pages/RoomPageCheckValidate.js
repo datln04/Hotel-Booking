@@ -1,24 +1,23 @@
 import Cookies from "js-cookie";
 import moment from "moment/moment";
 import React, { useEffect, useState } from "react";
-import { ReactReduxContext, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useSearchParams } from "react-router-dom";
 import image from "../assets/images/roomType/phong.jpg";
 import Breadcrumb from "../components/IntroducePage/Breadcrumb/Breadcrumb";
 import InfoBookingRoomValidate from "../components/RoomPageValidate/InfoBookingRoom/InfoBookingRoomValidate";
 import RoomAvailability from "../components/RoomPageValidate/InfoRoomAvailability/InfoRoomAvailability";
 import * as hotelAction from "../redux/actions/HotelServiceAction";
+import * as paymentAction from "../redux/actions/PaymentAction";
 import * as actions from "../redux/actions/RoomAvailability";
 import * as serviceAction from "../redux/actions/ServiceAction";
 import * as specialUtilityAction from "../redux/actions/SpecialUtilityActions";
-import * as paymentAction from "../redux/actions/PaymentAction";
 import { HotelByIdState$ } from "../redux/selectors/HotelServiceSelector";
 import { RoomAvailabilityState$ } from "../redux/selectors/RoomAvailabilitySelector";
 import { ServiceByCategoryIdState$ } from "../redux/selectors/ServiceSelector";
 import { SpecialUtilityState$ } from "../redux/selectors/SpecialUtilitySelector";
 import { CONSTANT } from "../util/constant/settingSystem";
 import { checkDate } from "../util/utilities/utils";
-import Loading from "../components/Loading/Loading";
 
 export default function RoomPageCheckValidate() {
   const location = useLocation();
@@ -135,10 +134,6 @@ export default function RoomPageCheckValidate() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
-
-  if (listRoomAvailability === null) return <Loading />;
-  if (listRoomAvailability !== null && listRoomAvailability.length === 0)
-    return;
 
   return (
     <div className="main-screen">
