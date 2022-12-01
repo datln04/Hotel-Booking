@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import moment from "moment/moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import image from "../assets/images/roomType/phong.jpg";
 import Breadcrumb from "../components/IntroducePage/Breadcrumb/Breadcrumb";
 import InfoBookingRoomValidate from "../components/RoomPageValidate/InfoBookingRoom/InfoBookingRoomValidate";
@@ -26,7 +26,6 @@ export default function RoomPageCheckValidate() {
     location.state?.dateCheckout ?? moment(new Date()).add(1, "d");
   const personDefault = location.state?.numOfPerson ?? 1;
   const childDefault = location.state?.numOfChild ?? 0;
-  const [searchParams] = useSearchParams();
   const [count, setCount] = useState([
     {
       adult: personDefault,
@@ -114,26 +113,10 @@ export default function RoomPageCheckValidate() {
         specialUtilityAction.getSpecialUtility.getSpecialUtilityRequest()
       );
       dispatch(hotelAction.getHotelServiceById.getHotelServiceByIdRequest(1));
-      if (!searchParams.toString()) {
-        dispatch(
-          actions.getRoomAvailability.getRoomAvailabilityRequest(
-            `dateCheckIn=${
-              moment(location.state?.dateCheckIn).format("DD/MM/yyyy") ??
-              moment(new Date()).format("dd/MM/yyyy")
-            }&dateCheckOut=${
-              moment(location.state.dateCheckout).format("DD/MM/yyyy") ??
-              moment(new Date()).add(1, "d").format("dd/mm/yyyy")
-            }&numOfPerson=${
-              Number(location.state?.numOfPerson ?? 1) +
-              Number(location.state?.numOfChild ?? 0)
-            }`
-          )
-        );
-      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className="main-screen">

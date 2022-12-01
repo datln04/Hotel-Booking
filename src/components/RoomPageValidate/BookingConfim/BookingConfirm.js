@@ -1,14 +1,14 @@
+/* eslint-disable array-callback-return */
 import Cookies from "js-cookie";
 import moment from "moment/moment";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import swal from "sweetalert";
-import { CONSTANT } from "../../../util/constant/settingSystem";
-import { combineName, formatPrice } from "../../../util/utilities/utils";
 import * as paymentAction from "../../../redux/actions/PaymentAction";
 import { PaymentVnPayConfirmState$ } from "../../../redux/selectors/PaymentSelector";
-import { useState } from "react";
+import { CONSTANT } from "../../../util/constant/settingSystem";
+import { combineName, formatPrice } from "../../../util/utilities/utils";
 
 const BookingConfirm = () => {
   const navigate = useNavigate();
@@ -20,6 +20,8 @@ const BookingConfirm = () => {
   const [bookingInfo, setBooingInfo] = useState(
     location.state?.payment ?? null
   );
+
+  let customer = {};
 
   window.onpopstate = () => {
     navigate("/");
@@ -38,12 +40,39 @@ const BookingConfirm = () => {
       window.location.href = "/";
     }
     if (bookingInfo && bookingInfo.length > 0) {
-      swal({
-        title: "Payment Successfully",
-        text: "Below is some information regarding your booking, you need to take a look at this if you have any concern please reach out to the receptionist about that",
-        icon: "success",
-        button: "Congratulation",
+      // if (bookingInfo.busyRooms && bookingInfo.busyRooms.length > 0) {
+      let numOfRoomFailure = "";
+      let numOfRoomSuccess = "";
+      bookingInfo.map((room, index) => {
+        if (room.bookingFailureRoom != null) {
+          console.log(room.bookingFailureRoomName);
+          numOfRoomFailure +=
+            "phòng " +
+            room.bookingFailureRoom.bookingFailureRoomName +
+            ` số ${index + 1}`;
+        } else {
+          numOfRoomSuccess +=
+            "phòng " + room.roomType.name + ` số ${index + 1}`;
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          customer = room.booking.customer;
+        }
       });
+      if (numOfRoomFailure.length > 0) {
+        console.log(numOfRoomFailure);
+        swal({
+          title: `Thanh toán thành công ${numOfRoomSuccess} `,
+          text: `${numOfRoomFailure} thanh toán không thành công do chúng tôi hết phòng, xin chân thành xin lỗi quý khách, kính mong quý khách có thể đặt lại phòng phù hợp cho chuyến lưu trú của mình`,
+          icon: "info",
+          button: "Thử lại",
+        });
+      } else {
+        swal({
+          title: "Thanh toán thành công",
+          text: "Vui lòng kiểm tra thông tin đặt phòng của bạn. Nếu bạn có bất kì thắc mắc liên quan đến thông tin đặt phòng vui lòng liên hệ đến lễ tân qua số điện thoại 0987654321",
+          icon: "success",
+          button: "Chúc mừng",
+        });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookingInfo]);
@@ -195,123 +224,128 @@ const BookingConfirm = () => {
                     <div className="col-3">Họ và tên:</div>
                     <div className="col-9 hs-text-white">
                       {combineName(
-                        bookingInfo[0].booking.customer.firstName,
-                        bookingInfo[0].booking.customer.middleName,
-                        bookingInfo[0].booking.customer.lastName
+                        customer.firstName,
+                        customer.middleName,
+                        customer.lastName
                       )}
                     </div>
                   </div>
                   <div className="d-flex col-12 hs-py-8">
                     <div className="col-3">Email:</div>
-                    <div className="col-9 hs-text-white">
-                      {bookingInfo[0].booking.customer.email}
-                    </div>
+                    <div className="col-9 hs-text-white">{customer.email}</div>
                   </div>
                   <div className="d-flex col-12 hs-py-8">
                     <div className="col-3">Điện thoại:</div>
                     <div className="col-9 hs-text-white">
-                      {bookingInfo[0].booking.customer.phoneNumber &&
-                        bookingInfo[0].booking.customer.phoneNumber}
+                      {customer.phoneNumber && customer.phoneNumber}
                     </div>
                   </div>
                 </div>
                 <div className="col-6 container-fluid">
                   {bookingInfo.map((data, index) => {
-                    const priceRoom = getPriceByRoom(
-                      data.roomType,
-                      data.booking
-                    );
-                    const price = getPrice(data.roomType);
-                    return (
-                      <>
-                        <div
-                          key={index}
-                          className="hs-text-white text-lg hs-py-24"
-                        >
-                          Thông tin đặt phòng {index + 1}
-                        </div>
-                        <div className="d-flex col-12 hs-py-8">
-                          <div className="col-4">Mã số đặt phòng: </div>
-                          <div className="col-8">{data.booking.id}</div>
-                        </div>
-                        <div className="d-flex col-12 hs-py-8">
-                          <div className="col-6 d-flex">
-                            <p className="col-5">Ngày đến: </p>
-                            <p className="col-6">
-                              {data.booking.arrivalDate.split(" ")[0]}
-                            </p>
+                    if (data.bookingFailureRoom == null) {
+                      const priceRoom = getPriceByRoom(
+                        data.roomType,
+                        data.booking
+                      );
+                      const price = getPrice(data.roomType);
+                      return (
+                        <>
+                          <div
+                            key={index}
+                            className="hs-text-white text-lg hs-py-24"
+                          >
+                            Thông tin đặt phòng {index + 1}
                           </div>
-                          <div className="col-6 d-flex">
-                            <p className="col-5">Ngày đi: </p>
-                            <p className="col-6">
-                              {data.booking.departureDate.split(" ")[0]}
-                            </p>
+                          <div className="d-flex col-12 hs-py-8">
+                            <div className="col-4">Mã số đặt phòng: </div>
+                            <div className="col-8">{data.booking.id}</div>
                           </div>
-                        </div>
-                        <div className="d-flex col-12 hs-py-8">
-                          <div className="col-6 d-flex">
-                            <p className="col-5">Nhận phòng: </p>
-                            <p className="col-6">{data.hotel.checkInTime}</p>
-                          </div>
-                          <div className="col-6 d-flex">
-                            <p className="col-5">Trả phòng: </p>
-                            <p className="col-6">{data.hotel.checkOutTime}</p>
-                          </div>
-                        </div>
-                        <div className="d-flex col-12 hs-py-8">
-                          <div className="col-6 d-flex">
-                            <p className="col-5">Loại phòng: </p>
-                            <p className="col-6">{data.roomType.name}</p>
-                          </div>
-                          <div className="col-6 d-flex">
-                            <p className="col-5">Loại giường: </p>
-                            <p className="col-6">{data.roomType.bedType}</p>
-                          </div>
-                        </div>
-                        <div className="d-flex col-6 hs-py-8">
-                          <div className="col-5">Tiền phòng:</div>
-                          <div className="col-6">
-                            {formatPrice(price, "vi-VN", "VND")}
-                          </div>
-                        </div>
-                        <div className="d-flex col-12 hs-py-8">
-                          <div>Yêu cầu khác: {data.booking.specialNote}</div>
-                        </div>
-                        <div className="d-flex col-12 hs-py-8">
-                          <div className="col-3">Đón sân bay: </div>
-                          <div className="col-9">
-                            {data.service
-                              ? data.service.name +
-                                " " +
-                                formatPrice(data.service.price, "vi-VN", "VND")
-                              : "Không"}
-                          </div>
-                        </div>
-                        <div className="d-flex col-12 hs-py-16 hs-text-white text-lg align-items-center">
-                          <div className="col-4 text-md">Giá theo phòng: </div>
-                          <div className="col-8">
-                            {formatPrice(priceRoom, "vi-VN", "VND")}
-                          </div>
-                        </div>
-                        {index === bookingInfo.length - 1 && (
-                          <>
-                            <div className="d-flex col-12 hs-pt-48">
-                              <div className="col-4">Thanh toán: </div>
-                              <div className="col-8">
-                                {data.booking.roomPayment === "N/A" &&
-                                  "Thanh Toán Sau"}
-                              </div>
+                          <div className="d-flex col-12 hs-py-8">
+                            <div className="col-6 d-flex">
+                              <p className="col-5">Ngày đến: </p>
+                              <p className="col-6">
+                                {data.booking.arrivalDate.split(" ")[0]}
+                              </p>
                             </div>
-                            <div className="d-flex col-12 hs-py-24 hs-text-white text-lg justify-content-between">
-                              <div className="col-4">Tổng: </div>
-                              <div className="col-4">
-                                {formatPrice(totalPrice, "vi-VN", "VND")}
-                              </div>
+                            <div className="col-6 d-flex">
+                              <p className="col-5">Ngày đi: </p>
+                              <p className="col-6">
+                                {data.booking.departureDate.split(" ")[0]}
+                              </p>
                             </div>
-                          </>
-                        )}
-                      </>
-                    );
+                          </div>
+                          <div className="d-flex col-12 hs-py-8">
+                            <div className="col-6 d-flex">
+                              <p className="col-5">Nhận phòng: </p>
+                              <p className="col-6">{data.hotel.checkInTime}</p>
+                            </div>
+                            <div className="col-6 d-flex">
+                              <p className="col-5">Trả phòng: </p>
+                              <p className="col-6">{data.hotel.checkOutTime}</p>
+                            </div>
+                          </div>
+                          <div className="d-flex col-12 hs-py-8">
+                            <div className="col-6 d-flex">
+                              <p className="col-5">Loại phòng: </p>
+                              <p className="col-6">{data.roomType.name}</p>
+                            </div>
+                            <div className="col-6 d-flex">
+                              <p className="col-5">Loại giường: </p>
+                              <p className="col-6">{data.roomType.bedType}</p>
+                            </div>
+                          </div>
+                          <div className="d-flex col-6 hs-py-8">
+                            <div className="col-5">Tiền phòng:</div>
+                            <div className="col-6">
+                              {formatPrice(price, "vi-VN", "VND")}
+                            </div>
+                          </div>
+                          <div className="d-flex col-12 hs-py-8">
+                            <div>Yêu cầu khác: {data.booking.specialNote}</div>
+                          </div>
+                          <div className="d-flex col-12 hs-py-8">
+                            <div className="col-3">Đón sân bay: </div>
+                            <div className="col-9">
+                              {data.service
+                                ? data.service.name +
+                                  " " +
+                                  formatPrice(
+                                    data.service.price,
+                                    "vi-VN",
+                                    "VND"
+                                  )
+                                : "Không"}
+                            </div>
+                          </div>
+                          <div className="d-flex col-12 hs-py-16 hs-text-white text-lg align-items-center">
+                            <div className="col-4 text-md">
+                              Giá theo phòng:{" "}
+                            </div>
+                            <div className="col-8">
+                              {formatPrice(priceRoom, "vi-VN", "VND")}
+                            </div>
+                          </div>
+                          {index === bookingInfo.length - 1 && (
+                            <>
+                              <div className="d-flex col-12 hs-pt-48">
+                                <div className="col-4">Thanh toán: </div>
+                                <div className="col-8">
+                                  {data.booking.roomPayment === "N/A" &&
+                                    "Thanh Toán Sau"}
+                                </div>
+                              </div>
+                              <div className="d-flex col-12 hs-py-24 hs-text-white text-lg justify-content-between">
+                                <div className="col-4">Tổng: </div>
+                                <div className="col-4">
+                                  {formatPrice(totalPrice, "vi-VN", "VND")}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </>
+                      );
+                    }
                   })}
                 </div>
               </div>
