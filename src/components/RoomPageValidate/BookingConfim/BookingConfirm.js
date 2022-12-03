@@ -49,7 +49,7 @@ const BookingConfirm = () => {
           numOfRoomFailure +=
             "phòng " +
             room.bookingFailureRoom.bookingFailureRoomName +
-            ` số ${index + 1}`;
+            ` số ${index + 1} `;
         } else {
           numOfRoomSuccess +=
             "phòng " + room.roomType.name + ` số ${index + 1}`;
@@ -58,7 +58,6 @@ const BookingConfirm = () => {
         }
       });
       if (numOfRoomFailure.length > 0) {
-        console.log(numOfRoomFailure);
         swal({
           title: `Thanh toán thành công ${numOfRoomSuccess} `,
           text: `${numOfRoomFailure} thanh toán không thành công do chúng tôi hết phòng, xin chân thành xin lỗi quý khách, kính mong quý khách có thể đặt lại phòng phù hợp cho chuyến lưu trú của mình`,
@@ -70,7 +69,7 @@ const BookingConfirm = () => {
           title: "Thanh toán thành công",
           text: "Vui lòng kiểm tra thông tin đặt phòng của bạn. Nếu bạn có bất kì thắc mắc liên quan đến thông tin đặt phòng vui lòng liên hệ đến lễ tân qua số điện thoại 0987654321",
           icon: "success",
-          button: "Chúc mừng",
+          button: "Xác nhận",
         });
       }
     }
@@ -92,10 +91,10 @@ const BookingConfirm = () => {
       }
       if (paymentVnPayConfirm.length === 0) {
         swal({
-          title: "ERROR!",
-          text: "Room is run out of available - Sorry about that",
+          title: "Thông báo",
+          text: "Chân thành xin lỗi quý khách, hiện tại phòng của quý khách đặt đã hết - Xin quý khách vui lòng đặt phòng khác phù hợp cho chuyến lưu trú của mình - Xin lỗi về sự bất tiện này",
           icon: "error",
-          button: "Got it!",
+          button: "Đã Hiểu!",
         }).then(() => (window.location.href = "/"));
       }
       if (
@@ -162,10 +161,10 @@ const BookingConfirm = () => {
 
   const handleOpenCancelRoom = () => {
     swal({
-      title: "Information",
-      text: "You might call for the receptionist to cancel your booking \n PHONE: 0987654321",
+      title: "Thông tin",
+      text: "Bạn cần phải gọi cho lễ tân để hủy đặt phòng  \n \t\t Số điện thoại: 0987654321",
       icon: "info",
-      button: "Got it!",
+      button: "Đã hiểu!",
     });
   };
 

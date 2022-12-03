@@ -122,8 +122,8 @@ export default function RoomAvailability({
   const handleBackButton = () => {
     if (tab === 2) {
       swal({
-        title: "Are you sure?",
-        text: "Your Booking will be canceled!!!",
+        title: "Bạn có chắc chắn?",
+        text: "Phòng đặt của bạn sẽ bị hủy!!!",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -172,12 +172,11 @@ export default function RoomAvailability({
   const handlePaymentMomo = () => {
     if (!acceptPolicy) {
       swal({
-        title: "Announcement!",
-        text: "You need to accept a policy to execute the payment",
+        title: "Thông báo!",
+        text: "Bạn cần phải chấp nhận chính sách để tiếp tục",
         icon: "error",
-        button: "Understand",
+        button: "Đã hiểu",
       });
-    } else {
     }
   };
 
@@ -203,10 +202,10 @@ export default function RoomAvailability({
           });
         } else {
           swal({
-            title: "ERROR!",
-            text: "Room is run out of available - Sorry about that",
+            title: "Thông báo",
+            text: "Chân thành xin lỗi quý khách, hiện tại phòng của quý khách đặt đã hết - Xin quý khách vui lòng đặt phòng khác phù hợp cho chuyến lưu trú của mình - Xin lỗi về sự bất tiện này",
             icon: "error",
-            button: "Got it!",
+            button: "Đã Hiểu!",
           }).then(() => window.location.reload());
         }
       } else if (laterPayment) {
@@ -240,10 +239,10 @@ export default function RoomAvailability({
   const handlePayment = (isPayLater) => {
     if (!acceptPolicy) {
       swal({
-        title: "Announcement!",
-        text: "You need to accept a policy to execute the payment",
+        title: "Thông báo!",
+        text: "Bạn cần phải chấp nhận chính sách để tiếp tục",
         icon: "error",
-        button: "Understand",
+        button: "Đã hiểu",
       });
     } else if (
       nameRef &&
@@ -296,18 +295,18 @@ export default function RoomAvailability({
         }
       } else {
         swal({
-          title: "Announcement!",
-          text: "Email and Email Confirm are not matched",
+          title: "Nhắc nhở",
+          text: "Email không trùng khớp",
           icon: "warning",
-          button: "Re-Enter",
+          button: "Nhập Lại",
         });
       }
     } else {
       swal({
-        title: "Announcement!",
-        text: "Tell us about your information",
+        title: "Thông báo!",
+        text: "Cho chúng tôi biết thông tin về bạn",
         icon: "info",
-        button: "Let in",
+        button: "Đã hiểu",
       });
     }
   };
