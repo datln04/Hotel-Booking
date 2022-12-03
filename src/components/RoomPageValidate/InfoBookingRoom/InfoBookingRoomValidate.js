@@ -20,17 +20,20 @@ export default function InfoBookingRoomValidate({
   setCloseCB,
   setRoomSelect,
   numOfChild,
+  countInitial,
 }) {
-  const [count, setCount] = useState([
-    { adult: numOfPerson, child: numOfChild },
-  ]);
+  const [count, setCount] = useState(
+    countInitial ? countInitial : [{ adult: numOfPerson, child: numOfChild }]
+  );
   const [isOpen, setOpen] = useState(false);
   const [focusInput, setFocusInput] = useState(null);
   const handleAddMoreRoom = () => {
     setCount([...count, { adult: 1, child: 0 }]);
   };
   const handleSetDateRange = ({ startDate, endDate }) => {
-    setDateArray({ startDate, endDate });
+    if (startDate && endDate) {
+      setDateArray({ startDate, endDate });
+    }
   };
 
   const handleFocusChange = (focusInput) => {

@@ -21,17 +21,22 @@ import { checkDate } from "../util/utilities/utils";
 
 export default function RoomPageCheckValidate() {
   const location = useLocation();
+  console.log(location.state);
   const dateCheckInDefault = location.state?.dateCheckIn ?? moment(new Date());
   const dateCheckOutDefault =
     location.state?.dateCheckout ?? moment(new Date()).add(1, "d");
   const personDefault = location.state?.numOfPerson ?? 1;
   const childDefault = location.state?.numOfChild ?? 0;
-  const [count, setCount] = useState([
-    {
-      adult: personDefault,
-      child: childDefault,
-    },
-  ]);
+  const [count, setCount] = useState(
+    location.state?.count
+      ? location.state?.count
+      : [
+          {
+            adult: personDefault,
+            child: childDefault,
+          },
+        ] ?? []
+  );
   const [roomSelect, setRoomSelect] = useState([]);
   const [tab, setTab] = useState(1);
   const [arrayDate, setArrayDate] = useState({
@@ -126,6 +131,7 @@ export default function RoomPageCheckValidate() {
         arrayDate={arrayDate}
         numOfPerson={location.state?.numOfPerson ?? 1}
         numOfChild={location.state?.numOfChild ?? 0}
+        countInitial={count}
         setDateArray={setArrayDate}
         setRoomSelect={setRoomSelect}
         close={close}
