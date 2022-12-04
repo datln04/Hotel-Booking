@@ -1,9 +1,11 @@
 import classNames from "classnames";
-import React from "react";
+import React, { useState } from "react";
 import { formatPrice } from "../../../util/utilities/utils";
 import Styles from "./AirPortShuttleService.module.scss";
 
 const AirPortShuttleService = ({ airportShuttle, setCheckCb, checked }) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <div className={classNames("col-12 d-flex hs-py-24", Styles.container)}>
       <div className="col-4">
@@ -15,7 +17,17 @@ const AirPortShuttleService = ({ airportShuttle, setCheckCb, checked }) => {
       </div>
       <div className="col-5 text-lg hs-text-white">
         <div className="">{airportShuttle.name}</div>
-        <div className="button text-md hs-text-dark-brown">Chi tiết</div>
+        <div
+          className="button text-md hs-text-dark-brown"
+          onClick={() => setOpen(!open)}
+        >
+          Chi tiết
+        </div>
+        {open && (
+          <div className="text-md hs-text-dark-grey">
+            {airportShuttle.description}
+          </div>
+        )}
         <div className="hs-pt-24">
           {formatPrice(airportShuttle.price, "vi-VN", "VND")}
         </div>
