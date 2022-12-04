@@ -325,23 +325,20 @@ const BookingConfirm = () => {
                               {formatPrice(priceRoom, "vi-VN", "VND")}
                             </div>
                           </div>
-                          {index === bookingInfo.length - 1 && (
-                            <>
-                              <div className="d-flex col-12 hs-pt-48">
-                                <div className="col-4">Thanh toán: </div>
-                                <div className="col-8">
-                                  {data.booking.roomPayment === "N/A" &&
-                                    "Thanh Toán Sau"}
-                                </div>
-                              </div>
-                              <div className="d-flex col-12 hs-py-24 hs-text-white text-lg justify-content-between">
-                                <div className="col-4">Tổng: </div>
-                                <div className="col-4">
-                                  {formatPrice(totalPrice, "vi-VN", "VND")}
-                                </div>
-                              </div>
-                            </>
-                          )}
+
+                          <div className="d-flex col-12 hs-pt-48">
+                            <div className="col-4">Thanh toán: </div>
+                            <div className="col-8">
+                              {data.booking.roomPayment === "N/A" &&
+                                "Thanh Toán Sau"}
+                            </div>
+                          </div>
+                          <div className="d-flex col-12 hs-py-24 hs-text-white text-lg justify-content-between">
+                            <div className="col-4">Tổng: </div>
+                            <div className="col-4">
+                              {formatPrice(totalPrice, "vi-VN", "VND")}
+                            </div>
+                          </div>
                         </>
                       );
                     }
