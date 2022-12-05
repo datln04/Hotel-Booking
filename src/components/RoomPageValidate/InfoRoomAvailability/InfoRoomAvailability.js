@@ -12,7 +12,11 @@ import {
   PaymentWithVNPayState$,
 } from "../../../redux/selectors/PaymentSelector";
 import { CONSTANT } from "../../../util/constant/settingSystem";
-import { formatPrice, getFullName } from "../../../util/utilities/utils";
+import {
+  formatPrice,
+  getFullName,
+  validatePhone,
+} from "../../../util/utilities/utils";
 import AirPortShuttleService from "../AirPortShuttleService/AirPortShuttleService";
 import CustomerInfo from "../CustomerInfo/CustomerInfo";
 import ListRoomAvailability from "../ListRoomAvailability/ListRoomAvailability";
@@ -239,7 +243,7 @@ export default function RoomAvailability({
   const handlePayment = (isPayLater) => {
     if (!acceptPolicy) {
       swal({
-        title: "Thông báo!",
+        title: "Thông báo",
         text: "Bạn cần phải chấp nhận chính sách để tiếp tục",
         icon: "error",
         button: "Đã hiểu",
@@ -249,57 +253,70 @@ export default function RoomAvailability({
       emailRef.current.value &&
       confirmEmailRef.current.value
     ) {
-      const isEqual =
-        emailRef.current.value.trim() === confirmEmailRef.current.value.trim();
-      if (isEqual) {
-        const fullName = getFullName(nameRef.current.value);
-        const data = {
-          vnp_Amount: searchParams.get("vnp_Amount") ?? "",
-          count: count,
-          roomSelect: roomSelect,
-          date: {
-            startDate: arrayDate.startDate.format("DD/MM/yyyy HH:mm:ss"),
-            endDate: arrayDate.endDate.format("DD/MM/yyyy HH:mm:ss"),
-          },
-          utilities: arrayChecked,
-          requestService:
-            arrayCheckedAirport.id !== 0 ? arrayCheckedAirport : {},
-          specialUtility: areaRequire,
-          customerInfo: {
-            email: emailRef.current.value,
-            firstName: fullName.firstName,
-            middleName: fullName.middleName,
-            lastName: fullName.lastName,
-            phoneNumber: phoneRef.current.value,
-          },
-          hotel_id: hotelInfo.id,
-        };
-        Cookies.set(CONSTANT.PAYMENT_INFO, JSON.stringify(data), {
-          path: "/",
-        });
-        // sessionStorage.setItem(CONSTANT.PAYMENT_INFO, );
-        if (!isPayLater) {
-          dispatch(
-            paymentAction.getPaymentWithVNPay.getPaymentWithVNPayRequest({
-              vnp_amount: totalPrice,
-              vnp_IpAddr: "127.0.0.1",
-              vnp_Locale: "vi",
-              vnp_OrderInfo: "Payment",
-            })
-          );
-        } else {
-          Cookies.set(CONSTANT.LATER_PAYMENT, JSON.stringify("Later"), {
-            path: "/",
+      if (phoneRef.current.value) {
+        const validPhone = validatePhone(phoneRef.current.value);
+        if (!validPhone) {
+          swal({
+            title: "Thông báo",
+            text: "Số điện thoại không chính xác",
+            icon: "error",
+            button: "Đã hiểu",
           });
-          setLaterPayment(true);
         }
       } else {
-        swal({
-          title: "Nhắc nhở",
-          text: "Email không trùng khớp",
-          icon: "warning",
-          button: "Nhập Lại",
-        });
+        const isEqual =
+          emailRef.current.value.trim() ===
+          confirmEmailRef.current.value.trim();
+        if (isEqual) {
+          const fullName = getFullName(nameRef.current.value);
+          const data = {
+            vnp_Amount: searchParams.get("vnp_Amount") ?? "",
+            count: count,
+            roomSelect: roomSelect,
+            date: {
+              startDate: arrayDate.startDate.format("DD/MM/yyyy HH:mm:ss"),
+              endDate: arrayDate.endDate.format("DD/MM/yyyy HH:mm:ss"),
+            },
+            utilities: arrayChecked,
+            requestService:
+              arrayCheckedAirport.id !== 0 ? arrayCheckedAirport : {},
+            specialUtility: areaRequire,
+            customerInfo: {
+              email: emailRef.current.value,
+              firstName: fullName.firstName,
+              middleName: fullName.middleName,
+              lastName: fullName.lastName,
+              phoneNumber: phoneRef.current.value,
+            },
+            hotel_id: hotelInfo.id,
+          };
+          Cookies.set(CONSTANT.PAYMENT_INFO, JSON.stringify(data), {
+            path: "/",
+          });
+          // sessionStorage.setItem(CONSTANT.PAYMENT_INFO, );
+          if (!isPayLater) {
+            dispatch(
+              paymentAction.getPaymentWithVNPay.getPaymentWithVNPayRequest({
+                vnp_amount: totalPrice,
+                vnp_IpAddr: "127.0.0.1",
+                vnp_Locale: "vi",
+                vnp_OrderInfo: "Payment",
+              })
+            );
+          } else {
+            Cookies.set(CONSTANT.LATER_PAYMENT, JSON.stringify("Later"), {
+              path: "/",
+            });
+            setLaterPayment(true);
+          }
+        } else {
+          swal({
+            title: "Nhắc nhở",
+            text: "Email không trùng khớp",
+            icon: "warning",
+            button: "Nhập Lại",
+          });
+        }
       }
     } else {
       swal({

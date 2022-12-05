@@ -1,22 +1,8 @@
 import classNames from "classnames";
 import React from "react";
-import Styles from "./ImageOfRoomType.module.scss";
 import Slider from "react-slick";
-import image1 from "../../../../assets/images/roomTypeDetail/anhthucte1.jpg";
-import image2 from "../../../../assets/images/roomTypeDetail/anhthucte2.jpg";
-import image3 from "../../../../assets/images/roomTypeDetail/anhthucte3.jpg";
-export default function ImageOfRoomType() {
-  const data = [
-    {
-      imageUrl: image1,
-    },
-    {
-      imageUrl: image2,
-    },
-    {
-      imageUrl: image3,
-    },
-  ];
+import Styles from "./ImageOfRoomType.module.scss";
+export default function ImageOfRoomType({ roomType, imageRelevantRef }) {
   const GalleryPrevArrow = ({ currentSlide, slideCount, ...props }) => {
     const { onClick } = props;
 
@@ -92,7 +78,8 @@ export default function ImageOfRoomType() {
       className={classNames(
         " d-block col-12 hs-bg-dark-9 text-center hs-pt-32 hs-pb-32",
         Styles.ImageOfRoomType
-      )} id="hinhAnh"
+      )}
+      ref={imageRelevantRef}
     >
       <div className={classNames("hs-text-dark-brown")}>
         <p className="text-lg">Hình Ảnh</p>
@@ -107,9 +94,12 @@ export default function ImageOfRoomType() {
         )}
       >
         <Slider {...settings}>
-          {data.map((item, idx) => (
-            <div className={classNames("col-4", Styles.feedbackImage)}>
-              <img alt="#" src={item.imageUrl} />
+          {roomType.images.map((item, idx) => (
+            <div
+              key={idx}
+              className={classNames("col-4", Styles.feedbackImage)}
+            >
+              <img src={item.pictureUrl} alt={item.pictureDescription} />
             </div>
           ))}
         </Slider>

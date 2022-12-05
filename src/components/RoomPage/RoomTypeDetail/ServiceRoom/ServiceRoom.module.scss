@@ -3,3 +3,14 @@
     border: 0.5px solid #fff;
     width: 60% !important;
 }
+
+.iconImage {
+    svg {
+        width: 30px;
+        height: 30px;
+
+        path {
+            fill: #ad854b;
+        }
+    }
+}

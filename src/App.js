@@ -18,6 +18,7 @@ import { loadingState$ } from "./redux/selectors/LoadingSelector";
 import { useSelector } from "react-redux";
 import RoomPageCheckValidate from "./pages/RoomPageCheckValidate";
 import BookingConfirm from "./components/RoomPageValidate/BookingConfim/BookingConfirm";
+import CancelBookingPage from "./pages/CancelBookingPage";
 
 function App() {
   let isLoading = useSelector(loadingState$);
@@ -36,6 +37,7 @@ function App() {
         <Route exact path="/contact" element={<ContactPage />} />
         <Route exact path="/service" element={<ServicePage />} />
         <Route exact path="/serviceDetail" element={<ServiceDetailPage />} />
+        <Route exact path="/cancelBooking" element={<CancelBookingPage />} />
         <Route exact path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />

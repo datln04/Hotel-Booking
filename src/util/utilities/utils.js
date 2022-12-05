@@ -1,5 +1,6 @@
 /* eslint-disable array-callback-return */
 import moment from "moment/moment";
+import { CONSTANT } from "../constant/settingSystem";
 
 export const checkDate = (date, format) => {
   return moment(date, format).format(format);
@@ -50,4 +51,21 @@ export const getLastName = (str) => {
 
 export const combineName = (firstName, middleName, lastName) => {
   return firstName + " " + middleName + " " + lastName;
+};
+
+export const validatePhone = (phoneNumber) => {
+  if (phoneNumber.match(CONSTANT.PHONE_REGEX)) {
+    return true;
+  }
+
+  return false;
+};
+
+export const filterUtilities = (utility) => {
+  const icon = CONSTANT.ICONS.filter((icon) => icon.name === utility.name);
+  if (icon) {
+    const object = Object.assign({}, ...icon);
+    return object;
+  }
+  return null;
 };

@@ -1,0 +1,108 @@
+.slick-slide {
+    padding: 1rem;
+}
+
+.thumbnail-slider-wrap .slick-track .slick-slide {
+    padding: 0.25rem;
+    width: 190px;
+}
+
+.slick-slider {
+    display: flex;
+}
+
+.custom-prevArrow,
+.custom-nextArrow {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.custom-nextArrow svg path,
+.custom-prevArrow svg path {
+    fill: white;
+}
+
+.custom-prevArrow {
+    left: 20px;
+    z-index: 1;
+}
+
+.custom-nextArrow {
+    right: 55px;
+    z-index: 1;
+}
+
+.custom-prevArrow-big,
+.custom-nextArrow-big {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.custom-nextArrow-big svg path,
+.custom-prevArrow-big svg path {
+    fill: white;
+}
+
+.custom-prevArrow-big {
+    left: 20px;
+    z-index: 1;
+}
+
+.custom-nextArrow-big {
+    right: 20px;
+    z-index: 1;
+}
+
+.slick-dots {
+    padding: 40px;
+    display: flex;
+    vertical-align: middle;
+    margin: auto;
+    padding: 0;
+    border-radius: 40px;
+    justify-content: center;
+    text-align: center;
+    bottom: 20px;
+    width: 95%;
+}
+
+.slick-dots ul {
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+.slick-dots li {
+    list-style: none;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 3px;
+    padding: 0;
+}
+
+.slick-dots li button {
+    border: none;
+    background: rgba(255, 255, 255, 0.6);
+    color: transparent;
+    cursor: pointer;
+    display: block;
+    height: 15px;
+    width: 15px;
+    border-radius: 7.5px;
+}
+
+.slick-dots li button::before {
+    content: '';
+}
+
+.slick-dots li.slick-active button {
+    background-color: #ad854b
+}
+
+.slick-dots li button:hover {
+    background: #ad854b;
+    outline: 0;
+}

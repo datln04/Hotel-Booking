@@ -21,8 +21,6 @@ const BookingConfirm = () => {
     location.state?.payment ?? null
   );
 
-  let customer = {};
-
   window.onpopstate = () => {
     navigate("/");
   };
@@ -45,7 +43,6 @@ const BookingConfirm = () => {
       let numOfRoomSuccess = "";
       bookingInfo.map((room, index) => {
         if (room.bookingFailureRoom != null) {
-          console.log(room.bookingFailureRoomName);
           numOfRoomFailure +=
             "phòng " +
             room.bookingFailureRoom.bookingFailureRoomName +
@@ -54,7 +51,6 @@ const BookingConfirm = () => {
           numOfRoomSuccess +=
             "phòng " + room.roomType.name + ` số ${index + 1}`;
           // eslint-disable-next-line react-hooks/exhaustive-deps
-          customer = room.booking.customer;
         }
       });
       if (numOfRoomFailure.length > 0) {
@@ -223,20 +219,23 @@ const BookingConfirm = () => {
                     <div className="col-3">Họ và tên:</div>
                     <div className="col-9 hs-text-white">
                       {combineName(
-                        customer.firstName,
-                        customer.middleName,
-                        customer.lastName
+                        bookingInfo[0].booking.customer.firstName,
+                        bookingInfo[0].booking.customer.middleName,
+                        bookingInfo[0].booking.customer.lastName
                       )}
                     </div>
                   </div>
                   <div className="d-flex col-12 hs-py-8">
                     <div className="col-3">Email:</div>
-                    <div className="col-9 hs-text-white">{customer.email}</div>
+                    <div className="col-9 hs-text-white">
+                      {bookingInfo[0].booking.customer.email}
+                    </div>
                   </div>
                   <div className="d-flex col-12 hs-py-8">
                     <div className="col-3">Điện thoại:</div>
                     <div className="col-9 hs-text-white">
-                      {customer.phoneNumber && customer.phoneNumber}
+                      {bookingInfo[0].booking.customer.phoneNumber &&
+                        bookingInfo[0].booking.customer.phoneNumber}
                     </div>
                   </div>
                 </div>
@@ -325,23 +324,19 @@ const BookingConfirm = () => {
                               {formatPrice(priceRoom, "vi-VN", "VND")}
                             </div>
                           </div>
-                          {index === bookingInfo.length - 1 && (
-                            <>
-                              <div className="d-flex col-12 hs-pt-48">
-                                <div className="col-4">Thanh toán: </div>
-                                <div className="col-8">
-                                  {data.booking.roomPayment === "N/A" &&
-                                    "Thanh Toán Sau"}
-                                </div>
-                              </div>
-                              <div className="d-flex col-12 hs-py-24 hs-text-white text-lg justify-content-between">
-                                <div className="col-4">Tổng: </div>
-                                <div className="col-4">
-                                  {formatPrice(totalPrice, "vi-VN", "VND")}
-                                </div>
-                              </div>
-                            </>
-                          )}
+                          <div className="d-flex col-12 hs-pt-48">
+                            <div className="col-4">Thanh toán: </div>
+                            <div className="col-8">
+                              {data.booking.roomPayment === "N/A" &&
+                                "Thanh Toán Sau"}
+                            </div>
+                          </div>
+                          <div className="d-flex col-12 hs-py-24 hs-text-white text-lg justify-content-between">
+                            <div className="col-4">Tổng: </div>
+                            <div className="col-4">
+                              {formatPrice(totalPrice, "vi-VN", "VND")}
+                            </div>
+                          </div>
                         </>
                       );
                     }

@@ -23,12 +23,22 @@ export const CONSTANT = {
   HOTEL_NAME: "5 Men Hotel",
 
   ROOM_VALIDATE: "/roomValidate",
+  CANCEL_BOOKING: "/cancelBooking",
+  ROOM_TYPE_DETAIL: "/roomTypeDetail",
 
   NAV_HIDE_ITEMS: [
     { name: "Kiểm Tra Phòng Trống", link: "/roomValidate" },
     {
       name: "Dịch vụ chi tiết",
       link: "/serviceDetail",
+    },
+    {
+      name: "Huỷ phòng dã đặt",
+      link: "/cancelBooking",
+    },
+    {
+      name: "Chi tiết đặt phòng",
+      link: "/roomTypeDetail",
     },
   ],
 
@@ -108,4 +118,6 @@ export const CONSTANT = {
       src: wifiIcon,
     },
   ],
+
+  PHONE_REGEX: "/^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/",
 };
