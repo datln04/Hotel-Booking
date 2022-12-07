@@ -8,6 +8,7 @@ import { DateRangePicker } from "react-dates";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import swal from "sweetalert";
+import { CONSTANT } from "../../../util/constant/settingSystem";
 import SubRoomInfoBooking from "../SubRoomInfoBooking/SubRoomInfoBooking";
 import Styles from "./InfoBookingRoomValidate.module.scss";
 import "./styles.css";
@@ -82,7 +83,10 @@ export default function InfoBookingRoomValidate({
         }
       });
     } else {
-      countDefault.map((person, index) => {
+      const roomSelectDefault = JSON.parse(
+        sessionStorage.getItem(CONSTANT.ROOM_SELECT)
+      );
+      roomSelectDefault.map((person, index) => {
         if (
           person.adult !== count[index].adult ||
           person.child !== count[index].child
@@ -96,8 +100,12 @@ export default function InfoBookingRoomValidate({
           }).then((willDelete) => {
             if (willDelete) {
               window.location.reload();
+            } else {
+              setOpen(true);
             }
           });
+        } else {
+          setOpen(false);
         }
       });
     }

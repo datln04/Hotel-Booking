@@ -395,6 +395,7 @@ export default function RoomAvailability({
         <ListRoomAvailability
           callBackFunc={handleClickRoom}
           data={listRoomAvailability}
+          roomSelect={roomSelect}
         />
       </>
     );

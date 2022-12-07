@@ -196,9 +196,9 @@ export default function RoomAvailability({ data, callBackFunc }) {
       <div className="hs-bg-dark-9 hs-mb-64 col-11">
         <div className="hs-text-white text-lg hs-p-8">{obj.name}</div>
         <div className={Styles.ImageOfRoomAvailability}>
-          {obj.images.length > 0 ? (
+          {obj?.images ? (
             <Slider {...settingsBigScreen}>
-              {obj.images.map((image) => {
+              {obj?.images.map((image) => {
                 return (
                   <img src={image.pictureUrl} alt={image.pictureDescription} />
                 );
@@ -229,7 +229,7 @@ export default function RoomAvailability({ data, callBackFunc }) {
         </div>
         <div className="d-flex col-12 justify-content-center">
           <div className="col-10 d-flex">
-            <div className="col-10 d-flex row align-items-center hs-py-24">
+            <div className="col-10 d-flex row align-items-center hs-py-24 hs-mr-8">
               {obj.utilities.length > 0 &&
                 obj.utilities.map((utility, idx) => {
                   const icon = filterUtilities(utility);
@@ -286,16 +286,18 @@ export default function RoomAvailability({ data, callBackFunc }) {
       </div>
     );
   };
-
+  console.log("data: ", data);
   return (
     <div className={classNames("col-11", Styles.RoomAvailability)}>
       {data &&
         data.map((item, index) => {
-          return (
-            <div key={index} className={classNames("hs-mt-64")}>
-              {Room(item)}
-            </div>
-          );
+          if (item.maxBookingRoom > 0) {
+            return (
+              <div key={index} className={classNames("hs-mt-64")}>
+                {Room(item)}
+              </div>
+            );
+          }
         })}
       {openModel && Object.keys(roomInModel).length !== 0 && (
         <div className={Styles.popUpContainer}>

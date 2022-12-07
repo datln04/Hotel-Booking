@@ -35,6 +35,8 @@ export const CONSTANT = {
   IMAGE_TYPE_ALL_SERVICE: "img_serviceCategory_",
   IMAGE_TYPE_ROOM_TYPE: "img_roomType_",
 
+  ROOM_SELECT: "room_select",
+
   NAV_HIDE_ITEMS: [
     { name: "Kiểm Tra Phòng Trống", link: "/roomValidate" },
     {

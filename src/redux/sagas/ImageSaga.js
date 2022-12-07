@@ -1,18 +1,11 @@
-import { call, delay, put } from "redux-saga/effects";
-import { takeLatest } from "redux-saga/effects";
+import { call, delay, put, takeLatest } from "redux-saga/effects";
 import ImageService from "../../services/ImageService";
-import * as actions from "../actions/ImageAction";
+import { DISPLAY_LOADING } from "../../util/common/LoadingConstant";
 import { STATUS_CODE } from "../../util/constant/settingSystem";
-import {
-  DISPLAY_LOADING,
-  HIDE_LOADING,
-} from "../../util/common/LoadingConstant";
+import * as actions from "../actions/ImageAction";
 
 function* getImageByTypeContains(action) {
   try {
-    yield put({
-      type: DISPLAY_LOADING,
-    });
     yield delay(2000);
     let listService = yield call(() => {
       return ImageService.getImageByTypeContains(action.payload);
@@ -24,10 +17,10 @@ function* getImageByTypeContains(action) {
         )
       );
     }
-    yield put({
-      type: HIDE_LOADING,
-    });
   } catch (error) {
+    yield put({
+      type: DISPLAY_LOADING,
+    });
     yield put(
       actions.getImageByTypeContains.getImageByTypeContainsFailure(error)
     );

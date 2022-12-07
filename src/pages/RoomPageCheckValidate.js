@@ -15,11 +15,16 @@ import { checkDate } from "../util/utilities/utils";
 import * as hotelAction from "../redux/actions/HotelServiceAction";
 import * as serviceAction from "../redux/actions/ServiceAction";
 import * as specialUtilityAction from "../redux/actions/SpecialUtilityActions";
+import * as imageAction from "../redux/actions/ImageAction";
 import { ServiceByCategoryIdState$ } from "../redux/selectors/ServiceSelector";
 import { SpecialUtilityState$ } from "../redux/selectors/SpecialUtilitySelector";
 import { HotelByIdState$ } from "../redux/selectors/HotelServiceSelector";
+import { ImageByTypeContainsState$ } from "../redux/selectors/ImageSelector";
+import { useCallback } from "react";
+import Loading from "../components/Loading/Loading";
 
 export default function RoomPageCheckValidate() {
+  const [data, setData] = useState(null);
   const location = useLocation();
   const dateCheckInDefault = location.state?.dateCheckIn ?? moment(new Date());
   const dateCheckOutDefault =
@@ -43,13 +48,32 @@ export default function RoomPageCheckValidate() {
   const specialUtility = useSelector(SpecialUtilityState$);
   const hotelInfo = useSelector(HotelByIdState$);
   const listRoomAvailability = useSelector(RoomAvailabilityState$);
+  const listImageRoom = useSelector(ImageByTypeContainsState$);
   const [close, setClose] = useState(false);
 
   const handleApplyRoom = (count) => {
     setCount(count);
+    sessionStorage.setItem(CONSTANT.ROOM_SELECT, JSON.stringify(count));
     setTab(1);
     setRoomSelect([]);
   };
+
+  useEffect(() => {
+    if (
+      listRoomAvailability &&
+      listRoomAvailability.images === undefined &&
+      listImageRoom.length !== 0
+    ) {
+      sessionStorage.setItem(CONSTANT.ROOM_SELECT, JSON.stringify(count));
+      listRoomAvailability.map((roomType) => {
+        const listImageOfRoomType = listImageRoom.filter(
+          (image) => image.pictureType.split("_")[2] === roomType.id.toString()
+        );
+        roomType.images = listImageOfRoomType;
+      });
+      setData(listRoomAvailability);
+    }
+  }, [listRoomAvailability, listImageRoom]);
 
   useEffect(() => {
     if (arrayDate.startDate && arrayDate.endDate) {
@@ -95,6 +119,9 @@ export default function RoomPageCheckValidate() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 600000);
     if (
       (location.state === undefined ||
         location.state === null ||
@@ -114,12 +141,18 @@ export default function RoomPageCheckValidate() {
         specialUtilityAction.getSpecialUtility.getSpecialUtilityRequest()
       );
       dispatch(hotelAction.getHotelServiceById.getHotelServiceByIdRequest(1));
+      dispatch(
+        imageAction.getImageByTypeContains.getImageByTypeContainsRequest(
+          CONSTANT.IMAGE_TYPE_ROOM_TYPE
+        )
+      );
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
-  return (
+  return !data ? (
+    <Loading />
+  ) : (
     <div className="main-screen">
       <Breadcrumb image={image} />
       <InfoBookingRoomValidate
