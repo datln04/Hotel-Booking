@@ -1,12 +1,11 @@
-import { call, delay, put } from "redux-saga/effects";
-import { takeLatest } from "redux-saga/effects";
-import * as actions from "../actions/ServiceCategoryAction";
-import { STATUS_CODE } from "../../util/constant/settingSystem";
+import { call, delay, put, takeLatest } from "redux-saga/effects";
+import { serviceCategory } from "../../services/ServiceCategory";
 import {
   DISPLAY_LOADING,
   HIDE_LOADING,
 } from "../../util/common/LoadingConstant";
-import { serviceCategory } from "../../services/ServiceCategory";
+import { STATUS_CODE } from "../../util/constant/settingSystem";
+import * as actions from "../actions/ServiceCategoryAction";
 
 function* getAllServiceCategory() {
   try {
@@ -30,9 +29,6 @@ function* getAllServiceCategory() {
 
 function* getServiceCategoryById(action) {
   try {
-    yield put({
-      type: DISPLAY_LOADING,
-    });
     yield delay(1000);
     let service = yield call(() => {
       return serviceCategory.getServiceCategoryById(action.payload);
@@ -44,10 +40,10 @@ function* getServiceCategoryById(action) {
         )
       );
     }
-    yield put({
-      type: HIDE_LOADING,
-    });
   } catch (error) {
+    yield put({
+      type: DISPLAY_LOADING,
+    });
     yield put(
       actions.getServiceCategoryById.getServiceCategoryByIdFailure(error)
     );

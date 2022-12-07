@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import Header from "../components/HomePage/Header/Header";
 import InfoBookingRoom from "../components/HomePage/InfoBookingRoom/InfoBookingRoom";

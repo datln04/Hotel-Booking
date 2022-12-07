@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { DateRangePicker } from "react-dates";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
+import swal from "sweetalert";
 import SubRoomInfoBooking from "../SubRoomInfoBooking/SubRoomInfoBooking";
 import Styles from "./InfoBookingRoomValidate.module.scss";
 import "./styles.css";
@@ -20,6 +21,7 @@ export default function InfoBookingRoomValidate({
   setCloseCB,
   setRoomSelect,
   numOfChild,
+  countDefault,
 }) {
   const [count, setCount] = useState([
     { adult: numOfPerson, child: numOfChild },
@@ -30,6 +32,9 @@ export default function InfoBookingRoomValidate({
     setCount([...count, { adult: 1, child: 0 }]);
   };
   const handleSetDateRange = ({ startDate, endDate }) => {
+    if (endDate === null) {
+      endDate = startDate;
+    }
     setDateArray({ startDate, endDate });
   };
 
@@ -63,13 +68,48 @@ export default function InfoBookingRoomValidate({
     );
   };
 
+  const handleCancelRoom = () => {
+    if (countDefault.length !== count.length) {
+      swal({
+        title: "Cảnh báo",
+        text: "Xin quý khách vui lòng áp dụng thay đổi, nếu không tất cả thay đổi của quý khách sẽ bị hủy bỏ",
+        icon: "warning",
+        buttons: ["Không chấp nhận", "Chấp nhận hủy"],
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          window.location.reload();
+        }
+      });
+    } else {
+      countDefault.map((person, index) => {
+        if (
+          person.adult !== count[index].adult ||
+          person.child !== count[index].child
+        ) {
+          swal({
+            title: "Cảnh báo",
+            text: "Xin quý khách vui lòng áp dụng thay đổi, nếu không tất cả thay đổi của quý khách sẽ bị hủy bỏ",
+            icon: "warning",
+            buttons: ["Không chấp nhận", "Chấp nhận hủy"],
+            dangerMode: true,
+          }).then((willDelete) => {
+            if (willDelete) {
+              window.location.reload();
+            }
+          });
+        }
+      });
+    }
+  };
+
   const renderDropdown = useCallback(() => {
     const tmp = count.map((person, index) => {
       return (
         <SubRoomInfoBooking
           key={index}
           index={index + 1}
-          removeCallBackFunc={() => setCount(count.splice(0, count.length - 1))}
+          removeCallBackFunc={() => setCount(count.splice(1, count.length))}
           lastItem={count.length}
           adult={person.adult}
           child={person.child}
@@ -97,8 +137,7 @@ export default function InfoBookingRoomValidate({
   };
 
   const totalPerson = countPerson();
-  const minDate = moment(new Date()).subtract("d", 1);
-
+  const minDate = moment(new Date());
   return (
     <div className={classNames("hs-bg-dark-9 col-12", Styles.InfoBookingRoom)}>
       <div
@@ -189,7 +228,7 @@ export default function InfoBookingRoomValidate({
                   className={classNames(
                     "hs-text-dark-brown text-center hs-px-32 d-flex align-item-center button"
                   )}
-                  onClick={() => setOpen(false)}
+                  onClick={handleCancelRoom}
                 >
                   <p>Hủy</p>
                 </div>

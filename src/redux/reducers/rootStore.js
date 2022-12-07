@@ -7,6 +7,7 @@ import ServiceCategoryDetailReducer from "./ServiceCategoryDetail";
 import RoomAvailabilityReducer from "./RoomAvailabilityReducer";
 import ServiceByCategoryIdReducer from "./ServiceReducer";
 import SpecialUtilityReducer from "./SpecialUtilityReducer";
+import ImageReducer from "./ImageReducer";
 import {
   PaymentMoMoReducer,
   PaymentVNPayReducer,
@@ -25,4 +26,5 @@ export default combineReducers({
   PaymentMoMoReducer,
   PaymentVNPayReducer,
   PaymentVnPayConfirmReducer,
+  ImageReducer,
 });

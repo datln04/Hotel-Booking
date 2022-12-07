@@ -6,8 +6,8 @@
     display: flex;
 }
 
-.custom-prevArrow,
-.custom-nextArrow {
+.custom-prevArrow-home-page,
+.custom-nextArrow-home-page {
     fill: #AD854B;
     cursor: pointer;
     position: absolute;
@@ -15,11 +15,11 @@
     transform: translate(0, -50%);
 }
 
-.custom-prevArrow {
+.custom-prevArrow-home-page {
     left: -40px;
 }
 
-.custom-nextArrow {
+.custom-nextArrow-home-page {
     right: -40px;
 }
 

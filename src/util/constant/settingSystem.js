@@ -26,6 +26,15 @@ export const CONSTANT = {
   CANCEL_BOOKING: "/cancelBooking",
   ROOM_TYPE_DETAIL: "/roomTypeDetail",
 
+  AIR_SPORT_SHUTTLE: "airportShuttle",
+  HOTEL_INFO: "hotelInfo",
+  SPECIAL_UTILITIES: "specialUtilities",
+  IMAGE_CATEGORY: "imageCategoryService",
+
+  IMAGE_TYPE_AIRPORT_SHUTTLE: "img_service_71",
+  IMAGE_TYPE_ALL_SERVICE: "img_serviceCategory_",
+  IMAGE_TYPE_ROOM_TYPE: "img_roomType_",
+
   NAV_HIDE_ITEMS: [
     { name: "Kiểm Tra Phòng Trống", link: "/roomValidate" },
     {
@@ -119,5 +128,6 @@ export const CONSTANT = {
     },
   ],
 
-  PHONE_REGEX: "/^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/",
+  PHONE_REGEX:
+    "^\\+{0,2}([\\-\\. ])?(\\(?\\d{0,3}\\))?([\\-\\. ])?\\(?\\d{0,3}\\)?([\\-\\. ])?\\d{3}([\\-\\. ])?\\d{4}",
 };

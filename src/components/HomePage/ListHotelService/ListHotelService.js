@@ -22,7 +22,7 @@ const ListHotelService = () => {
     return (
       <div
         {...props}
-        className="custom-prevArrow d-none d-lg-flex"
+        className="custom-prevArrow-home-page d-none d-lg-flex"
         onClick={onClick}
       >
         <svg
@@ -41,7 +41,10 @@ const ListHotelService = () => {
     const { onClick } = props;
 
     return (
-      <div className="custom-nextArrow d-none d-lg-flex" onClick={onClick}>
+      <div
+        className="custom-nextArrow-home-page d-none d-lg-flex"
+        onClick={onClick}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

@@ -262,6 +262,60 @@ export default function RoomAvailability({
             icon: "error",
             button: "Đã hiểu",
           });
+        } else {
+          const isEqual =
+            emailRef.current.value.trim() ===
+            confirmEmailRef.current.value.trim();
+          if (isEqual) {
+            const fullName = getFullName(nameRef.current.value);
+            const data = {
+              vnp_Amount: searchParams.get("vnp_Amount") ?? "",
+              count: count,
+              roomSelect: roomSelect,
+              date: {
+                startDate: arrayDate.startDate.format("DD/MM/yyyy HH:mm:ss"),
+                endDate: arrayDate.endDate.format("DD/MM/yyyy HH:mm:ss"),
+              },
+              utilities: arrayChecked,
+              requestService:
+                arrayCheckedAirport.id !== 0 ? arrayCheckedAirport : {},
+              specialUtility: areaRequire,
+              customerInfo: {
+                email: emailRef.current.value,
+                firstName: fullName.firstName,
+                middleName: fullName.middleName,
+                lastName: fullName.lastName,
+                phoneNumber: phoneRef.current.value,
+              },
+              hotel_id: hotelInfo.id,
+            };
+            Cookies.set(CONSTANT.PAYMENT_INFO, JSON.stringify(data), {
+              path: "/",
+            });
+            // sessionStorage.setItem(CONSTANT.PAYMENT_INFO, );
+            if (!isPayLater) {
+              dispatch(
+                paymentAction.getPaymentWithVNPay.getPaymentWithVNPayRequest({
+                  vnp_amount: totalPrice,
+                  vnp_IpAddr: "127.0.0.1",
+                  vnp_Locale: "vi",
+                  vnp_OrderInfo: "Payment",
+                })
+              );
+            } else {
+              Cookies.set(CONSTANT.LATER_PAYMENT, JSON.stringify("Later"), {
+                path: "/",
+              });
+              setLaterPayment(true);
+            }
+          } else {
+            swal({
+              title: "Nhắc nhở",
+              text: "Email không trùng khớp",
+              icon: "warning",
+              button: "Nhập Lại",
+            });
+          }
         }
       } else {
         const isEqual =
@@ -652,7 +706,9 @@ export default function RoomAvailability({
                         <div className="hs-py-16 text-lg">
                           {currentRoomInfo.isSelected
                             ? "Phòng " + (index + 1)
-                            : "Chọn Phòng " + (index + 1)}
+                            : count.length > roomSelect.length
+                            ? "Chọn Phòng " + (index + 1)
+                            : ""}
                         </div>
                         <div className={classNames("text-lg hs-py-16")}>
                           {currentRoomInfo.isSelected &&

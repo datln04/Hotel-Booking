@@ -2,7 +2,7 @@ import { BaseServices } from "./BaseService";
 
 class Service extends BaseServices {
   getAllServiceByCategoryId = (cateId) => {
-    return this.get(`v1/service?cate_id=${cateId}`);
+    return this.get(`v1/serviceByCateWithImage?cate_id=${cateId}`);
   };
 }
 

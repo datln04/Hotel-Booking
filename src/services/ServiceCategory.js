@@ -5,7 +5,7 @@ class ServiceCategory extends BaseServices {
     return this.get(`v1/serviceCategory/${payload}`);
   };
   getAllServiceCategory = () => {
-    return this.get("v1/serviceCategories");
+    return this.get("v1/serviceCategoriesWithImage");
   };
 }
 

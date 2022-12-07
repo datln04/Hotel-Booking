@@ -1,0 +1,16 @@
+.custom-prevArrow-customer-feedback,
+.custom-nextArrow-customer-feedback {
+    fill: #AD854B;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.custom-prevArrow-customer-feedback {
+    left: -40px;
+}
+
+.custom-nextArrow-customer-feedback {
+    right: -40px;
+}

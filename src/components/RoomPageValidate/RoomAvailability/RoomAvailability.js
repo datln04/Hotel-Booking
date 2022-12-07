@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Slider from "react-slick";
 import { HotelByIdState$ } from "../../../redux/selectors/HotelServiceSelector";
-import { CONSTANT } from "../../../util/constant/settingSystem";
 import {
   checkDate,
   filterUtilities,
@@ -114,7 +113,6 @@ export default function RoomAvailability({ data, callBackFunc }) {
   };
 
   const settings = {
-    dots: true,
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,

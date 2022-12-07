@@ -1,18 +1,11 @@
-import { call, delay, put } from "redux-saga/effects";
-import { takeLatest } from "redux-saga/effects";
-import * as actions from "../actions/SpecialUtilityActions";
-import { STATUS_CODE } from "../../util/constant/settingSystem";
-import {
-  DISPLAY_LOADING,
-  HIDE_LOADING,
-} from "../../util/common/LoadingConstant";
+import { call, delay, put, takeLatest } from "redux-saga/effects";
 import SpecialUtilityService from "../../services/SpecialUtilityService";
+import { DISPLAY_LOADING } from "../../util/common/LoadingConstant";
+import { STATUS_CODE } from "../../util/constant/settingSystem";
+import * as actions from "../actions/SpecialUtilityActions";
 
 function* getAllSpecialUtility() {
   try {
-    yield put({
-      type: DISPLAY_LOADING,
-    });
     yield delay(1000);
     let listService = yield call(() => {
       return SpecialUtilityService.getAllSpecialUtilityService();
@@ -22,10 +15,10 @@ function* getAllSpecialUtility() {
         actions.getSpecialUtility.getSpecialUtilitySuccess(listService.data)
       );
     }
-    yield put({
-      type: HIDE_LOADING,
-    });
   } catch (error) {
+    yield put({
+      type: DISPLAY_LOADING,
+    });
     yield put(actions.getSpecialUtility.getSpecialUtilityFailure(error));
   }
 }

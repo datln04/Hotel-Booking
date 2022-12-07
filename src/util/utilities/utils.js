@@ -54,10 +54,9 @@ export const combineName = (firstName, middleName, lastName) => {
 };
 
 export const validatePhone = (phoneNumber) => {
-  if (phoneNumber.match(CONSTANT.PHONE_REGEX)) {
+  if (phoneNumber.match("[0-9]{10}")) {
     return true;
   }
-
   return false;
 };
 

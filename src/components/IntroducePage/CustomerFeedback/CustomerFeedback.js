@@ -3,13 +3,13 @@ import React from "react";
 import Styles from "./CustomerFeedback.module.scss";
 import backgroundImage from "./../../../assets/images/feedback.jpg";
 import datImage from "./../../../assets/images/dat.jpg";
-import thucImage from "./../../../assets/images/thuc.jpg";
+// import thucImage from "./../../../assets/images/thuc.jpg";
 import longImage from "./../../../assets/images/long.jpg";
 import sonImage from "./../../../assets/images/son.jpg";
 import duongImage from "./../../../assets/images/duong.jpg";
 import Slider from "react-slick";
 import Feedback from "./Feedback/Feedback";
-// import './style.css'
+import "./CustomerFeedback.css";
 
 const CustomerFeedback = () => {
   const title = "Khách hàng nói gì về chúng tôi";
@@ -44,7 +44,11 @@ const CustomerFeedback = () => {
     const { onClick } = props;
 
     return (
-      <div {...props} className="custom-prevArrow" onClick={onClick}>
+      <div
+        {...props}
+        className="custom-prevArrow-customer-feedback"
+        onClick={onClick}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -61,7 +65,10 @@ const CustomerFeedback = () => {
     const { onClick } = props;
 
     return (
-      <div className="custom-nextArrow d-none d-lg-flex" onClick={onClick}>
+      <div
+        className="custom-nextArrow-customer-feedback d-none d-lg-flex"
+        onClick={onClick}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
