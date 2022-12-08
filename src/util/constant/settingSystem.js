@@ -34,6 +34,7 @@ export const CONSTANT = {
   IMAGE_TYPE_AIRPORT_SHUTTLE: "img_service_71",
   IMAGE_TYPE_ALL_SERVICE: "img_serviceCategory_",
   IMAGE_TYPE_ROOM_TYPE: "img_roomType_",
+  IMAGE_TYPE_NEWS: "img_new_",
 
   ROOM_SELECT: "room_select",
 

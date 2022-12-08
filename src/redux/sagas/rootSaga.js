@@ -7,6 +7,7 @@ import * as serviceSaga from "./ServiceSaga";
 import * as getAllSpecialUtility from "./SpecialUtilitySaga";
 import * as paymentSaga from "./PaymentSaga";
 import * as ImageSaga from "./ImageSaga";
+import * as NewsSaga from "./NewsSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -21,5 +22,7 @@ export default function* rootSaga() {
     paymentSaga.followActionGetPaymentWithVNPay(),
     paymentSaga.followActionGetPaymentVnPayConfirm(),
     ImageSaga.followActionGetImageByTypeContains(),
+    NewsSaga.followActionGetAllNews(),
+    NewsSaga.followActionUpdateNewsEvent(),
   ]);
 }

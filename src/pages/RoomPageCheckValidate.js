@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
 import Cookies from "js-cookie";
 import moment from "moment/moment";
 import React, { useEffect, useState } from "react";
@@ -5,23 +7,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import image from "../assets/images/roomType/phong.jpg";
 import Breadcrumb from "../components/IntroducePage/Breadcrumb/Breadcrumb";
+import Loading from "../components/Loading/Loading";
 import InfoBookingRoomValidate from "../components/RoomPageValidate/InfoBookingRoom/InfoBookingRoomValidate";
 import RoomAvailability from "../components/RoomPageValidate/InfoRoomAvailability/InfoRoomAvailability";
+import * as hotelAction from "../redux/actions/HotelServiceAction";
+import * as imageAction from "../redux/actions/ImageAction";
 import * as paymentAction from "../redux/actions/PaymentAction";
 import * as actions from "../redux/actions/RoomAvailability";
-import { RoomAvailabilityState$ } from "../redux/selectors/RoomAvailabilitySelector";
-import { CONSTANT } from "../util/constant/settingSystem";
-import { checkDate } from "../util/utilities/utils";
-import * as hotelAction from "../redux/actions/HotelServiceAction";
 import * as serviceAction from "../redux/actions/ServiceAction";
 import * as specialUtilityAction from "../redux/actions/SpecialUtilityActions";
-import * as imageAction from "../redux/actions/ImageAction";
-import { ServiceByCategoryIdState$ } from "../redux/selectors/ServiceSelector";
-import { SpecialUtilityState$ } from "../redux/selectors/SpecialUtilitySelector";
 import { HotelByIdState$ } from "../redux/selectors/HotelServiceSelector";
 import { ImageByTypeContainsState$ } from "../redux/selectors/ImageSelector";
-import { useCallback } from "react";
-import Loading from "../components/Loading/Loading";
+import { RoomAvailabilityState$ } from "../redux/selectors/RoomAvailabilitySelector";
+import { ServiceByCategoryIdState$ } from "../redux/selectors/ServiceSelector";
+import { SpecialUtilityState$ } from "../redux/selectors/SpecialUtilitySelector";
+import { CONSTANT } from "../util/constant/settingSystem";
+import { checkDate } from "../util/utilities/utils";
 
 export default function RoomPageCheckValidate() {
   const [data, setData] = useState(null);

@@ -1,9 +1,11 @@
 .newsContainer {
     margin-top: 95px;
+
     .tabGlobalMenu,
     .tabEventMenu {
         cursor: pointer;
     }
+
     .rightContent {
         position: relative;
         height: 1000px;
@@ -11,6 +13,7 @@
         border-left: 1px solid rgba(196, 196, 196, 0.6);
         overflow-y: scroll;
         overflow-x: hidden;
+
         .newsImageCoupon {
             img {
                 width: 100%;
@@ -19,6 +22,7 @@
                 border-radius: 5px;
             }
         }
+
         .newsImageDes {
             img {
                 width: 100%;
@@ -27,37 +31,51 @@
                 border-radius: 5px;
             }
         }
+
         .subEventContainer {
             min-height: 1000px;
             height: fit-content;
+
             .subEventTabContainer {
-                height: 410px;
-                max-height: 410px;
+                height: 380px;
+                max-height: 380px;
                 position: relative;
+
+                &:hover {
+                    opacity: 0.5;
+                    cursor: pointer;
+                }
+
                 .subContentTab {
                     position: absolute;
                     bottom: 0;
+
                 }
             }
+
             .subEventImage {
                 background-image: var(--backgroundImage);
                 background-repeat: no-repeat;
                 background-size: cover;
                 height: 200px;
                 position: relative;
+
                 .overlayText {
                     width: 100%;
                     position: absolute;
                     bottom: 0;
                 }
             }
+
         }
     }
+
     .rightContent::-webkit-scrollbar {
         display: none;
         // width: 10px;
         // border-radius: 10px;
     }
+
     // .rightContent::-webkit-scrollbar-track {
     //   background: transparent;
     // }

@@ -8,6 +8,8 @@ import RoomAvailabilityReducer from "./RoomAvailabilityReducer";
 import ServiceByCategoryIdReducer from "./ServiceReducer";
 import SpecialUtilityReducer from "./SpecialUtilityReducer";
 import ImageReducer from "./ImageReducer";
+import NewsReducer from "./NewsReducer";
+
 import {
   PaymentMoMoReducer,
   PaymentVNPayReducer,
@@ -27,4 +29,5 @@ export default combineReducers({
   PaymentVNPayReducer,
   PaymentVnPayConfirmReducer,
   ImageReducer,
+  NewsReducer,
 });
