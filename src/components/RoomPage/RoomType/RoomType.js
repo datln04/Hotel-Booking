@@ -245,7 +245,7 @@ export default function RoomType() {
                     className="button hs-text-dark-brown"
                     onClick={() => handleBookRoom(item)}
                   >
-                    Đặt Phòng +
+                    Xem chi tiết +
                   </div>
                 </div>
               </div>

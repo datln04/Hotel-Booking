@@ -14,6 +14,7 @@ import { getAllNewsState$ } from "../../redux/selectors/NewsSelector";
 import { CONSTANT } from "../../util/constant/settingSystem";
 import TextTruncate from "../../util/utilities/text-truncate/TextTruncate";
 import Loading from "../Loading/Loading";
+import NewsDetailComponent from "./NewsDetailCompoment/NewsDetailComponent";
 
 const NewsComponent = () => {
   const [data, setData] = useState(null);
@@ -23,6 +24,7 @@ const NewsComponent = () => {
   const listNews = useSelector(getAllNewsState$);
   const listImages = useSelector(ImageByTypeContainsState$);
   const dispatch = useDispatch();
+  const [detail, setDetail] = useState(null);
 
   const ENTRY_TYPE = {
     coupon: "coupon",
@@ -41,7 +43,7 @@ const NewsComponent = () => {
     dispatch(newsAction.getAllNews.getAllNewsRequest());
     setTimeout(() => {
       window.location.reload();
-    }, 60000);
+    }, 300000);
   }, [dispatch]);
 
   useEffect(() => {
@@ -104,6 +106,10 @@ const NewsComponent = () => {
     }
   }, [coupon, destination, event]);
 
+  const handleOpenDetailPage = (data) => {
+    setDetail(data);
+  };
+
   const eventType = {
     DONE: "DONE",
     ON: "ON",
@@ -147,7 +153,10 @@ const NewsComponent = () => {
           {coupon.map((c, idx) => {
             return (
               <div className="col-6 hs-px-64 hs-py-32" key={idx}>
-                <div className={Styles.newsImageCoupon}>
+                <div
+                  className={Styles.newsImageCoupon}
+                  onClick={() => handleOpenDetailPage(c)}
+                >
                   <img
                     src={c.images[0].pictureUrl}
                     alt={c.newName}
@@ -159,7 +168,10 @@ const NewsComponent = () => {
                   <TextTruncate text={c.description} mobile={3} desktop={3} />
                 </div>
                 <div className="hs-py-16">
-                  <div className="hs-text-dark-brown">
+                  <div
+                    className="hs-text-dark-brown"
+                    onClick={() => handleOpenDetailPage(c)}
+                  >
                     <p className="button">Xem chi tiết +</p>
                   </div>
                 </div>
@@ -218,6 +230,7 @@ const NewsComponent = () => {
             "hs-bg-dark col-12 rounded",
             Styles.subEventTabContainer
           )}
+          onClick={() => handleOpenDetailPage(ev)}
         >
           <div
             className={Styles.subEventImage}
@@ -305,6 +318,7 @@ const NewsComponent = () => {
     if (key === ENTRY_TYPE.event) {
       setCurrentEventTab(Object.keys(eventTab)[0]);
     }
+    setDetail(null);
     setCurrentGlobalTab(key);
   };
 
@@ -339,7 +353,11 @@ const NewsComponent = () => {
         </div>
         <div className={classNames("col-10", Styles.rightContent)}>
           <div className="col-12 d-flex justify-content-center hs-text-white">
-            {renderGlobalTab()}
+            {!detail ? (
+              renderGlobalTab()
+            ) : (
+              <NewsDetailComponent data={detail} />
+            )}
           </div>
         </div>
       </div>

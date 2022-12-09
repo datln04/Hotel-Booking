@@ -14,6 +14,7 @@ const DropdownBooking = () => {
 
   const handleApplyRoom = (count) => {
     setCount(count);
+    sessionStorage.setItem(CONSTANT.ROOM_SELECT, JSON.stringify(count));
   };
 
   const handleCheckAvailability = () => {
