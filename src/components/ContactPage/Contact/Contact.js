@@ -20,9 +20,9 @@ const Contact = () => {
             width="1449"
             height="651"
             style={{ border: 0 }}
-            allowfullscreen=""
+            allowFullScreen=""
             loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
+            referrerPolicy="no-referrer-when-downgrade"
             title="map"
           ></iframe>
         </div>
@@ -119,11 +119,11 @@ const Contact = () => {
                   </p>
                 </div>
                 <div className="hs-py-16 d-flex hs-text-white text-lg">
-                  <i class="fa-solid fa-phone hs-pr-16"></i>
+                  <i className="fa-solid fa-phone hs-pr-16"></i>
                   <p className="hs-text-dark-grey">086 939 3979</p>
                 </div>
                 <div className="hs-py-16 d-flex hs-text-white text-lg">
-                  <i class="fa-regular fa-envelope hs-pr-16"></i>
+                  <i className="fa-regular fa-envelope hs-pr-16"></i>
                   <p className="hs-text-dark-grey">
                     fivemencontact@fivemen.com
                   </p>
