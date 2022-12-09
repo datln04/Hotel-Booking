@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { DateRangePicker } from "react-dates";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
+import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import { CONSTANT } from "../../../util/constant/settingSystem";
 import SubRoomInfoBooking from "../SubRoomInfoBooking/SubRoomInfoBooking";
@@ -32,6 +33,7 @@ export default function InfoBookingRoomValidate({
   const handleAddMoreRoom = () => {
     setCount([...count, { adult: 1, child: 0 }]);
   };
+  const navigate = useNavigate();
   const handleSetDateRange = ({ startDate, endDate }) => {
     if (endDate === null) {
       endDate = startDate;
@@ -41,6 +43,10 @@ export default function InfoBookingRoomValidate({
 
   const handleFocusChange = (focusInput) => {
     setFocusInput(focusInput);
+  };
+
+  const handleCancelBooking = () => {
+    navigate(CONSTANT.CANCEL_BOOKING);
   };
 
   const handleSetAdultByIndex = (index, adult) => {
@@ -263,13 +269,21 @@ export default function InfoBookingRoomValidate({
           )}
         </div>
         {home && (
-          <button
-            className="col-3 hs-bg-dark-brown text-lg hs-text-white d-flex justify-content-center align-items-center button"
-            onClick={checkAvailabilityCB}
-            disabled={isOpen}
-          >
-            <p className="">Kiểm tra phòng chống</p>
-          </button>
+          <div className="col-3 ">
+            <button
+              className="button hs-bg-dark-brown text-lg hs-text-white d-flex justify-content-center align-items-center hs-p-8"
+              onClick={checkAvailabilityCB}
+              disabled={isOpen}
+            >
+              <p className="">Kiểm tra phòng chống</p>
+            </button>
+            <div
+              className="text-md hs-text-dark-grey hs-py-8 hs-px-8 "
+              onClick={handleCancelBooking}
+            >
+              <p className="button">Hủy phòng đã đặt</p>
+            </div>
+          </div>
         )}
       </div>
     </div>
