@@ -32,18 +32,27 @@ export default function RoomPageCheckValidate() {
     location.state?.dateCheckout ?? moment(new Date()).add(1, "d");
   const personDefault = location.state?.numOfPerson ?? 1;
   const childDefault = location.state?.numOfChild ?? 0;
-  const [count, setCount] = useState([
-    {
-      adult: personDefault,
-      child: childDefault,
-    },
-  ]);
+  const [count, setCount] = useState(
+    location.state?.count
+      ? location.state?.count
+      : [
+          {
+            adult: personDefault,
+            child: childDefault,
+          },
+        ]
+  );
+
   const [roomSelect, setRoomSelect] = useState([]);
   const [tab, setTab] = useState(1);
-  const [arrayDate, setArrayDate] = useState({
-    startDate: moment(dateCheckInDefault),
-    endDate: moment(dateCheckOutDefault),
-  });
+  const [arrayDate, setArrayDate] = useState(
+    location.state?.arrayDate
+      ? location.state?.arrayDate
+      : {
+          startDate: moment(dateCheckInDefault),
+          endDate: moment(dateCheckOutDefault),
+        }
+  );
   const dispatch = useDispatch();
   const airportShuttle = useSelector(ServiceByCategoryIdState$);
   const specialUtility = useSelector(SpecialUtilityState$);

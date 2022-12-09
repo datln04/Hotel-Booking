@@ -23,10 +23,10 @@ export default function InfoBookingRoomValidate({
   setRoomSelect,
   numOfChild,
   countDefault,
+  home,
+  checkAvailabilityCB,
 }) {
-  const [count, setCount] = useState([
-    { adult: numOfPerson, child: numOfChild },
-  ]);
+  const [count, setCount] = useState(countDefault);
   const [isOpen, setOpen] = useState(false);
   const [focusInput, setFocusInput] = useState(null);
   const handleAddMoreRoom = () => {
@@ -149,14 +149,21 @@ export default function InfoBookingRoomValidate({
   return (
     <div className={classNames("hs-bg-dark-9 col-12", Styles.InfoBookingRoom)}>
       <div
-        className={classNames("col-8 row hs-py-32", Styles.InfoBookingRoomItem)}
+        className={classNames("col-9 row hs-py-32", Styles.InfoBookingRoomItem)}
       >
-        <div className="col-6 d-flex justify-content-end hs-px-32 hs-border-right-dark-grey">
+        <div
+          className={classNames(
+            "d-flex justify-content-end hs-px-32 hs-border-right-dark-grey",
+            home ? "col-5 " : "col-6"
+          )}
+        >
           <i className="fa-solid fa-calendar-days hs-text-dark-brown text-lg"></i>
           <DateRangePicker
             onClose={() => {
-              setCloseCB(!close);
-              setRoomSelect([]);
+              if (!home) {
+                setCloseCB(!close);
+                setRoomSelect([]);
+              }
             }}
             endDate={arrayDate.endDate}
             endDateId="endDate"
@@ -176,7 +183,7 @@ export default function InfoBookingRoomValidate({
           />
           <i className="fa-solid fa-sort-down hs-text-dark-grey text-lg"></i>
         </div>
-        <div className="col-6 hs-px-32">
+        <div className={classNames("hs-px-32", home ? "col-4 " : "col-6")}>
           <div
             className={classNames(
               " d-flex align-items-center text-lg ",
@@ -255,6 +262,15 @@ export default function InfoBookingRoomValidate({
             </div>
           )}
         </div>
+        {home && (
+          <button
+            className="col-3 hs-bg-dark-brown text-lg hs-text-white d-flex justify-content-center align-items-center button"
+            onClick={checkAvailabilityCB}
+            disabled={isOpen}
+          >
+            <p className="">Kiểm tra phòng chống</p>
+          </button>
+        )}
       </div>
     </div>
   );

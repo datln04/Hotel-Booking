@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import classNames from "classnames";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -286,7 +287,7 @@ export default function RoomAvailability({ data, callBackFunc }) {
       </div>
     );
   };
-  console.log("data: ", data);
+
   return (
     <div className={classNames("col-11", Styles.RoomAvailability)}>
       {data &&
