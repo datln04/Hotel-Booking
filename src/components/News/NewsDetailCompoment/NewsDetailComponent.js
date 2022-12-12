@@ -5,7 +5,7 @@ const NewsDetailComponent = ({ data }) => {
   return (
     <div className={classNames("hs-bg-dark-low hs-px-64")}>
       <img
-        className=" h-25"
+        className="h-50 w-75"
         src={data.images[0].pictureUrl}
         alt={data.images[0].pictureDescription}
       />

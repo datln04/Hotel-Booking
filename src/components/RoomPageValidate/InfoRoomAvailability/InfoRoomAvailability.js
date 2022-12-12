@@ -749,7 +749,7 @@ export default function RoomAvailability({
                     <>
                       <div className="col-12  d-flex justify-content-between">
                         <div className="hs-py-16 text-lg">
-                          {index === 0
+                          {index === 0 || roomSelect.length === index
                             ? "Chọn Phòng " + (index + 1)
                             : "Phòng " + (index + 1)}
                         </div>

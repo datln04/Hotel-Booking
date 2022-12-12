@@ -159,7 +159,7 @@ export default function InfoBookingRoomValidate({
       >
         <div
           className={classNames(
-            "d-flex justify-content-end hs-px-32 hs-border-right-dark-grey",
+            "d-flex justify-content-end hs-px-32 hs-border-right-dark-grey align-items-center",
             home ? "col-5 " : "col-6"
           )}
         >
@@ -189,7 +189,12 @@ export default function InfoBookingRoomValidate({
           />
           <i className="fa-solid fa-sort-down hs-text-dark-grey text-lg"></i>
         </div>
-        <div className={classNames("hs-px-32", home ? "col-4 " : "col-6")}>
+        <div
+          className={classNames(
+            "hs-px-32 ",
+            home ? "col-4 d-flex align-items-center" : "col-6"
+          )}
+        >
           <div
             className={classNames(
               " d-flex align-items-center text-lg ",
