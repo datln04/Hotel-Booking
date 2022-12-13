@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import classNames from "classnames";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -14,7 +15,9 @@ import {
 import { CONSTANT } from "../../../util/constant/settingSystem";
 import {
   formatPrice,
+  getDayInRange,
   getFullName,
+  removeDuplicateInArray,
   validatePhone,
 } from "../../../util/utilities/utils";
 import AirPortShuttleService from "../AirPortShuttleService/AirPortShuttleService";
@@ -22,6 +25,7 @@ import CustomerInfo from "../CustomerInfo/CustomerInfo";
 import ListRoomAvailability from "../ListRoomAvailability/ListRoomAvailability";
 import Styles from "./InfoRoomAvailability.module.scss";
 import Cookies from "js-cookie";
+import moment from "moment";
 
 export default function RoomAvailability({
   count,
@@ -67,7 +71,29 @@ export default function RoomAvailability({
 
   const getTotalPrice = useCallback(() => {
     let price = 0;
-    roomSelect.map((room) => (price += room.price));
+    const dayGap = arrayDate.endDate.diff(arrayDate.startDate, "days");
+    listRoomAvailability.map((roomType) => {
+      const currentRoomSelect = roomSelect.find((x) => x.id === roomType.id);
+      if (currentRoomSelect) {
+        const cleanRoomPrices = removeDuplicateInArray(roomType.roomPrices);
+        const dateRange = getDayInRange(
+          arrayDate.startDate.format("yyyy-MM-DD"),
+          arrayDate.endDate.format("yyyy-MM-DD")
+        );
+        dateRange.map((range, index) => {
+          if (index <= dayGap) {
+            const isFoundPriceForDate = cleanRoomPrices.find(
+              (x) => x.date === moment(range).format("DD/MM/yyyy")
+            );
+            if (isFoundPriceForDate) {
+              price += isFoundPriceForDate.price;
+            } else {
+              price += roomType.defaultPrice;
+            }
+          }
+        });
+      }
+    });
     if (arrayCheckedAirport.id !== 0) {
       const airPortPrice = airportShuttleList.find(
         (airPort) => airPort.id === arrayCheckedAirport.id
@@ -328,8 +354,16 @@ export default function RoomAvailability({
             count: count,
             roomSelect: roomSelect,
             date: {
-              startDate: arrayDate.startDate.format("DD/MM/yyyy HH:mm:ss"),
-              endDate: arrayDate.endDate.format("DD/MM/yyyy HH:mm:ss"),
+              startDate:
+                arrayDate.startDate.format("DD/MM/yyyy") +
+                " " +
+                hotelInfo.checkInTime +
+                ":00",
+              endDate:
+                arrayDate.endDate.format("DD/MM/yyyy") +
+                " " +
+                hotelInfo.checkOutTime +
+                ":00",
             },
             utilities: arrayChecked,
             requestService:

@@ -1,5 +1,6 @@
 import moment from "moment";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CONSTANT } from "../../../util/constant/settingSystem";
 import InfoBookingRoomValidate from "../../RoomPageValidate/InfoBookingRoom/InfoBookingRoomValidate";
@@ -12,9 +13,13 @@ const DropdownBooking = () => {
   });
   const navigate = useNavigate();
 
+  useEffect(() => {
+    sessionStorage.setItem(CONSTANT.ROOM_SELECT, JSON.stringify(count));
+  }, [count]);
+
   const handleApplyRoom = (count) => {
     setCount(count);
-    sessionStorage.setItem(CONSTANT.ROOM_SELECT, JSON.stringify(count));
+    // sessionStorage.setItem(CONSTANT.ROOM_SELECT, JSON.stringify(count));
   };
 
   const handleCheckAvailability = () => {

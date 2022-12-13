@@ -18,11 +18,9 @@ export default function InfoBookingRoomValidate({
   handleApplyRoomCb,
   arrayDate,
   setDateArray,
-  numOfPerson,
   close,
   setCloseCB,
   setRoomSelect,
-  numOfChild,
   countDefault,
   home,
   checkAvailabilityCB,
@@ -190,10 +188,7 @@ export default function InfoBookingRoomValidate({
           <i className="fa-solid fa-sort-down hs-text-dark-grey text-lg"></i>
         </div>
         <div
-          className={classNames(
-            "hs-px-32 ",
-            home ? "col-4 d-flex align-items-center" : "col-6"
-          )}
+          className={classNames("hs-px-32 ", home ? "col-4 hs-mt-24" : "col-6")}
         >
           <div
             className={classNames(
