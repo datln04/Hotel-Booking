@@ -21,6 +21,7 @@ const BookingConfirm = () => {
     location.state?.payment ?? null
   );
   const [isAllNull, setAllNull] = useState(0);
+  const [isSuccess, setSuccess] = useState(0);
 
   window.onpopstate = () => {
     navigate("/");
@@ -52,6 +53,7 @@ const BookingConfirm = () => {
         } else {
           numOfRoomSuccess +=
             "phòng " + room.roomType.name + ` số ${index + 1}`;
+          setSuccess(index + 1);
           // eslint-disable-next-line react-hooks/exhaustive-deps
         }
       });
@@ -176,7 +178,7 @@ const BookingConfirm = () => {
   return (
     bookingInfo &&
     bookingInfo.length > 0 &&
-    isAllNull > 1 && (
+    isSuccess > 0 && (
       <div className="col-12 hs-bg-dark-low d-flex justify-content-center">
         <div className="col-8">
           <div className="col-12 d-flex justify-content-center hs-mt-96">
