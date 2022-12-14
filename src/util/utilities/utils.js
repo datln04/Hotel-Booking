@@ -89,7 +89,6 @@ export function removeDuplicateInArray(arr) {
       newArr.push(element);
     } else {
       const duplicateElement = newArr.findIndex((x) => x.date === element.date);
-      console.log(duplicateElement);
       if (duplicateElement === 0) {
         newArr[duplicateElement] = element;
       } else {

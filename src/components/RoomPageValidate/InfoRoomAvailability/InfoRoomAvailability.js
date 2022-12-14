@@ -81,7 +81,7 @@ export default function RoomAvailability({
           arrayDate.endDate.format("yyyy-MM-DD")
         );
         dateRange.map((range, index) => {
-          if (index <= dayGap) {
+          if (index + 1 <= dayGap) {
             const isFoundPriceForDate = cleanRoomPrices.find(
               (x) => x.date === moment(range).format("DD/MM/yyyy")
             );

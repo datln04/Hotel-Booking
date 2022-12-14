@@ -11,9 +11,8 @@ const Contact = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(hotelAction.getHotelServiceById.getHotelServiceByIdRequest(1));
-  });
+  }, [dispatch]);
 
-  console.log(hotelInfo);
   return (
     Object.keys(hotelInfo).length !== 0 && (
       <div

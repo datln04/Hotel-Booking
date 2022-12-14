@@ -20,6 +20,7 @@ const BookingConfirm = () => {
   const [bookingInfo, setBooingInfo] = useState(
     location.state?.payment ?? null
   );
+  const [isAllNull, setAllNull] = useState(0);
 
   window.onpopstate = () => {
     navigate("/");
@@ -43,6 +44,7 @@ const BookingConfirm = () => {
       let numOfRoomSuccess = "";
       bookingInfo.map((room, index) => {
         if (room.bookingFailureRoom != null) {
+          setAllNull(index + 1);
           numOfRoomFailure +=
             "phòng " +
             room.bookingFailureRoom.bookingFailureRoomName +
@@ -53,20 +55,27 @@ const BookingConfirm = () => {
           // eslint-disable-next-line react-hooks/exhaustive-deps
         }
       });
-      if (numOfRoomFailure.length > 0) {
+      if (numOfRoomFailure.length > 0 && numOfRoomSuccess.length > 0) {
         swal({
           title: `Thanh toán thành công ${numOfRoomSuccess} `,
           text: `${numOfRoomFailure} thanh toán không thành công do chúng tôi hết phòng, xin chân thành xin lỗi quý khách, kính mong quý khách có thể đặt lại phòng phù hợp cho chuyến lưu trú của mình`,
           icon: "info",
           button: "Thử lại",
         });
-      } else {
+      } else if (numOfRoomSuccess.length > 0) {
         swal({
           title: "Thanh toán thành công",
           text: "Vui lòng kiểm tra thông tin đặt phòng của bạn. Nếu bạn có bất kì thắc mắc liên quan đến thông tin đặt phòng vui lòng liên hệ đến lễ tân qua số điện thoại 0987654321",
           icon: "success",
           button: "Xác nhận",
         });
+      } else {
+        swal({
+          title: "Thông báo",
+          text: "Chân thành xin lỗi quý khách, hiện tại phòng của quý khách đặt đã hết - Xin quý khách vui lòng đặt phòng khác phù hợp cho chuyến lưu trú của mình - Xin lỗi về sự bất tiện này",
+          icon: "error",
+          button: "Đã Hiểu!",
+        }).then(() => (window.location.href = "/"));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,7 +144,7 @@ const BookingConfirm = () => {
   };
 
   const getPriceByRoom = (roomType, booking) => {
-    const currentDate = moment(new Date());
+    const currentDate = booking.arrivalDate.split(" ")[0];
     let price = 0;
     let servicePrice = 0;
     const priceByDate = roomType.roomPrices.find(
@@ -166,7 +175,8 @@ const BookingConfirm = () => {
 
   return (
     bookingInfo &&
-    bookingInfo.length > 0 && (
+    bookingInfo.length > 0 &&
+    isAllNull > 1 && (
       <div className="col-12 hs-bg-dark-low d-flex justify-content-center">
         <div className="col-8">
           <div className="col-12 d-flex justify-content-center hs-mt-96">
