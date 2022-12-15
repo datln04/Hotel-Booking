@@ -1,26 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 import Cookies from "js-cookie";
 import moment from "moment/moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import swal from "sweetalert";
 import * as paymentAction from "../../../redux/actions/PaymentAction";
 import { PaymentVnPayConfirmState$ } from "../../../redux/selectors/PaymentSelector";
 import { CONSTANT } from "../../../util/constant/settingSystem";
-import { combineName, formatPrice } from "../../../util/utilities/utils";
+import {
+  combineName,
+  formatPrice,
+  getDayInRange,
+  removeDuplicateInArray,
+} from "../../../util/utilities/utils";
 
 const BookingConfirm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let totalPrice = 0;
+  const [totalPrice, setTotalPrice] = useState(0);
   const [searchParams] = useSearchParams();
   const paymentVnPayConfirm = useSelector(PaymentVnPayConfirmState$);
   const location = useLocation();
   const [bookingInfo, setBooingInfo] = useState(
     location.state?.payment ?? null
   );
-  const [isAllNull, setAllNull] = useState(0);
   const [isSuccess, setSuccess] = useState(0);
 
   window.onpopstate = () => {
@@ -45,7 +50,6 @@ const BookingConfirm = () => {
       let numOfRoomSuccess = "";
       bookingInfo.map((room, index) => {
         if (room.bookingFailureRoom != null) {
-          setAllNull(index + 1);
           numOfRoomFailure +=
             "phòng " +
             room.bookingFailureRoom.bookingFailureRoomName +
@@ -130,41 +134,80 @@ const BookingConfirm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentVnPayConfirm]);
 
-  const getPrice = (roomType) => {
-    const currentDate = moment(new Date());
-    let price = 0;
-    const priceByDate = roomType.roomPrices.find(
-      (roomPrice) => moment(roomPrice.date) === currentDate
-    );
-
-    if (priceByDate) {
-      price = priceByDate.price;
-    } else {
-      price = roomType.defaultPrice;
-    }
-    return price;
-  };
-
   const getPriceByRoom = (roomType, booking) => {
-    const currentDate = booking.arrivalDate.split(" ")[0];
+    const arrivalDate = moment(booking.arrivalDate);
+    const departureDate = moment(booking.departureDate);
     let price = 0;
     let servicePrice = 0;
-    const priceByDate = roomType.roomPrices.find(
-      (roomPrice) => moment(roomPrice.date) === currentDate
+    const dayGap = departureDate.diff(arrivalDate, "days");
+    const cleanRoomPrices = removeDuplicateInArray(roomType.roomPrices);
+    const dateRange = getDayInRange(
+      arrivalDate.format("yyyy-MM-DD"),
+      departureDate.format("yyyy-MM-DD")
     );
+    dateRange.map((range, index) => {
+      if (index + 1 <= dayGap) {
+        const isFoundPriceForDate = cleanRoomPrices.find(
+          (x) => x.date === moment(range).format("DD/MM/yyyy")
+        );
+        if (isFoundPriceForDate) {
+          price += isFoundPriceForDate.price;
+        } else {
+          price += roomType.defaultPrice;
+        }
+      }
+    });
 
     if (booking.orders.length > 0) {
       servicePrice = booking.orders[0].totalAmount;
     }
 
-    if (priceByDate) {
-      price = priceByDate.price;
-    } else {
-      price = roomType.defaultPrice;
-    }
-    totalPrice += Number(price + servicePrice);
-    return Number(price + servicePrice);
+    return {
+      price: Number(price),
+      priceWithService: Number(price + servicePrice),
+    };
   };
+
+  const getTotalPrice = useCallback(() => {
+    if (bookingInfo && bookingInfo.length > 0 && isSuccess > 0) {
+      let price = 0;
+      const arrivalDate = moment(bookingInfo[0].booking.arrivalDate);
+      const departureDate = moment(bookingInfo[0].booking.departureDate);
+      const dayGap = departureDate.diff(arrivalDate, "days");
+      bookingInfo.map((data) => {
+        // const currentRoomSelect = roomSelect.find((x) => x.id === roomType.id);
+        // if (currentRoomSelect) {
+        const cleanRoomPrices = removeDuplicateInArray(
+          data.roomType.roomPrices
+        );
+        const dateRange = getDayInRange(
+          arrivalDate.format("yyyy-MM-DD"),
+          departureDate.format("yyyy-MM-DD")
+        );
+        dateRange.map((range, index) => {
+          if (index + 1 <= dayGap) {
+            const isFoundPriceForDate = cleanRoomPrices.find(
+              (x) => x.date === moment(range).format("DD/MM/yyyy")
+            );
+            if (isFoundPriceForDate) {
+              price += isFoundPriceForDate.price;
+            } else {
+              price += data.roomType.defaultPrice;
+            }
+          }
+        });
+        if (data.service !== null) {
+          price += data.service.price;
+        }
+      });
+
+      setTotalPrice(price);
+    }
+  }, [bookingInfo]);
+
+  useEffect(() => {
+    getTotalPrice();
+  }, [getTotalPrice]);
 
   const handleOpenCancelRoom = () => {
     swal({
@@ -254,11 +297,8 @@ const BookingConfirm = () => {
                 <div className="col-6 container-fluid">
                   {bookingInfo.map((data, index) => {
                     if (data.bookingFailureRoom == null) {
-                      const priceRoom = getPriceByRoom(
-                        data.roomType,
-                        data.booking
-                      );
-                      const price = getPrice(data.roomType);
+                      const price = getPriceByRoom(data.roomType, data.booking);
+
                       return (
                         <>
                           <div
@@ -308,7 +348,7 @@ const BookingConfirm = () => {
                           <div className="d-flex col-6 hs-py-8">
                             <div className="col-5">Tiền phòng:</div>
                             <div className="col-6">
-                              {formatPrice(price, "vi-VN", "VND")}
+                              {formatPrice(price.price, "vi-VN", "VND")}
                             </div>
                           </div>
                           <div className="d-flex col-12 hs-py-8">
@@ -333,7 +373,11 @@ const BookingConfirm = () => {
                               Giá theo phòng:{" "}
                             </div>
                             <div className="col-8">
-                              {formatPrice(priceRoom, "vi-VN", "VND")}
+                              {formatPrice(
+                                price.priceWithService,
+                                "vi-VN",
+                                "VND"
+                              )}
                             </div>
                           </div>
                           <div className="d-flex col-12 hs-pt-48">

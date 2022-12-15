@@ -13,7 +13,7 @@ import Styles from "../RoomAvailability/RoomAvailability.module.scss";
 import RoomPlaceHolder from "./../../../assets/images/fallbackImage.png";
 import "./RoomDetailSlider.css";
 
-export default function RoomAvailability({ data, callBackFunc }) {
+export default function RoomAvailability({ data, callBackFunc, arrayDate }) {
   const [openModel, setOpenModel] = useState(false);
   const [roomInModel, setRoomInModel] = useState({});
   const hotelInfo = useSelector(HotelByIdState$);
@@ -190,7 +190,7 @@ export default function RoomAvailability({ data, callBackFunc }) {
 
   const Room = (obj) => {
     const priceOfRoom = obj.roomPrices.find((roomPrice) => {
-      return checkDate(new Date(), "DD/MM/YYYY") === roomPrice.date;
+      return arrayDate.startDate.format("DD/MM/yyyy") === roomPrice.date;
     });
 
     return (

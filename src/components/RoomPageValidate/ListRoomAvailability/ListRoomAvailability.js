@@ -8,6 +8,7 @@ export default function ListRoomAvailability({
   callBackFunc,
   data,
   roomSelect,
+  arrayDate,
 }) {
   useEffect(() => {
     if (roomSelect.length > 0) {
@@ -22,7 +23,11 @@ export default function ListRoomAvailability({
 
   return (
     <div className={classNames("hs-bg-dark", Styles.ListRoomAvailability)}>
-      <RoomAvailability data={data} callBackFunc={callBackFunc} />
+      <RoomAvailability
+        data={data}
+        callBackFunc={callBackFunc}
+        arrayDate={arrayDate}
+      />
     </div>
   );
 }

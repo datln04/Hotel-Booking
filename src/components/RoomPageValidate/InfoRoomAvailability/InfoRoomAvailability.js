@@ -430,6 +430,7 @@ export default function RoomAvailability({
           callBackFunc={handleClickRoom}
           data={listRoomAvailability}
           roomSelect={roomSelect}
+          arrayDate={arrayDate}
         />
       </>
     );
