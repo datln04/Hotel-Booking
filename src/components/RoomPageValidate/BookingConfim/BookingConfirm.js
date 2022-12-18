@@ -11,6 +11,7 @@ import { PaymentVnPayConfirmState$ } from "../../../redux/selectors/PaymentSelec
 import { CONSTANT } from "../../../util/constant/settingSystem";
 import {
   combineName,
+  convertDateDBIntoDateJS,
   formatPrice,
   getDayInRange,
   removeDuplicateInArray,
@@ -26,7 +27,7 @@ const BookingConfirm = () => {
   const [bookingInfo, setBooingInfo] = useState(
     location.state?.payment ?? null
   );
-  const [isSuccess, setSuccess] = useState(0);
+  const [isSuccess, setSuccess] = useState(-1);
 
   window.onpopstate = () => {
     navigate("/");
@@ -57,7 +58,7 @@ const BookingConfirm = () => {
         } else {
           numOfRoomSuccess +=
             "phòng " + room.roomType.name + ` số ${index + 1}`;
-          setSuccess(index + 1);
+          setSuccess(index);
           // eslint-disable-next-line react-hooks/exhaustive-deps
         }
       });
@@ -135,18 +136,21 @@ const BookingConfirm = () => {
   }, [paymentVnPayConfirm]);
 
   const getPriceByRoom = (roomType, booking) => {
-    const arrivalDate = moment(booking.arrivalDate);
-    const departureDate = moment(booking.departureDate);
+    const arrivalDate = moment(
+      convertDateDBIntoDateJS(booking.arrivalDate.split(" ")[0])
+    );
+    const departureDate = moment(
+      convertDateDBIntoDateJS(booking.departureDate.split(" ")[0])
+    );
     let price = 0;
     let servicePrice = 0;
-    const dayGap = departureDate.diff(arrivalDate, "days");
     const cleanRoomPrices = removeDuplicateInArray(roomType.roomPrices);
     const dateRange = getDayInRange(
       arrivalDate.format("yyyy-MM-DD"),
       departureDate.format("yyyy-MM-DD")
     );
     dateRange.map((range, index) => {
-      if (index + 1 <= dayGap) {
+      if (index < dateRange.length - 1) {
         const isFoundPriceForDate = cleanRoomPrices.find(
           (x) => x.date === moment(range).format("DD/MM/yyyy")
         );
@@ -169,41 +173,49 @@ const BookingConfirm = () => {
   };
 
   const getTotalPrice = useCallback(() => {
-    if (bookingInfo && bookingInfo.length > 0 && isSuccess > 0) {
+    if (bookingInfo && bookingInfo.length > 0 && isSuccess !== -1) {
       let price = 0;
-      const arrivalDate = moment(bookingInfo[0].booking.arrivalDate);
-      const departureDate = moment(bookingInfo[0].booking.departureDate);
+      const arrivalDate = moment(
+        convertDateDBIntoDateJS(
+          bookingInfo[isSuccess].booking.arrivalDate.split(" ")[0]
+        )
+      );
+      const departureDate = moment(
+        convertDateDBIntoDateJS(
+          bookingInfo[isSuccess].booking.departureDate.split(" ")[0]
+        )
+      );
       const dayGap = departureDate.diff(arrivalDate, "days");
       bookingInfo.map((data) => {
-        // const currentRoomSelect = roomSelect.find((x) => x.id === roomType.id);
-        // if (currentRoomSelect) {
-        const cleanRoomPrices = removeDuplicateInArray(
-          data.roomType.roomPrices
-        );
-        const dateRange = getDayInRange(
-          arrivalDate.format("yyyy-MM-DD"),
-          departureDate.format("yyyy-MM-DD")
-        );
-        dateRange.map((range, index) => {
-          if (index + 1 <= dayGap) {
-            const isFoundPriceForDate = cleanRoomPrices.find(
-              (x) => x.date === moment(range).format("DD/MM/yyyy")
-            );
-            if (isFoundPriceForDate) {
-              price += isFoundPriceForDate.price;
-            } else {
-              price += data.roomType.defaultPrice;
+        if (data.booking !== null) {
+          const cleanRoomPrices = removeDuplicateInArray(
+            data.roomType.roomPrices
+          );
+          const dateRange = getDayInRange(
+            arrivalDate.format("yyyy-MM-DD"),
+            departureDate.format("yyyy-MM-DD")
+          );
+          dateRange.map((range, index) => {
+            if (index + 1 <= dayGap) {
+              const isFoundPriceForDate = cleanRoomPrices.find(
+                (x) => x.date === moment(range).format("DD/MM/yyyy")
+              );
+              if (isFoundPriceForDate) {
+                price += isFoundPriceForDate.price;
+              } else {
+                price += data.roomType.defaultPrice;
+              }
             }
+          });
+          if (data.service !== null) {
+            price += data.service.price;
           }
-        });
-        if (data.service !== null) {
-          price += data.service.price;
         }
       });
 
       setTotalPrice(price);
     }
-  }, [bookingInfo]);
+  }, [bookingInfo, isSuccess]);
 
   useEffect(() => {
     getTotalPrice();
@@ -221,7 +233,7 @@ const BookingConfirm = () => {
   return (
     bookingInfo &&
     bookingInfo.length > 0 &&
-    isSuccess > 0 && (
+    isSuccess !== -1 && (
       <div className="col-12 hs-bg-dark-low d-flex justify-content-center">
         <div className="col-8">
           <div className="col-12 d-flex justify-content-center hs-mt-96">
@@ -274,23 +286,23 @@ const BookingConfirm = () => {
                     <div className="col-3">Họ và tên:</div>
                     <div className="col-9 hs-text-white">
                       {combineName(
-                        bookingInfo[0].booking.customer.firstName,
-                        bookingInfo[0].booking.customer.middleName,
-                        bookingInfo[0].booking.customer.lastName
+                        bookingInfo[isSuccess].booking.customer.firstName,
+                        bookingInfo[isSuccess].booking.customer.middleName,
+                        bookingInfo[isSuccess].booking.customer.lastName
                       )}
                     </div>
                   </div>
                   <div className="d-flex col-12 hs-py-8">
                     <div className="col-3">Email:</div>
                     <div className="col-9 hs-text-white">
-                      {bookingInfo[0].booking.customer.email}
+                      {bookingInfo[isSuccess].booking.customer.email}
                     </div>
                   </div>
                   <div className="d-flex col-12 hs-py-8">
                     <div className="col-3">Điện thoại:</div>
                     <div className="col-9 hs-text-white">
-                      {bookingInfo[0].booking.customer.phoneNumber &&
-                        bookingInfo[0].booking.customer.phoneNumber}
+                      {bookingInfo[isSuccess].booking.customer.phoneNumber &&
+                        bookingInfo[isSuccess].booking.customer.phoneNumber}
                     </div>
                   </div>
                 </div>
@@ -298,7 +310,6 @@ const BookingConfirm = () => {
                   {bookingInfo.map((data, index) => {
                     if (data.bookingFailureRoom == null) {
                       const price = getPriceByRoom(data.roomType, data.booking);
-
                       return (
                         <>
                           <div
@@ -387,12 +398,14 @@ const BookingConfirm = () => {
                                 "Thanh Toán Sau"}
                             </div>
                           </div>
-                          <div className="d-flex col-12 hs-py-24 hs-text-white text-lg justify-content-between">
-                            <div className="col-4">Tổng: </div>
-                            <div className="col-4">
-                              {formatPrice(totalPrice, "vi-VN", "VND")}
+                          {index === bookingInfo.length - 1 && (
+                            <div className="d-flex col-12 hs-py-24 hs-text-white text-lg justify-content-between">
+                              <div className="col-4">Tổng: </div>
+                              <div className="col-4">
+                                {formatPrice(totalPrice, "vi-VN", "VND")}
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </>
                       );
                     }

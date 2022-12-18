@@ -71,7 +71,7 @@ export default function RoomAvailability({
 
   const getTotalPrice = useCallback(() => {
     let price = 0;
-    const dayGap = arrayDate.endDate.diff(arrayDate.startDate, "days");
+    // const dayGap = arrayDate.endDate.diff(arrayDate.startDate, "days");
     listRoomAvailability.map((roomType) => {
       const currentRoomSelect = roomSelect.find((x) => x.id === roomType.id);
       if (currentRoomSelect) {
@@ -80,8 +80,9 @@ export default function RoomAvailability({
           arrayDate.startDate.format("yyyy-MM-DD"),
           arrayDate.endDate.format("yyyy-MM-DD")
         );
+        console.log(dateRange);
         dateRange.map((range, index) => {
-          if (index + 1 <= dayGap) {
+          if (index < dateRange.length - 1) {
             const isFoundPriceForDate = cleanRoomPrices.find(
               (x) => x.date === moment(range).format("DD/MM/yyyy")
             );
@@ -299,8 +300,8 @@ export default function RoomAvailability({
               count: count,
               roomSelect: roomSelect,
               date: {
-                startDate: arrayDate.startDate.format("DD/MM/yyyy HH:mm:ss"),
-                endDate: arrayDate.endDate.format("DD/MM/yyyy HH:mm:ss"),
+                startDate: arrayDate.startDate.format("DD/MM/yyyy"),
+                endDate: arrayDate.endDate.format("DD/MM/yyyy"),
               },
               utilities: arrayChecked,
               requestService:
@@ -354,16 +355,8 @@ export default function RoomAvailability({
             count: count,
             roomSelect: roomSelect,
             date: {
-              startDate:
-                arrayDate.startDate.format("DD/MM/yyyy") +
-                " " +
-                hotelInfo.checkInTime +
-                ":00",
-              endDate:
-                arrayDate.endDate.format("DD/MM/yyyy") +
-                " " +
-                hotelInfo.checkOutTime +
-                ":00",
+              startDate: arrayDate.startDate.format("DD/MM/yyyy"),
+              endDate: arrayDate.endDate.format("DD/MM/yyyy"),
             },
             utilities: arrayChecked,
             requestService:
