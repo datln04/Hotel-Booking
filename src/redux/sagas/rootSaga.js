@@ -8,6 +8,7 @@ import * as getAllSpecialUtility from "./SpecialUtilitySaga";
 import * as paymentSaga from "./PaymentSaga";
 import * as ImageSaga from "./ImageSaga";
 import * as NewsSaga from "./NewsSaga";
+import * as AbstractionSaga from "./AbstractionSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -24,5 +25,6 @@ export default function* rootSaga() {
     ImageSaga.followActionGetImageByTypeContains(),
     NewsSaga.followActionGetAllNews(),
     NewsSaga.followActionUpdateNewsEvent(),
+    AbstractionSaga.followActionGetAllAbstraction(),
   ]);
 }

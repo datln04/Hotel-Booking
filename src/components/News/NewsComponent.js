@@ -9,12 +9,14 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as imageAction from "../../redux/actions/ImageAction";
 import * as newsAction from "../../redux/actions/NewsAction";
+import * as abstractionAction from "../../redux/actions/AbstractionActions";
 import { ImageByTypeContainsState$ } from "../../redux/selectors/ImageSelector";
 import { getAllNewsState$ } from "../../redux/selectors/NewsSelector";
 import { CONSTANT } from "../../util/constant/settingSystem";
 import TextTruncate from "../../util/utilities/text-truncate/TextTruncate";
 import Loading from "../Loading/Loading";
 import NewsDetailComponent from "./NewsDetailCompoment/NewsDetailComponent";
+import { getAllAbstractionState$ } from "../../redux/selectors/AbstractionSelector";
 
 const NewsComponent = () => {
   const [data, setData] = useState(null);
@@ -25,6 +27,7 @@ const NewsComponent = () => {
   const listImages = useSelector(ImageByTypeContainsState$);
   const dispatch = useDispatch();
   const [detail, setDetail] = useState(null);
+  const listAbstraction = useSelector(getAllAbstractionState$);
 
   const ENTRY_TYPE = {
     coupon: "coupon",
@@ -37,10 +40,11 @@ const NewsComponent = () => {
     window.scrollTo(0, 0);
     dispatch(
       imageAction.getImageByTypeContains.getImageByTypeContainsRequest(
-        CONSTANT.IMAGE_TYPE_NEWS
+        CONSTANT.IMAGE_ALL
       )
     );
     dispatch(newsAction.getAllNews.getAllNewsRequest());
+    dispatch(abstractionAction.getAllAbstraction.getAllAbstractionRequest());
     setTimeout(() => {
       window.location.reload();
     }, 300000);
@@ -50,26 +54,34 @@ const NewsComponent = () => {
     if (listNews.length !== 0 && listImages.length !== 0 && !data) {
       listNews.map((news) => {
         const listImageOfNews = listImages.filter(
-          (image) => image.pictureType.split("_")[2] === news.id.toString()
+          (image) =>
+            image.pictureType.split("_")[2] === news.id.toString() &&
+            image.pictureType.split("_")[1] === "new"
         );
         news.images = listImageOfNews;
       });
+      const destination = listAbstraction.map((abstraction) => {
+        const listOfImageAbstraction = listImages.filter(
+          (image) =>
+            image.pictureType.split("_")[2] === abstraction.id.toString() &&
+            image.pictureType.split("_")[1] === "abstraction"
+        );
+        return { ...abstraction, images: listOfImageAbstraction };
+      });
+      setDestination(destination);
       setData(listNews);
     } else if (data) {
       const couponData = data.filter(
         (item) => item.newsType === ENTRY_TYPE.promotion
       );
-      const destinationData = data.filter(
-        (item) => item.newsType === ENTRY_TYPE.destination
-      );
+
       const eventData = data.filter(
         (item) => item.newsType === ENTRY_TYPE.event
       );
       setCoupon(couponData);
-      setDestination(destinationData);
       setEvent(eventData);
     }
-  }, [listImages, listNews, data]);
+  }, [listImages, listNews, data, listAbstraction]);
 
   useEffect(() => {
     if (coupon && destination && event) {
@@ -185,7 +197,7 @@ const NewsComponent = () => {
 
   const renderDestination = () => {
     return (
-      destination && (
+      destination.length > 0 && (
         <div className="col-10">
           {destination.map((des, idx) => {
             return (
@@ -196,19 +208,19 @@ const NewsComponent = () => {
                 >
                   <img
                     src={des.images[0].pictureUrl}
-                    alt={des.newName}
+                    alt={des.name}
                     className="button"
                   />
                 </div>
                 <div className="col-7">
                   <div className="text-lg">
-                    {idx + 1}. {des.newName}
+                    {idx + 1}. {des.name}
                   </div>
                   <div className="hs-text-dark-grey hs-py-16">
                     {des.description}
                   </div>
                   <div className="hs-text-dark-grey hs-py-16">
-                    Giờ mở cửa: {des.startTime} - {des.endTime}
+                    Giờ mở cửa: {des.openTime} - {des.closeTime}
                   </div>
                   <div className="hs-text-dark-grey">Vị trí: {des.address}</div>
                 </div>

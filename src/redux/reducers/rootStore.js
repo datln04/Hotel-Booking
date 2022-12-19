@@ -9,6 +9,7 @@ import ServiceByCategoryIdReducer from "./ServiceReducer";
 import SpecialUtilityReducer from "./SpecialUtilityReducer";
 import ImageReducer from "./ImageReducer";
 import NewsReducer from "./NewsReducer";
+import AbstractionReducer from "./AbstractionReducer";
 
 import {
   PaymentMoMoReducer,
@@ -30,4 +31,5 @@ export default combineReducers({
   PaymentVnPayConfirmReducer,
   ImageReducer,
   NewsReducer,
+  AbstractionReducer,
 });
