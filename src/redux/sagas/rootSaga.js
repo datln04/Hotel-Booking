@@ -20,6 +20,7 @@ export default function* rootSaga() {
     serviceSaga.followActionGetAllServiceByCategoryId(),
     getAllSpecialUtility.followActionGetAllSpecialUtility(),
     paymentSaga.followActionGetPaymentWithMoMo(),
+    paymentSaga.followActionGetPaymentMoMoConfirm(),
     paymentSaga.followActionGetPaymentWithVNPay(),
     paymentSaga.followActionGetPaymentVnPayConfirm(),
     ImageSaga.followActionGetImageByTypeContains(),

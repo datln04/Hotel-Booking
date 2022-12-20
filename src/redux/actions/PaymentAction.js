@@ -7,6 +7,14 @@ export const getPaymentWithMoMo = createActions({
   getPaymentWithMoMoRequest: (payload) => payload,
   getPaymentWithMoMoSuccess: (payload) => payload,
   getPaymentWithMoMoFailure: (err) => err,
+  removePaymentWithMoMo: undefined,
+});
+
+export const getPaymentWithMoMoConfirm = createActions({
+  getPaymentWithMoMoConfirmRequest: (payload) => payload,
+  getPaymentWithMoMoConfirmSuccess: (payload) => payload,
+  getPaymentWithMoMoConfirmFailure: (err) => err,
+  removePaymentWithMoMoConfirm: undefined,
 });
 
 export const getPaymentWithVNPay = createActions({

@@ -15,6 +15,7 @@ import {
   PaymentMoMoReducer,
   PaymentVNPayReducer,
   PaymentVnPayConfirmReducer,
+  PaymentMoMoConfirmReducer,
 } from "./PaymentReducer";
 
 export default combineReducers({
@@ -27,6 +28,7 @@ export default combineReducers({
   ServiceByCategoryIdReducer,
   SpecialUtilityReducer,
   PaymentMoMoReducer,
+  PaymentMoMoConfirmReducer,
   PaymentVNPayReducer,
   PaymentVnPayConfirmReducer,
   ImageReducer,

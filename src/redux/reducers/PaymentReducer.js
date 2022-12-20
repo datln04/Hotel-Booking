@@ -3,6 +3,7 @@ import {
   getPaymentWithVNPay,
   getPaymentVnPayConfirm,
   getType,
+  getPaymentWithMoMoConfirm,
 } from "../actions/PaymentAction";
 
 const initialState = {
@@ -27,6 +28,12 @@ export function PaymentMoMoReducer(state = initialState, action) {
       return {
         ...state,
         isLoading: true,
+      };
+    case getType(getPaymentWithMoMo.removePaymentWithMoMo):
+      return {
+        ...state,
+        arrPayment: {},
+        isLoading: false,
       };
     default:
       return state;
@@ -90,6 +97,35 @@ export function PaymentVnPayConfirmReducer(state = initialState, action) {
       return {
         ...state,
         arrPayment: {},
+        isLoading: false,
+      };
+    default:
+      return state;
+  }
+}
+
+export function PaymentMoMoConfirmReducer(state = initialState, action) {
+  switch (action.type) {
+    case getType(getPaymentWithMoMoConfirm.getPaymentWithMoMoConfirmRequest):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(getPaymentWithMoMoConfirm.getPaymentWithMoMoConfirmSuccess):
+      return {
+        ...state,
+        arrPayment: action.payload,
+        isLoading: false,
+      };
+    case getType(getPaymentWithMoMoConfirm.getPaymentWithMoMoConfirmFailure):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(getPaymentWithMoMoConfirm.removePaymentWithMoMoConfirm):
+      return {
+        ...state,
+        arrPayment: 1,
         isLoading: false,
       };
     default:

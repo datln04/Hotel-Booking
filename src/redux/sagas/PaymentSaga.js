@@ -30,6 +30,32 @@ function* getPaymentWithMoMo(action) {
   }
 }
 
+function* getPaymentWithMoMoConfirm(action) {
+  try {
+    yield put({
+      type: DISPLAY_LOADING,
+    });
+    yield delay(1000);
+    let listService = yield call(() => {
+      return PaymentService.getPaymentWithMoMoConfirm(action.payload);
+    });
+    if (listService.status === STATUS_CODE.SUCCESS) {
+      yield put(
+        actions.getPaymentWithMoMoConfirm.getPaymentWithMoMoConfirmSuccess(
+          listService.data
+        )
+      );
+    }
+    yield put({
+      type: HIDE_LOADING,
+    });
+  } catch (error) {
+    yield put(
+      actions.getPaymentWithMoMoConfirm.getPaymentWithMoMoConfirmFailure(error)
+    );
+  }
+}
+
 function* getPaymentWithVNPay(action) {
   try {
     yield put({
@@ -82,6 +108,13 @@ export function* followActionGetPaymentWithMoMo() {
   yield takeLatest(
     actions.getPaymentWithMoMo.getPaymentWithMoMoRequest,
     getPaymentWithMoMo
+  );
+}
+
+export function* followActionGetPaymentMoMoConfirm() {
+  yield takeLatest(
+    actions.getPaymentWithMoMoConfirm.getPaymentWithMoMoConfirmRequest,
+    getPaymentWithMoMoConfirm
   );
 }
 

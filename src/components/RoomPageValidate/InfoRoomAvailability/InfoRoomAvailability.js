@@ -80,7 +80,6 @@ export default function RoomAvailability({
           arrayDate.startDate.format("yyyy-MM-DD"),
           arrayDate.endDate.format("yyyy-MM-DD")
         );
-        console.log(dateRange);
         dateRange.map((range, index) => {
           if (index < dateRange.length - 1) {
             const isFoundPriceForDate = cleanRoomPrices.find(
