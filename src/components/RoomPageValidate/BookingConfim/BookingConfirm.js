@@ -52,12 +52,12 @@ const BookingConfirm = () => {
       bookingInfo.map((room, index) => {
         if (room.bookingFailureRoom != null) {
           numOfRoomFailure +=
-            "phòng " +
+            " phòng " +
             room.bookingFailureRoom.bookingFailureRoomName +
             ` số ${index + 1} `;
         } else {
           numOfRoomSuccess +=
-            "phòng " + room.roomType.name + ` số ${index + 1}`;
+            " phòng " + room.roomType.name + ` số ${index + 1}`;
           setSuccess(index);
           // eslint-disable-next-line react-hooks/exhaustive-deps
         }
